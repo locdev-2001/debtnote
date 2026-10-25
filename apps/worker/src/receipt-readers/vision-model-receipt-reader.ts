@@ -4,7 +4,8 @@ import { z } from 'zod';
 import type { ReceiptReader } from './receipt-reader';
 
 const instruction = `Đọc hóa đơn trong ảnh. Chỉ trả về JSON đúng dạng {"items":[{"title":string,"amount":number}],"total":number|null}.
-- Mỗi món một phần tử; title giữ đúng tên in trên bill, có dấu tiếng Việt; amount là thành tiền của dòng (đơn giá × số lượng).
+- Mỗi món một phần tử; amount là thành tiền của dòng (đơn giá × số lượng).
+- title là tên món viết lại đúng chính tả tiếng Việt có dấu, chỉ viết hoa chữ cái đầu và tên riêng (ví dụ "Mẹt khô thập cẩm", "Bia Heineken lùn", "Coca"). Sửa lỗi in hoặc lỗi gõ của quán theo tên món ăn Việt Nam thông dụng (ví dụ "DA GÀ MẮM TOIIR" thành "Da gà mắm tỏi"); không thêm từ không có trên bill.
 - Tiền là số nguyên VND, không dấu phân cách.
 - Không đưa vào items các dòng tổng, chiết khấu, phụ thu, thuế, tiền khách trả, tiền thừa.
 - total là tổng cộng cuối bill, null nếu không thấy.`;
