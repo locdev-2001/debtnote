@@ -141,6 +141,15 @@ function RecipientRequestPage({
                   action: () => openSheet('promise'),
                 }
               : null;
+  const receiptMascot: MascotState =
+    status?.mascot ??
+    (request?.confirmedAmounts.length
+      ? 'partial'
+      : request?.dueDate && request.dueDate < today
+        ? 'overdue'
+        : request?.dueDate === today
+          ? 'reminder'
+          : 'upcoming');
   return (
     <div className="recipient-page">
       <RecipientHeader />
@@ -166,7 +175,6 @@ function RecipientRequestPage({
           <>
             {status && (
               <div className="recipient-status" role="status">
-                <MascotIllustration state={status.mascot} size="inline" decorative />
                 <div>
                   <strong>{status.title}</strong>
                   {status.detail && <span>{status.detail}</span>}
@@ -183,7 +191,10 @@ function RecipientRequestPage({
                 )}
               </div>
             )}
-            <ExpenseReceipt meta={`${request.recipientName} → ${request.collectorName}`}>
+            <ExpenseReceipt
+              meta={`${request.recipientName} → ${request.collectorName}`}
+              watermark={receiptMascot}
+            >
               {request.dueDate && outstanding > 0 && (
                 <p className="recipient-due">
                   {request.dueDate === today

@@ -4,7 +4,7 @@
 
 Mở trực tiếp `/p/mau-binh`, không cần đăng nhập. Đây là link mẫu trên thiết bị đang dùng, chưa phải link chia sẻ thật giữa hai người hay hai thiết bị.
 
-- Bill trắng đen chỉ hiện phần của người nhận, người nhận tiền, hạn trả và số đã được xác nhận.
+- Bill trắng đen chỉ hiện phần của người nhận, người nhận tiền, hạn trả và số đã được xác nhận. Mascot trạng thái nằm chìm giữa bill; thanh trạng thái chỉ giữ chữ.
 - Xem bill gốc là phần mở rộng; không hiện tên/phần tiền của những người khác.
 - Bình có phần 360.000 ₫, đã được xác nhận nhận 200.000 ₫, còn 160.000 ₫.
 - Dũng không chịu tiền bia; phần chính chỉ có đồ ăn 210.000 ₫. Trong bill gốc, bia được ghi không tính vào phần Dũng.

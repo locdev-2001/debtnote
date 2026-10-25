@@ -462,6 +462,21 @@
   min-width: 0;
   isolation: isolate;
 }
+.receipt-watermark {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: grid;
+  place-items: center;
+  opacity: var(--receipt-watermark-opacity);
+  filter: grayscale(var(--receipt-watermark-grayscale));
+  pointer-events: none;
+  user-select: none;
+}
+.receipt-watermark > .mascot-illustration {
+  width: min(var(--receipt-watermark-size), var(--receipt-watermark-max-width));
+  height: auto;
+}
 .receipt-heading {
   display: grid;
   justify-items: center;

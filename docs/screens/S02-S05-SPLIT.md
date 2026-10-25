@@ -13,7 +13,7 @@ Trang chủ → Thêm khoản → Chia nhóm → Người → Chia → Chốt.
 
 ## Hướng hình ảnh được chốt
 
-Theo ảnh hóa đơn quán ăn do người dùng cung cấp: giấy phẳng chữ đen trên trắng, tiêu đề giữa, cột tiền thẳng phải, đường phân cách mảnh, tổng tiền in đậm. Không dùng viền hoa văn, watermark hay màu xanh bên trong bill. Manrope được giữ theo bộ thiết kế chung.
+Theo ảnh hóa đơn quán ăn do người dùng cung cấp: giấy phẳng chữ đen trên trắng, tiêu đề giữa, cột tiền thẳng phải, đường phân cách mảnh, tổng tiền in đậm. Không dùng viền hoa văn hay màu xanh bên trong bill. Mascot trạng thái có thể làm hình chìm đơn sắc, mờ qua component dùng chung. Manrope được giữ theo bộ thiết kế chung.
 
 `ExpenseReceipt` và `ReceiptAmountRow` là component trình bày dùng chung. Token giấy/mực/khoảng cách ở `tokens.css`. Lựa chọn người và nút của luồng chia dùng đen; phần tổng quan giữ bảng màu của app.
 

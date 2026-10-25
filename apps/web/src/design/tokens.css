@@ -244,6 +244,10 @@
   --receipt-rule-dash: 0.25rem;
   --receipt-brand-size: 1.25rem;
   --receipt-heading-tracking: 0.025em;
+  --receipt-watermark-size: 13rem;
+  --receipt-watermark-max-width: 70%;
+  --receipt-watermark-opacity: 0.085;
+  --receipt-watermark-grayscale: 1;
   --recipient-content-width: 26rem;
   --recipient-gutter: var(--space-4);
   --recipient-brand-mark-size: 1.5rem;
