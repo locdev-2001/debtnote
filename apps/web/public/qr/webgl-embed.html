@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>QR cây 3D</title>
+    <style>
+      .helper-text-embed { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module">
+      const upstreamOrigin = 'https://webgl-qr.pages.dev/';
+
+      function assetUrl(path) {
+        const address = new URL(path, upstreamOrigin);
+        if (address.origin !== new URL(upstreamOrigin).origin) throw new Error('Nguồn QR không hợp lệ.');
+        return address.href;
+      }
+
+      try {
+        const response = await fetch(upstreamOrigin, {
+          credentials: 'omit',
+          referrerPolicy: 'no-referrer',
+        });
+        if (!response.ok) throw new Error('Chưa tải được QR.');
+        const source = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const entry = source.querySelector('script[type="module"][src]')?.getAttribute('src');
+        if (!entry) throw new Error('Chưa tìm thấy bộ dựng QR.');
+        await Promise.all(
+          [...source.querySelectorAll('link[rel="stylesheet"][href]')].map(
+            (stylesheet) =>
+              new Promise((resolve, reject) => {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = assetUrl(stylesheet.getAttribute('href'));
+                link.onload = resolve;
+                link.onerror = reject;
+                document.head.append(link);
+              }),
+          ),
+        );
+        await import(assetUrl(entry));
+      } catch {
+        document.getElementById('root').textContent = 'Chưa tải được cây QR. Vui lòng mở lại.';
+      }
+    </script>
+  </body>
+</html>

@@ -22,7 +22,7 @@ Nếu đã có payload chuyển khoản, dùng nguyên chuỗi đó. Nếu ngư�
 
 Các fixture hiện để `paymentQrPayload = null`: QR mở link bill mẫu. Nhãn rút gọn thành `QR bill mẫu`. Chưa có màn cấu hình tài khoản thật hoặc bộ sinh VietQR động. Bill đã trả đủ vẫn mở được QR để xem bill, nhưng không có hành động báo chuyển/hẹn trả.
 
-Lõi và UI không chứa URL nhà cung cấp. Địa chỉ/tham số WebGL nằm tại `adapters/qr/webgl-qr-renderer.ts`; App truyền renderer vào màn người nhận. Iframe chỉ được tạo khi mở sheet, và bị gỡ khi đóng. Không thêm Three.js/qrcode vào bundle Debtnote.
+Lõi và UI không chứa URL nhà cung cấp. Adapter `adapters/qr/webgl-qr-renderer.ts` trỏ vào khung riêng `/qr/webgl-embed.html`; khung này tải entry module/CSS công khai từ WebGL QR Tree và ẩn `.helper-text-embed` để bỏ dòng Tap. Không cắt hoặc che ảnh canvas. App truyền renderer vào màn người nhận. Iframe chỉ được tạo khi mở sheet, và bị gỡ khi đóng. Không thêm Three.js/qrcode vào bundle Debtnote.
 
 ## Quan sát trực tiếp
 
@@ -57,3 +57,5 @@ Nguồn tạo payload VietQR, cấu hình tài khoản và đối soát là các
 Đã giải mã ngay trên máy bằng ZXing 0.21.3; ảnh dùng chấm tròn nên jsQR không đọc được trực tiếp. Nội dung dài 93 ký tự, checksum khớp. Dữ liệu có thông tin ngân hàng/tài khoản, không có URL/deep link, không có số tiền hoặc dữ liệu bổ sung. Không suy ra khả năng tự mở app từ tên/logo trên ảnh.
 
 Không đưa ảnh, số tài khoản hoặc chuỗi QR thật vào repo/fixture, không gửi chúng sang website nhúng. Bản app hiện vẫn dùng QR bill mẫu. Việc tự mở app phụ thuộc loại dữ liệu mã gốc và trình quét; cần kiểm tra với đúng ngân hàng/app của mẫu, không coi giải mã QR thành công là đã kiểm tra ứng dụng ngân hàng.
+
+Đã xem lại ảnh mobile/desktop sau khi ẩn chú thích; chạm cây vẫn chuyển được QR phẳng và chú thích có computed display `none`. Iframe vẫn dùng sandbox chỉ `allow-scripts`.
