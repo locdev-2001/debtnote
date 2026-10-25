@@ -82,6 +82,8 @@
   --surface-app: #ffffff;
   --surface-card: var(--neutral-white);
   --surface-subtle: var(--neutral-soft);
+  --form-field-surface: var(--surface-subtle);
+  --control-checkbox-size: 1rem;
   --surface-row: #f3f8f4;
   --surface-row-alternate: #eaf5ee;
   --text-primary: var(--neutral-ink);
@@ -263,6 +265,13 @@
   --calendar-weekday-height: 1.5rem;
   --calendar-cell-gap: 0.125rem;
   --calendar-disabled-opacity: 0.45;
+  --brand-logo-small: 1.5rem;
+  --brand-logo-large: 3rem;
+  --brand-logo-size: 2rem;
+  --brand-wordmark-size: 1.25rem;
+  --mvp-nav-height: 3.75rem;
+  --mvp-nav-width: 32rem;
+  --auth-content-width: 24rem;
   --design-header-height: 4rem;
   --design-hero-gap: 2rem;
   --design-hero-illustration-size: 10rem;

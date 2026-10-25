@@ -1,5 +1,9 @@
 import { assertMinorUnits, calculateOutstandingAmount } from '@debtnote/money-core';
-import type { MoneyDirection, SettlementState } from '../../components/money/presentation';
+import {
+  getSettlementState,
+  type MoneyDirection,
+  type SettlementState,
+} from '../../components/money/presentation';
 import { isDateKey } from '../../lib/calendar';
 
 export { addDays, getTodayKey, isDateKey } from '../../lib/calendar';
@@ -29,9 +33,11 @@ export function remainingAmount(record: HomeRecord): number {
 }
 
 export function settlementState(record: HomeRecord): SettlementState {
-  if (remainingAmount(record) === 0) return 'paid';
-  if (record.awaitingConfirmation) return 'confirmation';
-  return record.confirmedAmounts.length > 0 ? 'partial' : 'unpaid';
+  return getSettlementState(
+    remainingAmount(record),
+    record.awaitingConfirmation,
+    record.confirmedAmounts.length,
+  );
 }
 
 export function summarize(records: readonly HomeRecord[], direction: MoneyDirection) {

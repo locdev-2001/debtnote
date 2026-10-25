@@ -1,4 +1,8 @@
 .split-flow {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
   --action-primary: var(--receipt-ink);
   --action-primary-hover: var(--receipt-muted);
   --action-subtle: var(--receipt-input-surface);
@@ -203,4 +207,15 @@
 }
 .split-flow-footer > .action-button {
   width: 100%;
+}
+.split-options {
+  color: var(--text-secondary);
+  font-size: var(--font-size-label);
+}
+.split-options > summary {
+  padding-block: var(--space-2);
+  cursor: pointer;
+}
+.split-options[open] > .split-item-editor {
+  margin-top: var(--space-2);
 }

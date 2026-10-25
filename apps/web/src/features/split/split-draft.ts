@@ -1,4 +1,4 @@
-import { assertMinorUnits, splitExpenseItems } from '@debtnote/money-core';
+import { assertMinorUnits, calculateBillSplit } from '@debtnote/money-core';
 
 export interface SplitPerson {
   id: string;
@@ -16,11 +16,18 @@ export interface SplitDraft {
   mode: 'equal' | 'custom';
   participants: SplitPerson[];
   payerId: string;
+  title?: string;
+  fee?: string;
+  discount?: string;
+  dueDate?: string | null;
+  attachmentId?: string | null;
   items: SplitItem[];
 }
 export interface SplitPreview {
   id: string;
   totalAmount: number;
+  fee: number;
+  discount: number;
   ownAmount: number;
   settlementAmount: number;
   direction: 'receivable' | 'payable';
@@ -76,11 +83,15 @@ export function calculateSplitPreview(draft: SplitDraft): SplitPreview {
     if (!included.length) throw new Error(`${item.title || 'Khoản tiền'}: chọn người được chia.`);
     return { amount, participantIds: included };
   });
-  const totalAmount = splitDraftTotal(draft);
-  const shares = splitExpenseItems(
-    draft.mode === 'equal' ? [{ amount: totalAmount, participantIds }] : items,
+  const result = calculateBillSplit(
+    items,
     participantIds,
-  ).map((share) => ({
+    draft.mode,
+    Number(draft.fee || 0),
+    Number(draft.discount || 0),
+  );
+  const totalAmount = result.totalAmount;
+  const shares = result.shares.map((share) => ({
     ...(draft.participants.find((person) => person.id === share.participantId) as SplitPerson),
     amount: share.amount,
     itemTitles: draft.items
@@ -92,6 +103,8 @@ export function calculateSplitPreview(draft: SplitDraft): SplitPreview {
   return {
     id: draft.id,
     totalAmount,
+    fee: Number(draft.fee || 0),
+    discount: Number(draft.discount || 0),
     ownAmount,
     direction,
     payer,
@@ -121,7 +134,7 @@ export function toggleSplitPerson(draft: SplitDraft, person: SplitPerson): Split
   const selected = draft.participants.some((participant) => participant.id === person.id);
   const participants = selected
     ? draft.participants.filter((participant) => participant.id !== person.id)
-    : [...draft.participants, person];
+    : [...draft.participants, { id: person.id, name: person.name }];
   return {
     ...draft,
     participants,

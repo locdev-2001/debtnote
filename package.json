@@ -26,7 +26,8 @@
     "db:migrate": "pnpm --filter @debtnote/runtime build && pnpm --filter @debtnote/database db:migrate",
     "worker:probe": "tsx --conditions=development scripts/worker-probe.ts",
     "start:api": "pnpm --filter @debtnote/api start",
-    "start:worker": "pnpm --filter @debtnote/worker start"
+    "start:worker": "pnpm --filter @debtnote/worker start",
+    "test:integration": "DEBTNOTE_INTEGRATION=1 vitest run apps/api/src/mvp.integration.test.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",

@@ -1,96 +1,63 @@
 # Debtnote
 
-Ứng dụng chia tiền và theo dõi các khoản cần thu, cần trả. Bản đầu là PWA: dùng ngay bằng link, có thể thêm vào màn hình chính. Người nhận yêu cầu thanh toán không phải cài ứng dụng.
+PWA ghi tiền giữa mọi người: chia bill đều/theo món, theo dõi cần thu/cần trả và xác nhận thanh toán. Người nhận dùng link riêng, không phải cài app.
 
-Repo đã có khung kỹ thuật, bộ thiết kế và prototype S01–S05 và S08: Trang chủ, chia tiền và màn người nhận qua link mẫu. Các thao tác ở trang chủ chỉ cập nhật dữ liệu mẫu trên thiết bị. Chưa có tài khoản, bảng nghiệp vụ, API ghi tiền thật, OCR hoặc kết nối thanh toán/nhắc tiền.
+## MVP hiện có
 
-## Stack
+- Một luồng SĐT → PIN 6 số. Số mới dùng PIN lần đầu; thiết bị nhớ SĐT. Có đổi PIN, mã khôi phục và giới hạn đăng nhập.
+- Sổ PostgreSQL riêng; tạo khoản nhanh, chọn người trả, chia theo món, phí/giảm giá, lưu nháp và chốt bill trong transaction.
+- Chụp bill/OCR bất đồng bộ; sửa trước khi chốt. Ảnh chỉ chủ sổ được đọc.
+- Link khách có hạn/thu hồi: xem phần mình, QR cây 3D, báo chuyển một phần, hẹn một phần, báo sai. Chủ sổ xác nhận tiền về.
+- Phân bổ một lần trả nhiều khoản, giữ tiền thừa riêng, lịch sử; chống request lặp và xác nhận đồng thời.
+- Theo dõi hạn/hẹn/báo sai, thống kê, dự toán 7 ngày, nhắc trong app và cấu hình QR nhận tiền từ ảnh.
+- Manrope, Reicon, token nghiệp vụ, logo mascot và bill giấy đã chốt.
 
-- React, Vite, Tailwind CSS và TanStack Query cho giao diện.
-- Node.js, Fastify và tRPC cho API.
-- PostgreSQL và Drizzle cho dữ liệu.
-- Redis và BullMQ cho tác vụ nền.
-- pnpm workspace, TypeScript strict, Biome và Vitest.
+SĐT chưa được xác minh OTP; không tự ghép danh bạ với tài khoản. MVP chưa tự đối soát ngân hàng hoặc gửi SMS/Zalo/email. Số liệu lịch thu là lịch dự kiến, không phải cam kết thu được.
 
-Phiên bản dependency dùng chung khai báo ở `pnpm-workspace.yaml`; lockfile được commit để cài đặt lặp lại được.
+## Local
 
-## Chạy local
-
-Cần Node.js theo `.node-version`, pnpm theo `packageManager` và Docker Compose nếu chưa có PostgreSQL/Redis riêng.
+Cần Node theo `.node-version`, pnpm theo `packageManager`, PostgreSQL và Redis.
 
 ```bash
 cp .env.example .env
 pnpm install --frozen-lockfile
 pnpm infra:up
+pnpm db:migrate
 pnpm dev
 ```
 
-- Giao diện: http://localhost:5173
-- API: http://127.0.0.1:3001
-- PostgreSQL: cổng 55432; Redis: cổng 56379.
+Nếu đã có PostgreSQL/Redis, sửa URL trong `.env` và bỏ `infra:up`. Web: http://localhost:5173, API: http://127.0.0.1:3001. `.local/data-key` là khóa mã hóa local được tạo lần đầu; giữ khóa nếu còn QR đã lưu. Không dùng cấu hình local trên server.
 
-Nếu dùng PostgreSQL/Redis có sẵn, sửa `DATABASE_URL` và `REDIS_URL` trong `.env`, bỏ qua `pnpm infra:up`. API và worker kiểm tra cấu hình lúc khởi động; không đưa thông tin kết nối vào frontend.
+Trang chính dùng API thật. Prototype chỉ còn ở `/demo` và `/p/mau-*` khi chạy development. Bộ thiết kế tại `/design/`.
 
-`pnpm infra:down` dừng container và giữ nguyên volume dữ liệu. Tài khoản trong Compose chỉ dành cho local.
+## Kiến trúc
 
-## Cấu trúc và hướng phụ thuộc
+`web → rpc → application → contracts/money-core`. API và worker ghép các adapter PostgreSQL, storage, OCR và QR. `money-core` tính tiền nguyên an toàn, phân bổ phần dư ổn định, không biết nhà cung cấp. Application service dùng repository/clock/id qua contract; PostgreSQL khóa theo chủ sổ trong transaction.
 
-```text
-apps/
-  web/          PWA, gọi contract tRPC
-  api/          HTTP adapter, ghép các dependency lúc khởi động
-  worker/       Tiến trình xử lý tác vụ nền
-packages/
-  money-core/   Hàm tính tiền thuần, không phụ thuộc framework hay nhà cung cấp
-  rpc/          Router và contract tRPC, frontend chỉ import type AppRouter
-  database/     Kết nối PostgreSQL, schema và migration Drizzle
-  jobs/         Kết nối Redis, định nghĩa queue và payload
-  runtime/      Đọc môi trường và đóng tài nguyên khi dừng tiến trình
-```
+`packages/database/migrations` chứa schema thật. Sinh migration bằng `pnpm db:generate`, đọc SQL rồi áp dụng bằng `pnpm db:migrate`.
 
-`money-core` dùng chung cho frontend/backend; số tiền là số nguyên theo đơn vị nhỏ nhất của loại tiền (VND là đồng), giới hạn trong `Number.MAX_SAFE_INTEGER`. Phần dư phân bổ theo thứ tự mã người ổn định. Chỉ đưa các phân bổ thanh toán đã xác nhận vào phép tính số còn nợ.
-
-Các màn hình và router nghiệp vụ sẽ gọi application service; service phụ thuộc contract của domain. PostgreSQL, OCR, storage và kênh nhắc tiền triển khai các contract ở adapter. Không đặt nhánh theo nhà cung cấp trong lõi tính tiền. Composition root trong `apps/api` và `apps/worker` chịu trách nhiệm ghép implementation.
-
-Database hiện chưa có bảng nghiệp vụ. Sau khi thêm schema, chạy `pnpm db:generate`, kiểm tra migration rồi mới `pnpm db:migrate`. Migration hiện tại rỗng và không tạo bảng nghiệp vụ.
-
-## Kiểm tra
+## Kiểm tra và build
 
 ```bash
 pnpm check
-curl http://127.0.0.1:3001/healthz
-curl http://127.0.0.1:3001/readyz
+pnpm test:integration
 pnpm worker:probe
 ```
 
-`pnpm check` chạy lint, kiểm tra kiểu dữ liệu, kiểm thử và build cả ba ứng dụng. Kiểm thử tính tiền bao gồm bill 1.500.000đ có người đến muộn, không uống bia, món riêng, phần dư và trả một phần.
-
-`/healthz` kiểm tra tiến trình API; `/readyz` thực sự kiểm tra PostgreSQL và Redis, trả HTTP 503 nếu dependency lỗi. `worker:probe` cần worker đang chạy: tạo tác vụ thật qua Redis rồi chờ worker hoàn tất, không chỉ kiểm tra kết nối.
-
-## Build và kiểm tra PWA
+`check` gồm lint, typecheck, kiểm tra token, unit test và build. Tích hợp dùng schema PostgreSQL tạm riêng, thử qua HTTP với chủ sổ/khách, session, Origin, PIN, quyền ảnh, idempotency và đồng thời. `worker:probe` cần worker/Redis đang chạy.
 
 ```bash
-pnpm build
 pnpm start:api
 pnpm start:worker
-```
-
-Hai lệnh `start` chạy ở hai terminal riêng. Để xem bản build PWA, chạy thêm:
-
-```bash
 pnpm --filter @debtnote/web preview
 ```
 
-Mở http://localhost:4173. Vite preview chỉ dùng để kiểm tra local. Khi triển khai, phục vụ `apps/web/dist` qua HTTPS và reverse proxy `/trpc`, `/healthz`, `/readyz` đến API trong cùng origin. API và database nên cùng khu vực triển khai.
+Chạy ba lệnh ở terminal riêng để xem bản build tại http://localhost:4173. API và ảnh dùng cùng origin qua proxy; service worker chỉ cache tài nguyên giao diện.
 
-Service worker chỉ cache tài nguyên giao diện, không cache response API hoặc trạng thái thanh toán. Phiên bản mới yêu cầu người dùng bấm cập nhật, không tự tải lại màn hình đang thao tác. PWA cần HTTPS hoặc localhost; chế độ dev không đăng ký service worker.
+## Production và tiến độ
 
-## Bước tiếp theo
-
-Theo dõi [roadmap đầy đủ](docs/ROADMAP.md) để xem mốc bàn giao, thứ tự screen, công việc và tiêu chí nghiệm thu từng giai đoạn.
-
-Bộ thiết kế gồm Manrope, Reicon, mascot hoạt hình, token và component nghiệp vụ được mô tả tại [hướng hình ảnh](docs/DESIGN.md). Khi chạy local, mở http://localhost:5173/design/ để thử nền trắng, xanh–vàng, component compact và các trạng thái tương tác.
-
-Prototype [S01 — Trang chủ](docs/screens/S01-HOME.md) và [S02–S05 — Chia tiền](docs/screens/S02-S05-SPLIT.md) đã có tại http://localhost:5173/. Chọn Thêm khoản → Thử bill mẫu để xem bill trắng đen, bỏ người theo khoản và chốt vào sổ mẫu. Bản nháp giữ sau khi tải lại.
-
-Màn [S08 — Người nhận](docs/screens/S08-RECIPIENT.md): mở http://localhost:5173/p/mau-binh để xem phần tiền, báo đã chuyển, hẹn trả và báo sai. Mã QR dùng cây 3D để mở bill mẫu, chưa cấu hình nhận tiền; phản hồi chỉ lưu trên thiết bị, chưa gửi tới người tạo hoặc đồng bộ với sổ mẫu Trang chủ.
+- [Triển khai domain, backup và rollback](docs/mvp/DEPLOY.md).
+- [Tiến độ MVP và bằng chứng](docs/mvp/PROGRESS.md).
+- [Roadmap toàn sản phẩm](docs/ROADMAP.md).
+- [Design system](docs/DESIGN.md).
+- [Tích hợp QR cây](docs/integrations/WEBGL-QR.md).

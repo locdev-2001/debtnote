@@ -1,0 +1,7 @@
+ALTER TABLE "bills" ADD CONSTRAINT "bill_amounts_valid" CHECK ("bills"."fee" >= 0 AND "bills"."discount" >= 0 AND "bills"."total_amount" BETWEEN 0 AND 9007199254740991 AND "bills"."own_amount" BETWEEN 0 AND "bills"."total_amount");--> statement-breakpoint
+ALTER TABLE "bills" ADD CONSTRAINT "bill_mode_valid" CHECK ("bills"."mode" IN ('equal','custom') AND "bills"."status" IN ('active','cancelled'));--> statement-breakpoint
+ALTER TABLE "debts" ADD CONSTRAINT "debt_amount_valid" CHECK ("debts"."principal_amount" BETWEEN 1 AND 9007199254740991);--> statement-breakpoint
+ALTER TABLE "debts" ADD CONSTRAINT "debt_state_valid" CHECK ("debts"."direction" IN ('receivable','payable') AND "debts"."status" IN ('active','cancelled'));--> statement-breakpoint
+ALTER TABLE "payments" ADD CONSTRAINT "payment_amount_valid" CHECK ("payments"."amount" BETWEEN 1 AND 9007199254740991 AND "payments"."excess_amount" BETWEEN 0 AND "payments"."amount");--> statement-breakpoint
+ALTER TABLE "payments" ADD CONSTRAINT "payment_state_valid" CHECK ("payments"."direction" IN ('receivable','payable') AND "payments"."status" IN ('pending','confirmed','rejected') AND ("payments"."status" <> 'confirmed' OR "payments"."confirmed_at" IS NOT NULL));--> statement-breakpoint
+ALTER TABLE "promises" ADD CONSTRAINT "promise_amount_valid" CHECK ("promises"."amount" BETWEEN 1 AND 9007199254740991);

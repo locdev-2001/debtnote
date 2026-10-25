@@ -406,7 +406,7 @@
   border-radius: var(--radius-control);
   outline: none;
   color: var(--text-primary);
-  background: var(--surface-subtle);
+  background: var(--form-field-surface);
   font: inherit;
   font-weight: var(--font-weight-regular);
   height: var(--component-input-height);
@@ -450,6 +450,7 @@
   --action-primary-hover: var(--receipt-muted);
   --action-subtle: var(--receipt-input-surface);
   --surface-subtle: var(--receipt-input-surface);
+  --form-field-surface: var(--receipt-input-surface);
   --input-surface: var(--receipt-input-surface);
   --input-text: var(--receipt-ink);
   --focus-ring: var(--receipt-ink);
@@ -606,5 +607,11 @@
   margin: -1px;
   clip-path: inset(50%);
   overflow: hidden;
+  white-space: nowrap;
+}
+.receipt-value {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: baseline;
   white-space: nowrap;
 }

@@ -40,3 +40,30 @@ export async function closeRedisConnection(connection: Redis): Promise<void> {
     connection.disconnect();
   }
 }
+
+export const receiptOcrQueueName = 'debtnote-receipt-ocr';
+export const receiptOcrPayloadSchema = z.object({ attachmentId: z.string().uuid() });
+export function createReceiptOcrQueue(connection: Redis) {
+  return new Queue<z.infer<typeof receiptOcrPayloadSchema>>(receiptOcrQueueName, {
+    connection,
+    defaultJobOptions: {
+      attempts: 2,
+      backoff: { type: 'exponential', delay: 3_000 },
+      removeOnComplete: { count: 100 },
+      removeOnFail: { count: 100 },
+    },
+  });
+}
+
+export async function scheduleReceiptOcr(
+  queue: ReturnType<typeof createReceiptOcrQueue>,
+  attachmentId: string,
+) {
+  const existing = await queue.getJob(attachmentId);
+  if (existing) {
+    const status = await existing.getState();
+    if (!['completed', 'failed', 'unknown'].includes(status)) return;
+    await existing.remove();
+  }
+  await queue.add('receipt', { attachmentId }, { jobId: attachmentId });
+}

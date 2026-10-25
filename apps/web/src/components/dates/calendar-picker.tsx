@@ -1,6 +1,6 @@
 import { type ChevronProps, DayPicker } from '@daypicker/react';
 import { vi } from '@daypicker/react/locale/vi';
-import { isDateKey } from '../../lib/calendar';
+import { getTodayKey, isDateKey } from '../../lib/calendar';
 import { AppIcon } from '../app-icon';
 
 function CalendarChevron({ orientation = 'right' }: ChevronProps) {
@@ -23,7 +23,8 @@ export default function CalendarPicker({
   onSelect: (date: string) => void;
 }) {
   const minimumDate = new Date(`${minDate}T12:00:00`);
-  const selectedDate = new Date(`${isDateKey(value) ? value : minDate}T12:00:00`);
+  const today = new Date(`${getTodayKey()}T12:00:00`);
+  const selectedDate = isDateKey(value) ? new Date(`${value}T12:00:00`) : undefined;
   return (
     <DayPicker
       id={id}
@@ -33,8 +34,8 @@ export default function CalendarPicker({
       mode="single"
       required
       selected={selectedDate}
-      defaultMonth={selectedDate}
-      today={minimumDate}
+      defaultMonth={selectedDate ?? today}
+      today={today}
       disabled={{ before: minimumDate }}
       startMonth={new Date(minimumDate.getFullYear(), minimumDate.getMonth(), 1)}
       locale={vi}

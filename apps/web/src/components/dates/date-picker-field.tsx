@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useId, useRef, useState } from 'react';
-import { isDateKey } from '../../lib/calendar';
 import type { ComponentSize } from '../../design/component-size';
+import { isDateKey } from '../../lib/calendar';
 import { AppIcon } from '../app-icon';
 import './date-picker.css';
 
@@ -24,7 +24,7 @@ export function DatePickerField({
   const labelId = `${fieldId}-label`;
   const valueId = `${fieldId}-value`;
   const [open, setOpen] = useState(false);
-  const fieldRef = useRef<HTMLDivElement>(null);
+  const fieldRef = useRef<HTMLFieldSetElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const displayValue = isDateKey(value) ? value.split('-').reverse().join('/') : 'Chọn ngày';
 
@@ -43,7 +43,8 @@ export function DatePickerField({
   }
 
   return (
-    <div
+    <fieldset
+      aria-labelledby={labelId}
       className="date-picker-field"
       data-component-size={size}
       ref={fieldRef}
@@ -93,6 +94,6 @@ export function DatePickerField({
           </Suspense>
         </div>
       )}
-    </div>
+    </fieldset>
   );
 }

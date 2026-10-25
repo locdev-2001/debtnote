@@ -3,32 +3,36 @@ import { ActionButton } from '../../components/actions/action-button';
 import { ActionSheet } from '../../components/actions/action-sheet';
 import { ChoiceGroup } from '../../components/actions/choice-group';
 import { AppIcon } from '../../components/app-icon';
+import { DatePickerField } from '../../components/dates/date-picker-field';
 import { MascotIllustration } from '../../components/illustrations/mascot-illustration';
 import { AmountField } from '../../components/money/amount-field';
 import { ExpenseReceipt, ReceiptAmountRow } from '../../components/money/expense-receipt';
 import { MoneyAmount } from '../../components/money/money-amount';
+import { getTodayKey } from '../../lib/calendar';
 import {
   calculateSplitPreview,
   currentPerson,
-  splitDraftTotal,
   type SplitDraft,
   type SplitItem,
   type SplitPerson,
   type SplitPreview,
+  splitDraftTotal,
   toggleSplitPerson,
 } from './split-draft';
 import './split.css';
 
 interface SplitExpenseFlowProps {
   open: boolean;
+  previewMode?: boolean;
   draft: SplitDraft | null;
   completed: SplitPreview | null;
   people: readonly SplitPerson[];
   storageIssue: string;
+  notice?: string;
   onChange: (draft: SplitDraft) => void;
   onClose: () => void;
   onDiscard: () => void;
-  onConfirm: (preview: SplitPreview) => boolean;
+  onConfirm: (preview: SplitPreview, draft: SplitDraft) => boolean | Promise<boolean>;
 }
 
 function ParticipantChoices({
@@ -58,10 +62,12 @@ function ParticipantChoices({
 
 export function SplitExpenseFlow({
   open,
+  previewMode = true,
   draft,
   completed,
   people,
   storageIssue,
+  notice,
   onChange,
   onClose,
   onDiscard,
@@ -73,6 +79,7 @@ export function SplitExpenseFlow({
   const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
   const [invalidAmountIds, setInvalidAmountIds] = useState<string[]>([]);
   const [commitIssue, setCommitIssue] = useState('');
+  const [committing, setCommitting] = useState(false);
   const titles = ['Chọn người', 'Chia tiền', 'Xem lại'];
   let preview: SplitPreview | null = null;
   let totalAmount: number | null = null;
@@ -81,6 +88,7 @@ export function SplitExpenseFlow({
     try {
       totalAmount = splitDraftTotal(draft);
       preview = calculateSplitPreview(draft);
+      totalAmount = preview.totalAmount;
     } catch (error) {
       calculationIssue = error instanceof Error ? error.message : 'Kiểm tra lại khoản tiền.';
     }
@@ -145,7 +153,7 @@ export function SplitExpenseFlow({
         </div>
       ) : (
         draft && (
-          <div className="split-flow">
+          <fieldset className="split-flow" disabled={committing}>
             <nav className="split-steps" aria-label="Các bước chia tiền">
               {['Người', 'Chia', 'Chốt'].map((label, index) => (
                 <button
@@ -428,6 +436,36 @@ export function SplitExpenseFlow({
                   >
                     Thêm khoản
                   </ActionButton>
+                  <details className="split-options">
+                    <summary>Tùy chọn</summary>
+                    <div className="split-item-editor">
+                      <label className="money-form-field">
+                        Tên bill
+                        <input
+                          maxLength={80}
+                          value={draft.title ?? ''}
+                          placeholder="Khoản chung"
+                          onChange={(event) => onChange({ ...draft, title: event.target.value })}
+                        />
+                      </label>
+                      <AmountField
+                        label="Phí"
+                        value={draft.fee ?? ''}
+                        onChange={(fee) => onChange({ ...draft, fee })}
+                      />
+                      <AmountField
+                        label="Giảm giá"
+                        value={draft.discount ?? ''}
+                        onChange={(discount) => onChange({ ...draft, discount })}
+                      />
+                      <DatePickerField
+                        label="Ngày hẹn"
+                        value={draft.dueDate ?? ''}
+                        minDate={getTodayKey()}
+                        onChange={(dueDate) => onChange({ ...draft, dueDate })}
+                      />
+                    </div>
+                  </details>
                   {totalAmount === null ? (
                     <p className="split-error">Tổng tiền vượt giới hạn.</p>
                   ) : (
@@ -470,6 +508,10 @@ export function SplitExpenseFlow({
                       />
                     ))}
                   </div>
+                  {preview.fee > 0 && <ReceiptAmountRow label="Phí" amount={preview.fee} />}
+                  {preview.discount > 0 && (
+                    <ReceiptAmountRow label="Giảm giá" amount={preview.discount} deduction />
+                  )}
                   <ReceiptAmountRow
                     label="Tổng cộng"
                     amount={preview.totalAmount}
@@ -499,23 +541,39 @@ export function SplitExpenseFlow({
                 <footer className="split-flow-footer">
                   <ActionButton
                     icon="check"
-                    onClick={() => {
-                      if (!onConfirm(preview))
-                        setCommitIssue('Chưa ghi được. Kiểm tra thông báo ở tổng quan.');
+                    pending={committing}
+                    onClick={async () => {
+                      if (committing) return;
+                      setCommitting(true);
+                      try {
+                        if (!(await onConfirm(preview, draft)))
+                          setCommitIssue('Chưa chốt được. Vui lòng thử lại.');
+                      } catch {
+                        setCommitIssue('Chưa chốt được. Vui lòng thử lại.');
+                      } finally {
+                        setCommitting(false);
+                      }
                     }}
                   >
                     Chốt khoản
                   </ActionButton>
-                  <p className="split-caption">Chỉ lưu trong sổ mẫu trên thiết bị.</p>
+                  {previewMode && (
+                    <p className="split-caption">Chỉ lưu trong sổ mẫu trên thiết bị.</p>
+                  )}
                 </footer>
               </>
+            )}
+            {notice && (
+              <p className="split-caption" role="status">
+                {notice}
+              </p>
             )}
             {(storageIssue || commitIssue) && (
               <p className="split-error" role="alert">
                 {commitIssue || storageIssue}
               </p>
             )}
-          </div>
+          </fieldset>
         )
       )}
     </ActionSheet>

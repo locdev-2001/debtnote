@@ -1,5 +1,5 @@
-import { type DeadlineKind, type SettlementState, settlementStates } from './presentation';
 import type { ComponentSize } from '../../design/component-size';
+import { type DeadlineKind, type SettlementState, settlementStates } from './presentation';
 
 export function SettlementBadge({
   state,

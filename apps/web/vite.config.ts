@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
   const environment = loadEnv(mode, workspaceRoot, '');
   const apiTarget = `http://127.0.0.1:${environment.API_PORT || '3001'}`;
   const proxy = Object.fromEntries(
-    ['/trpc', '/healthz', '/readyz'].map((path) => [path, { target: apiTarget }]),
+    ['/trpc', '/files', '/healthz', '/readyz'].map((path) => [path, { target: apiTarget }]),
   );
 
   return {
@@ -52,8 +52,13 @@ export default defineConfig(({ mode }) => {
           ],
         },
         workbox: {
-          globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
-          navigateFallbackDenylist: [/^\/trpc(?:\/|$)/, /^\/healthz$/, /^\/readyz$/],
+          globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2}'],
+          navigateFallbackDenylist: [
+            /^\/files(?:\/|$)/,
+            /^\/trpc(?:\/|$)/,
+            /^\/healthz$/,
+            /^\/readyz$/,
+          ],
           runtimeCaching: [],
           cleanupOutdatedCaches: true,
         },

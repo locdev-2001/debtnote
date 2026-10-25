@@ -1,5 +1,5 @@
-import { AppIcon } from '../app-icon';
 import type { ComponentSize } from '../../design/component-size';
+import { AppIcon } from '../app-icon';
 import { PersonAvatar } from '../people/person-avatar';
 import { MoneyAmount } from './money-amount';
 import type { DeadlineKind, MoneyDirection, SettlementState } from './presentation';

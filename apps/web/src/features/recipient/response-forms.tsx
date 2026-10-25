@@ -63,25 +63,52 @@ export function ReportPaymentForm({
 export function RecipientPromiseForm({
   today,
   promisedDate,
+  promisedAmount,
+  outstanding,
   onConfirm,
 }: {
   today: string;
   promisedDate: string | null;
-  onConfirm: (date: string) => void;
+  promisedAmount?: number | null | undefined;
+  outstanding: number;
+  onConfirm: (date: string, amount: number) => void;
 }) {
   const [date, setDate] = useState(
     promisedDate && promisedDate >= today ? promisedDate : addDays(today, 1),
   );
+  const [amount, setAmount] = useState(String(promisedAmount ?? outstanding));
+  const [valid, setValid] = useState(true);
+  const amountValid = valid && Number(amount) > 0 && Number(amount) <= outstanding;
   return (
     <form
       className="recipient-form"
       onSubmit={(event) => {
         event.preventDefault();
-        if (isDateKey(date) && date >= today) onConfirm(date);
+        if (isDateKey(date) && date >= today && amountValid) onConfirm(date, Number(amount));
       }}
     >
+      <AmountField
+        label="Số hẹn trả"
+        value={amount}
+        onChange={setAmount}
+        onValidityChange={setValid}
+      />
+      <AmountPresets
+        amounts={[100_000, outstanding].filter((preset) => preset <= outstanding)}
+        fullAmount={outstanding}
+        fullLabel="Toàn bộ"
+        selected={amount}
+        onSelect={(preset) => {
+          setAmount(String(preset));
+          setValid(true);
+        }}
+      />
       <PromiseDateField today={today} value={date} onChange={setDate} />
-      <ActionButton type="submit" icon="calendar" disabled={!isDateKey(date) || date < today}>
+      <ActionButton
+        type="submit"
+        icon="calendar"
+        disabled={!isDateKey(date) || date < today || !amountValid}
+      >
         Hẹn ngày này
       </ActionButton>
     </form>
@@ -99,7 +126,9 @@ export function DisputeForm({
 }) {
   const [reason, setReason] = useState<DisputeReason>(dispute?.reason ?? 'amount');
   const [note, setNote] = useState(dispute?.note ?? '');
-  const personalLines = request.lines.filter((line) => line.personalAmount > 0);
+  const personalLines = request.lines.filter(
+    (line) => line.personalAmount > 0 && line.disputable !== false,
+  );
   const [itemId, setItemId] = useState(dispute?.itemId ?? personalLines[0]?.id ?? '');
   return (
     <form

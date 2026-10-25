@@ -1,5 +1,5 @@
-import { AppIcon } from '../app-icon';
 import type { ComponentSize } from '../../design/component-size';
+import { AppIcon } from '../app-icon';
 import { MoneyAmount } from './money-amount';
 import { type MoneyDirection, moneyDirections } from './presentation';
 

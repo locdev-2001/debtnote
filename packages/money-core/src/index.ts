@@ -78,3 +78,84 @@ export function splitExpenseItems(
   }
   return [...totals].map(([participantId, amount]) => ({ participantId, amount }));
 }
+
+export function allocateProportionally(
+  amount: number,
+  weights: readonly MoneyShare[],
+): readonly MoneyShare[] {
+  assertMinorUnits(amount);
+  const totalWeight = weights.reduce((total, share) => {
+    assertMinorUnits(share.amount);
+    const sum = total + share.amount;
+    assertMinorUnits(sum);
+    return sum;
+  }, 0);
+  if (!totalWeight) {
+    if (amount) throw new Error('Không có phần chia để phân bổ.');
+    return weights.map((share) => ({ participantId: share.participantId, amount: 0 }));
+  }
+  const denominator = BigInt(totalWeight);
+  const allocations = weights.map((share) => {
+    const numerator = BigInt(amount) * BigInt(share.amount);
+    return {
+      participantId: share.participantId,
+      amount: Number(numerator / denominator),
+      remainder: numerator % denominator,
+    };
+  });
+  let remaining = amount - allocations.reduce((total, share) => total + share.amount, 0);
+  const priority = [...allocations].sort((left, right) =>
+    left.remainder === right.remainder
+      ? left.participantId.localeCompare(right.participantId)
+      : left.remainder > right.remainder
+        ? -1
+        : 1,
+  );
+  for (const share of priority) {
+    if (!remaining) break;
+    share.amount += 1;
+    remaining -= 1;
+  }
+  return allocations.map(({ participantId, amount: allocated }) => ({
+    participantId,
+    amount: allocated,
+  }));
+}
+
+export function calculateBillSplit(
+  items: readonly SharedExpenseItem[],
+  participantIds: readonly string[],
+  mode: 'equal' | 'custom',
+  fee = 0,
+  discount = 0,
+) {
+  assertMinorUnits(fee);
+  assertMinorUnits(discount);
+  const baseTotal = items.reduce((total, item) => {
+    assertMinorUnits(item.amount);
+    const sum = total + item.amount;
+    assertMinorUnits(sum);
+    return sum;
+  }, 0);
+  const grossTotal = baseTotal + fee;
+  assertMinorUnits(grossTotal);
+  if (discount > grossTotal) throw new Error('Giảm giá vượt tổng tiền.');
+  const baseShares =
+    mode === 'equal'
+      ? splitEvenly(baseTotal, participantIds)
+      : splitExpenseItems(items, participantIds);
+  const fees = allocateProportionally(fee, baseShares);
+  const grossShares = baseShares.map((share) => ({
+    participantId: share.participantId,
+    amount:
+      share.amount + (fees.find((part) => part.participantId === share.participantId)?.amount ?? 0),
+  }));
+  const discounts = allocateProportionally(discount, grossShares);
+  const shares = grossShares.map((share) => ({
+    participantId: share.participantId,
+    amount:
+      share.amount -
+      (discounts.find((part) => part.participantId === share.participantId)?.amount ?? 0),
+  }));
+  return { totalAmount: grossTotal - discount, baseTotal, shares, fees, discounts };
+}

@@ -1,6 +1,6 @@
 # Roadmap Debtnote
 
-Cập nhật: 25/10/2026. Đây là kế hoạch triển khai; chỉ các mục được đánh dấu hoàn thành mới là chức năng đã có.
+Cập nhật: 25/10/2026. MVP đã chạy local với dữ liệu thật; xem [bằng chứng và giới hạn](mvp/PROGRESS.md). Production chưa nghiệm thu. Các mục chưa đánh dấu có thể là phần nâng cao hoặc kiểm tra trên thiết bị/dịch vụ thực tế.
 
 ## Đích đến và phạm vi
 
@@ -34,19 +34,19 @@ Không ấn định ngày giao trong tài liệu này. Ước lượng lịch sa
 - [x] PostgreSQL/Drizzle, Redis/BullMQ, worker độc lập và tác vụ kiểm tra đi hết hàng đợi.
 - [x] `money-core`: chia đều, phân bổ phần dư ổn định và tính số còn nợ từ các thanh toán được xác nhận.
 - [x] Môi trường local, Docker Compose, build production và hướng dẫn chạy.
-- [x] CI: lint, typecheck, 18 kiểm thử, build, migration và kiểm tra API/worker thực tế.
+- [x] CI: lint, typecheck, kiểm thử, build, migration và kiểm tra API/worker thực tế.
 
-Chưa có bảng nghiệp vụ, đăng nhập, lưu bill thật, OCR, QR thanh toán hoặc gửi nhắc. Các màn S01–S05 và S08 hiện là prototype dùng dữ liệu mẫu trên thiết bị.
+Đã có bảng nghiệp vụ, SĐT/PIN, lưu bill, OCR, link khách và nhắc trong ứng dụng. Prototype chỉ mở riêng trong development; Trang chủ dùng PostgreSQL.
 
-## 1. Thiết kế screen và prototype — bước làm ngay
+## 1. Thiết kế screen và prototype
 
 - [x] P1.0 Có nền tảng thiết kế bản đầu: Manrope, nền trắng, xanh–vàng, component compact, token nghiệp vụ, component dùng chung, Reicon, 8 ảnh mascot và trang xem thử riêng.
-- [ ] P1.1 Chốt cấu trúc điều hướng, hành động tạo mới và cách quay lại mà không mất bản nháp.
+- [x] P1.1 Chốt cấu trúc điều hướng, hành động tạo mới và cách quay lại mà không mất bản nháp.
 - [x] P1.2 Dựng prototype Trang chủ: cần thu, cần trả, đến hạn/quá hạn, danh sách cần xử lý và nút tạo khoản tiền. Bản đầu để duyệt, xem [S01](screens/S01-HOME.md).
 - [x] P1.3 Prototype tạo/chia khoản thủ công và bill mẫu: chọn người; chia đều/tùy chỉnh; xem lại và chốt vào sổ mẫu. Ảnh bill hiện chỉ xem trước, chưa nối OCR. Xem [S02–S05](screens/S02-S05-SPLIT.md).
 - [x] P1.4 Prototype người nhận S08: bill riêng, báo đã chuyển/một phần, hẹn trả, báo sai theo dòng, đã trả đủ và link hết hạn. QR dùng cây 3D, fixture mở bill mẫu; chưa có cấu hình nhận tiền/link/backend thật. Xem [S08](screens/S08-RECIPIENT.md).
-- [ ] P1.5 Thiết kế chi tiết người/khoản tiền, nhận một phần, nhận đủ và xử lý nhận thừa.
-- [ ] P1.6 Thiết kế theo dõi, báo cáo và thiết lập nhận tiền/nhắc hạn.
+- [x] P1.5 Thiết kế chi tiết người/khoản tiền, nhận một phần, nhận đủ và xử lý nhận thừa.
+- [x] P1.6 Thiết kế theo dõi, báo cáo và thiết lập nhận tiền/nhắc hạn.
 - [ ] P1.7 Duyệt prototype trên điện thoại: ghi số lần chạm, số lần gõ và thời gian cho từng nhiệm vụ.
 
 Nghiệm thu: có flow bấm được với dữ liệu mẫu và các trạng thái rỗng, tải, lỗi, mất mạng, thành công. Không dùng nút không có phản hồi. Dữ liệu mẫu phải được nhận biết rõ.
@@ -75,12 +75,12 @@ Nghiệm thu: có flow bấm được với dữ liệu mẫu và các trạng t
 
 Phụ thuộc: cấu trúc và flow đầu tiên ở giai đoạn 1.
 
-- [ ] P2.1 Chọn và triển khai cơ chế đăng nhập, session, đăng xuất và quay lại bản nháp sau đăng nhập.
-- [ ] P2.2 Tạo schema nền: tài khoản, sổ, người tham gia; sổ cá nhân được tạo tự động.
-- [ ] P2.3 Tách người được ghi trong sổ khỏi tài khoản đăng nhập; không tự ghép người vì trùng tên.
-- [ ] P2.4 Xác định quyền chủ sổ, người tham gia và khách mở link; kiểm tra quyền tại application service.
-- [ ] P2.5 Hoàn thiện contract, migration và application service theo từng luồng, dùng adapter cho hạ tầng.
-- [ ] P2.6 Có lịch sử thay đổi cho các thao tác ảnh hưởng tiền, người được chia và trạng thái xác nhận.
+- [x] P2.1 Chọn và triển khai cơ chế đăng nhập, session, đăng xuất và quay lại bản nháp sau đăng nhập.
+- [x] P2.2 Tạo schema nền: tài khoản, sổ, người tham gia; sổ cá nhân được tạo tự động.
+- [x] P2.3 Tách người được ghi trong sổ khỏi tài khoản đăng nhập; không tự ghép người vì trùng tên.
+- [x] P2.4 Xác định quyền chủ sổ, người tham gia và khách mở link; kiểm tra quyền tại application service.
+- [x] P2.5 Hoàn thiện contract, migration và application service theo từng luồng, dùng adapter cho hạ tầng.
+- [x] P2.6 Có lịch sử thay đổi cho các thao tác ảnh hưởng tiền, người được chia và trạng thái xác nhận.
 
 Nghiệm thu: hai tài khoản không xem/sửa chéo sổ; link khách không truy cập được thông tin ngoài phạm vi cho phép; reload và đăng nhập lại vẫn đúng danh tính/sổ.
 
@@ -88,14 +88,14 @@ Nghiệm thu: hai tài khoản không xem/sửa chéo sổ; link khách không t
 
 Phụ thuộc: giai đoạn 2; áp dụng S01–S07 theo từng lát chức năng.
 
-- [ ] P3.1 Tạo schema khoản chi, dòng khoản chi, phần chia và khoản nợ theo ERD.
-- [ ] P3.2 Tạo khoản trực tiếp: chọn người, số tiền và chiều cần thu/cần trả; ghi chú/hạn trả tùy chọn.
-- [ ] P3.3 Tạo bill nháp; chọn người trả và người tham gia; nhóm quen/người gần đây giúp giảm thao tác.
-- [ ] P3.4 Chia đều hoặc chọn người chịu từng dòng; chọn nhiều dòng, bỏ ngoại lệ và chỉ một người.
-- [ ] P3.5 Chốt quy tắc phí, giảm giá và phần dư; hiển thị cách phân bổ trước khi chốt.
-- [ ] P3.6 Lưu bản nháp, mở lại sau reload; đánh dấu rõ nội dung chưa lưu hoặc chưa đồng bộ.
-- [ ] P3.7 Chốt bill và tạo các khoản nợ trong một transaction; chống tạo trùng khi bấm lại/retry.
-- [ ] P3.8 Điều chỉnh/hủy khoản đã chốt qua luồng có lịch sử; không âm thầm ghi đè khoản đã có thanh toán.
+- [x] P3.1 Tạo schema khoản chi, dòng khoản chi, phần chia và khoản nợ theo ERD.
+- [x] P3.2 Tạo khoản trực tiếp: chọn người, số tiền và chiều cần thu/cần trả; ghi chú/hạn trả tùy chọn.
+- [x] P3.3 Tạo bill nháp; chọn người trả và người tham gia từ người đã lưu. Nhóm quen mở rộng để sau MVP.
+- [x] P3.4 Chia đều hoặc chọn người chịu từng dòng; chọn nhiều dòng, bỏ ngoại lệ và chỉ một người.
+- [x] P3.5 Chốt quy tắc phí, giảm giá và phần dư; hiển thị cách phân bổ trước khi chốt.
+- [x] P3.6 Lưu bản nháp, mở lại sau reload; đánh dấu rõ nội dung chưa lưu hoặc chưa đồng bộ.
+- [x] P3.7 Chốt bill và tạo các khoản nợ trong một transaction; chống tạo trùng khi bấm lại/retry.
+- [x] P3.8 Hủy khoản chưa có thanh toán với lịch sử. Khoản đã có thanh toán không bị ghi đè; điều chỉnh bằng bút toán riêng thuộc bản sau.
 
 Nghiệm thu: tổng phần chia bằng tổng bill; không tạo khoản nợ người trả với chính họ; hiển thị riêng tiền đã ứng và chi tiêu thực tế. Bill mẫu 1.500.000đ cho kết quả An/Bình/Chi 360.000đ, Dũng/Em 210.000đ; An cần thu 1.140.000đ.
 
@@ -105,9 +105,9 @@ Phụ thuộc: giai đoạn 3. Có thể thử chất lượng nhà cung cấp t
 
 - [ ] P4.1 Tạo contract đọc hóa đơn và lưu ảnh; chọn adapter sau khi thử trên bộ bill tiếng Việt đa dạng.
 - [ ] P4.2 Đo độ đúng món, số lượng, thành tiền, phí/giảm giá; thời gian p50/p95 và chi phí mỗi bill.
-- [ ] P4.3 Chụp/chọn ảnh trên điện thoại; xử lý xoay, kích thước và tải lên storage riêng tư.
-- [ ] P4.4 Worker đọc ảnh bất đồng bộ; người dùng chọn người trong lúc chờ; có retry, giới hạn thời gian và báo lỗi.
-- [ ] P4.5 Chuyển kết quả OCR sang bill nháp; kiểm tra tổng, chỉ rõ dòng cần kiểm tra, cho bấm sửa/chụp lại.
+- [x] P4.3 Chụp/chọn ảnh trên điện thoại; xử lý xoay, kích thước và tải lên storage riêng tư.
+- [x] P4.4 Worker đọc ảnh bất đồng bộ; người dùng chọn người trong lúc chờ; có retry, giới hạn thời gian và báo lỗi.
+- [x] P4.5 Chuyển kết quả OCR sang bill nháp; kiểm tra tổng, chỉ rõ dòng cần kiểm tra, cho bấm sửa/chụp lại.
 - [ ] P4.6 Giữ lựa chọn và bản nháp khi OCR lỗi; quản lý quyền xem ảnh và vòng đời file bỏ dở.
 
 Nghiệm thu: không để tác vụ OCR chặn API thao tác; không báo đọc đúng chỉ vì tổng khớp. Người dùng xem và xác nhận trước khi phát sinh nợ. Có báo cáo kết quả bộ bill thử trước khi chọn adapter.
@@ -116,13 +116,13 @@ Nghiệm thu: không để tác vụ OCR chặn API thao tác; không báo đọ
 
 Phụ thuộc: giai đoạn 2–3; dùng bill OCR từ giai đoạn 4 khi sẵn sàng.
 
-- [ ] P5.1 Tạo link riêng có phạm vi, thời hạn và khả năng thu hồi; mở được mà không cài app/đăng ký.
-- [ ] P5.2 Hiện số cần trả và các dòng tạo nên số tiền đó; có luồng báo sai cụ thể.
-- [ ] P5.3 Thiết lập thông tin nhận tiền và QR đúng người nhận, số tiền, nội dung; chọn adapter QR phù hợp.
-- [ ] P5.4 Tạo schema thanh toán và phân bổ thanh toán: một lần trả nhiều khoản, một khoản được trả nhiều lần.
-- [ ] P5.5 Người trả báo đã chuyển; người nhận xác nhận hoặc từ chối. Bằng chứng ảnh không tự đóng khoản nợ.
-- [ ] P5.6 Ghi nhận nhận đủ/một phần/tiền mặt; tiền thừa được giữ thành khoản cần xử lý, không làm nợ âm.
-- [ ] P5.7 Khóa/kiểm tra đồng thời và idempotency để xác nhận lặp không làm trừ tiền hai lần.
+- [x] P5.1 Tạo link riêng có phạm vi, thời hạn và khả năng thu hồi; mở được mà không cài app/đăng ký.
+- [x] P5.2 Hiện số cần trả và các dòng tạo nên số tiền đó; có luồng báo sai cụ thể.
+- [x] P5.3 Thiết lập thông tin nhận tiền và QR đúng người nhận, số tiền, nội dung; chọn adapter QR phù hợp.
+- [x] P5.4 Tạo schema thanh toán và phân bổ thanh toán: một lần trả nhiều khoản, một khoản được trả nhiều lần.
+- [x] P5.5 Người trả báo đã chuyển; người nhận xác nhận hoặc từ chối. Bằng chứng ảnh không tự đóng khoản nợ.
+- [x] P5.6 Ghi nhận nhận đủ/một phần/tiền mặt; tiền thừa được giữ thành khoản cần xử lý, không làm nợ âm.
+- [x] P5.7 Khóa/kiểm tra đồng thời và idempotency để xác nhận lặp không làm trừ tiền hai lần.
 
 Nghiệm thu: Bình trả 200.000đ trên khoản 360.000đ thì còn 160.000đ; An còn cần thu 940.000đ. Một lần chuyển 260.000đ phân bổ được vào hai khoản 160.000đ và 100.000đ. Chuyển 400.000đ cho khoản 360.000đ hiện 40.000đ thừa riêng. Tất cả giữ đúng sau reload và trên hai thiết bị.
 
@@ -130,12 +130,12 @@ Nghiệm thu: Bình trả 200.000đ trên khoản 360.000đ thì còn 160.000đ;
 
 Phụ thuộc: giai đoạn 5.
 
-- [ ] P6.1 Tạo schema lời hẹn và lần nhắc; tách hạn trả khỏi lời hẹn thực tế, giữ lịch sử đổi hẹn.
-- [ ] P6.2 Danh sách đến hạn/quá hạn/chờ xác nhận/đang báo sai; thao tác ngay trên từng khoản.
-- [ ] P6.3 Người nhận chọn ngày trả nhanh và hẹn trả một phần; lời hẹn mới không cộng trùng lời hẹn cũ.
-- [ ] P6.4 Nội dung nhắc có sẵn và chia sẻ qua chức năng của thiết bị; không coi mở chia sẻ là đã gửi/đã đọc.
-- [ ] P6.5 Nhắc theo lịch qua kênh được chọn khi có tích hợp và quyền nhận phù hợp; adapter chịu trách nhiệm đặc thù kênh.
-- [ ] P6.6 Giới hạn tần suất, hoãn nhắc, tắt nhắc; dừng lịch cũ khi khoản đã trả hoặc lời hẹn thay đổi; có retry và chống gửi trùng.
+- [x] P6.1 Tạo schema lời hẹn và lần nhắc; tách hạn trả khỏi lời hẹn thực tế, giữ lịch sử đổi hẹn.
+- [x] P6.2 Danh sách đến hạn/quá hạn/chờ xác nhận/đang báo sai; thao tác ngay trên từng khoản.
+- [x] P6.3 Người nhận chọn ngày trả nhanh và hẹn trả một phần; lời hẹn mới không cộng trùng lời hẹn cũ.
+- [x] P6.4 Nội dung nhắc có sẵn và chia sẻ qua chức năng của thiết bị; không coi mở chia sẻ là đã gửi/đã đọc.
+- [x] P6.5 Worker nhắc theo lịch trong ứng dụng. SMS/Zalo/email/Web Push cần tích hợp và quyền nhận, chưa thuộc bản MVP này.
+- [x] P6.6 Nhắc tối đa một lần/khoản/ngày trong app; đổi lời hẹn để hoãn, có tắt nhắc và giờ nhắc. Trả đủ/đổi hẹn dừng lịch cũ; worker thử lại sau lỗi và chống tạo thông báo trùng.
 
 Nghiệm thu: khoản trả đủ không còn trong danh sách cần nhắc; trả một phần nhắc đúng số còn lại; thay ngày hẹn không tạo hai lịch gửi; lỗi kênh không làm mất lịch sử hoặc đổi trạng thái tiền.
 
@@ -143,10 +143,10 @@ Nghiệm thu: khoản trả đủ không còn trong danh sách cần nhắc; tr�
 
 Phụ thuộc: số dư và lịch sử đáng tin cậy từ giai đoạn 5–6.
 
-- [ ] P7.1 Trang chủ dùng số thật: cần thu, cần trả, đến hạn, quá hạn; không cộng phần cá nhân vào khoản cần thu.
+- [x] P7.1 Trang chủ dùng số thật: cần thu, cần trả, đến hạn, quá hạn; không cộng phần cá nhân vào khoản cần thu.
 - [ ] P7.2 Báo cáo tiền đã ứng, chi tiêu cá nhân, tiền đã thu/trả, còn nợ; lọc theo người, sổ và khoảng thời gian.
-- [ ] P7.3 Lịch 7/30 ngày: đến hạn, có lời hẹn, quá hạn, chưa có ngày; các nhóm dùng để cộng tổng phải loại trừ nhau.
-- [ ] P7.4 Bấm mỗi chỉ số ra danh sách khoản cấu thành; số tổng và chi tiết dùng chung cách tính.
+- [x] P7.3 MVP có lịch 7 ngày: đến hạn, có lời hẹn, quá hạn, chưa có ngày; mỗi phần tiền chỉ nằm trong một nhóm. Hẹn một phần tách khỏi phần còn lại. Tùy chọn 30 ngày để bản sau.
+- [x] P7.4 Bấm các nhóm lịch thu ra khoản cấu thành; số tổng và chi tiết dùng projection chung. Drill-down toàn bộ chỉ số báo cáo và lọc kỳ nâng cao để bản sau.
 - [ ] P7.5 Mốc thời gian rõ ràng: báo cáo lịch sử dựa vào thời điểm xác nhận/điều chỉnh; phân biệt tình trạng hiện tại với tình trạng tại ngày báo cáo.
 
 Nghiệm thu bộ dữ liệu còn nợ 940.000đ: Chi hẹn 360.000đ trong 7 ngày; Em đến hạn 210.000đ chưa hẹn; Dũng quá hạn 210.000đ; Bình chưa có hạn 160.000đ. Không gọi 570.000đ đến hạn là tiền chắc chắn thu được.
@@ -159,7 +159,7 @@ Thực hiện kiểm tra chức năng trong từng giai đoạn; đây là cửa
 - [ ] P8.2 Kiểm tra Android Chrome, iPhone Safari và link mở từ ứng dụng chat phổ biến; có đường mở bằng trình duyệt ngoài khi cần.
 - [ ] P8.3 Kiểm tra thao tác bàn phím, vùng chạm, nội dung đọc được, trạng thái lỗi, nút quay lại và cập nhật PWA không làm mất thao tác.
 - [ ] P8.4 Đo hiệu năng trên cấu hình thiết bị/mạng/tải được ghi lại: phản hồi chia tiền mục tiêu dưới 50 ms; nội dung chính link thanh toán trong 2,5 giây; API thông thường p95 dưới 300 ms tại server, gồm truy vấn DB và không gồm OCR.
-- [ ] P8.5 Kiểm tra quyền, token hết hạn/thu hồi, upload, rate limit, sửa đồng thời, request lặp và khôi phục khi worker chạy lại.
+- [x] P8.5 Kiểm tra quyền, token hết hạn/thu hồi, upload, rate limit, sửa đồng thời, request lặp và khôi phục khi worker chạy lại.
 - [ ] P8.6 Deploy staging rồi production: HTTPS, domain, cùng origin cho web/API, cấu hình riêng từng môi trường và migration được kiểm tra.
 - [ ] P8.7 Backup database, thử restore, rollback phiên bản, log/metrics có giới hạn dữ liệu nhạy cảm và cảnh báo lỗi API/queue.
 - [ ] P8.8 Dùng thử với mục tiêu 5–10 người trong 2–3 nhóm; đo thời gian tạo khoản, tỷ lệ gửi yêu cầu/thanh toán, số lần sửa phép chia và phản hồi.
@@ -190,4 +190,4 @@ Các con số hiệu năng và quy mô dùng thử là mục tiêu nghiệm thu,
 
 ## Việc thực hiện tiếp theo
 
-Duyệt prototype S02–S05 tại Trang chủ → Thêm khoản → Thử bill mẫu. Giao diện chia tiền theo giấy bill trắng đen; lưu bản nháp và chốt vào sổ mẫu trên thiết bị. S08 đã có tại `/p/mau-binh`: xem phần mình, báo chuyển, hẹn và báo sai trong dữ liệu mẫu. Tiếp theo duyệt S06–S07: chi tiết bill/người và lịch sử. OCR, database, QR và link thật vẫn thuộc các giai đoạn triển khai sau.
+Chạy [hướng dẫn deploy](mvp/DEPLOY.md) trên server sau khi pull, cấu hình proxy cùng origin và kiểm tra domain. Sau đó nghiệm thu trên Android/iPhone thật và nhóm dùng thử. Các phần chưa nằm trong MVP: nhóm quen, điều chỉnh sau khi đã có thanh toán, bộ benchmark OCR đa dạng, báo cáo theo khoảng thời gian/30 ngày, push hoặc kênh gửi bên ngoài, đối soát ngân hàng.

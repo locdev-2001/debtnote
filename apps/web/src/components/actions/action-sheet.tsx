@@ -36,6 +36,12 @@ export function ActionSheet({ open, title, children, onClose }: ActionSheetProps
       className="money-action-sheet"
       ref={dialogRef}
       onClose={onClose}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          onClose();
+        }
+      }}
       aria-label={title}
       onPointerDown={(event) => {
         pointerStartedOutside.current =

@@ -1,0 +1,25 @@
+{
+  "name": "@debtnote/application",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "development": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "build": "tsup src/index.ts --config ../../tsup.config.ts"
+  },
+  "dependencies": {
+    "@debtnote/contracts": "workspace:*",
+    "@debtnote/money-core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "tsup": "catalog:",
+    "vitest": "catalog:"
+  }
+}

@@ -9,6 +9,10 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@debtnote/application": "workspace:*",
+    "@debtnote/contracts": "workspace:*",
+    "pg": "catalog:",
+    "image-size": "catalog:",
     "@debtnote/database": "workspace:*",
     "@debtnote/jobs": "workspace:*",
     "@debtnote/rpc": "workspace:*",
@@ -17,6 +21,7 @@
     "fastify": "5.12.7"
   },
   "devDependencies": {
+    "@types/pg": "catalog:",
     "@types/node": "catalog:",
     "tsup": "catalog:",
     "tsx": "catalog:",

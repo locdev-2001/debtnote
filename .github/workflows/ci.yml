@@ -42,6 +42,7 @@ jobs:
       - run: cp .env.example .env
       - run: pnpm check
       - run: pnpm db:migrate
+      - run: pnpm test:integration
       - name: Kiểm tra API và worker từ bản build
         shell: bash
         run: |

@@ -3,6 +3,7 @@ import { ActionButton } from '../../components/actions/action-button';
 import { ActionSheet } from '../../components/actions/action-sheet';
 import { ChoiceGroup } from '../../components/actions/choice-group';
 import { AppIcon } from '../../components/app-icon';
+import { Brand } from '../../components/brand/brand';
 import { MascotIllustration } from '../../components/illustrations/mascot-illustration';
 import { DebtListItem } from '../../components/money/debt-list-item';
 import { formatVnd } from '../../components/money/format-vnd';
@@ -205,12 +206,7 @@ export function HomePage({
   return (
     <div className="home-page">
       <header className="home-header">
-        <a className="home-brand" href="/" aria-label="Debtnote, trang chủ">
-          <img src="/favicon.svg" alt="" />
-          <span>
-            debtnote<span className="home-brand-dot">.</span>
-          </span>
-        </a>
+        <Brand href="/" />
         <span className="home-demo-label">Dữ liệu mẫu</span>
         <button
           type="button"

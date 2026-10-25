@@ -20,3 +20,5 @@ export function createDatabase(connectionString: string) {
     close: () => pool.end(),
   };
 }
+
+export { PostgresLedgerRepository } from './ledger-repository';

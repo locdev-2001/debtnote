@@ -11,12 +11,16 @@ export interface PaymentRequest {
   access: 'active' | 'expired';
   paymentQrPayload: string | null;
   billTotal: number;
+  originalLines?: readonly { id: string; title: string; amount: number; deduction?: boolean }[];
   lines: readonly {
     id: string;
     title: string;
     totalAmount: number;
     participantCount: number;
     personalAmount: number;
+    deduction?: boolean;
+    proportional?: boolean;
+    disputable?: boolean;
   }[];
 }
 export interface PaymentRequestReader {
@@ -32,12 +36,13 @@ export type DisputeReason = keyof typeof disputeReasons;
 export interface RecipientResponse {
   reportedAmount: number | null;
   promisedDate: string | null;
+  promisedAmount?: number | null;
   dispute: { reason: DisputeReason; note: string; itemId: string | null } | null;
 }
 export type RecipientCommand =
   | { type: 'report-payment'; amount: number }
   | { type: 'cancel-report' }
-  | { type: 'promise'; date: string }
+  | { type: 'promise'; date: string; amount?: number }
   | { type: 'dispute'; reason: DisputeReason; note: string; itemId: string | null };
 
 export function emptyRecipientResponse(): RecipientResponse {
@@ -72,7 +77,15 @@ export function applyRecipientCommand(
   if (command.type === 'cancel-report') return { ...response, reportedAmount: null };
   if (command.type === 'promise') {
     if (!isDateKey(command.date) || command.date < today) throw new Error('Chọn ngày từ hôm nay.');
-    return { ...response, promisedDate: command.date };
+    if (command.amount !== undefined) {
+      const issue = reportAmountIssue(request, command.amount);
+      if (issue) throw new Error(issue);
+    }
+    return {
+      ...response,
+      promisedDate: command.date,
+      promisedAmount: command.amount ?? requestOutstanding(request),
+    };
   }
   if (!Object.hasOwn(disputeReasons, command.reason) || command.note.length > 240)
     throw new Error('Kiểm tra lại lý do báo sai.');

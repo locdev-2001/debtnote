@@ -16,6 +16,7 @@
     "build": "tsup src/index.ts --config ../../tsup.config.ts"
   },
   "dependencies": {
+    "@debtnote/contracts": "workspace:*",
     "drizzle-orm": "catalog:",
     "pg": "catalog:"
   },

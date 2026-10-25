@@ -3,6 +3,7 @@ import {
   disputeReasons,
   emptyRecipientResponse,
   type PaymentRequest,
+  type RecipientCommand,
   type RecipientResponse,
   reportAmountIssue,
 } from './payment-request';
@@ -10,7 +11,11 @@ import {
 type ResponseStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 export interface RecipientResponseStore {
   load: (request: PaymentRequest) => RecipientResponse;
-  save: (requestId: string, response: RecipientResponse) => boolean;
+  save: (
+    requestId: string,
+    response: RecipientResponse,
+    command: RecipientCommand,
+  ) => boolean | Promise<boolean>;
   reset: (requestId: string) => boolean;
 }
 const storageKey = (requestId: string) => `debtnote:recipient-prototype:v1:${requestId}`;

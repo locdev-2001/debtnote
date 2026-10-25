@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActionButton } from '../src/components/actions/action-button';
 import { ActionSheet } from '../src/components/actions/action-sheet';
 import { ChoiceGroup } from '../src/components/actions/choice-group';
+import { Brand } from '../src/components/brand/brand';
 import {
   MascotIllustration,
   type MascotState,
@@ -23,9 +24,9 @@ import {
   DisputeBadge,
   SettlementBadge,
 } from '../src/components/money/settlement-badge';
+import { ComponentSizes } from './component-sizes';
 import { exampleDebts } from './fixtures';
 import { IconGallery } from './icons';
-import { ComponentSizes } from './component-sizes';
 
 const brandColors = [
   { label: 'Xanh chính', token: '--brand-green' },
@@ -72,12 +73,7 @@ export function DesignPage() {
     <div className="design-page" data-design-theme="money-gold">
       <div className="design-sheet">
         <header className="sheet-header">
-          <a className="wordmark" href="/" aria-label="Debtnote, về ứng dụng">
-            <img src="/favicon.svg" alt="" />
-            <span>
-              debtnote<span className="wordmark-dot">.</span>
-            </span>
-          </a>
+          <Brand href="/" />
           <nav aria-label="Nội dung bộ thiết kế">
             <a href="#templates">Giao diện</a>
             <a href="#business">Thành phần</a>
@@ -95,7 +91,7 @@ export function DesignPage() {
                 <h2 id="templates-title">Màu sắc</h2>
               </div>
             </div>
-            <div className="brand-pattern" aria-label="Bảng màu Xanh và Vàng">
+            <div className="brand-pattern" role="img" aria-label="Bảng màu Xanh và Vàng">
               {brandColors.map((color) => (
                 <div key={color.token}>
                   <span style={{ background: `var(${color.token})` }} />

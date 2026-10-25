@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { calculateOutstandingAmount, splitEvenly } from './index';
+import { calculateBillSplit, calculateOutstandingAmount, splitEvenly } from './index';
 
 describe('chia tiền', () => {
   it('chia đúng bill có người đến muộn, không uống bia và dùng món riêng', () => {
@@ -76,5 +76,59 @@ describe('số tiền còn nợ', () => {
   it('không cho phân bổ quá số nợ hoặc phân bổ âm', () => {
     expect(() => calculateOutstandingAmount(360_000, [400_000])).toThrow(RangeError);
     expect(() => calculateOutstandingAmount(360_000, [-1])).toThrow(RangeError);
+  });
+});
+
+describe('phí và giảm giá theo phần dùng thực tế', () => {
+  it('giữ từng đồng ở biên số nguyên an toàn', () => {
+    const result = calculateBillSplit(
+      [{ amount: Number.MAX_SAFE_INTEGER - 5, participantIds: ['a', 'b', 'c'] }],
+      ['a', 'b', 'c'],
+      'custom',
+      5,
+      7,
+    );
+    expect(result.shares.reduce((sum, share) => sum + share.amount, 0)).toBe(
+      Number.MAX_SAFE_INTEGER - 7,
+    );
+    expect(
+      result.shares.every((share) => Number.isSafeInteger(share.amount) && share.amount >= 0),
+    ).toBe(true);
+  });
+  it('người không dùng món không bị gánh phí và giảm giá của món đó', () => {
+    const result = calculateBillSplit(
+      [{ amount: 101, participantIds: ['a', 'b'] }],
+      ['a', 'b', 'c'],
+      'custom',
+      10,
+      8,
+    );
+    expect(result.totalAmount).toBe(103);
+    expect(result.shares.find((share) => share.participantId === 'c')?.amount).toBe(0);
+    expect(result.shares.reduce((sum, share) => sum + share.amount, 0)).toBe(103);
+    expect(
+      calculateBillSplit(
+        [{ amount: 101, participantIds: ['b', 'a'] }],
+        ['c', 'b', 'a'],
+        'custom',
+        10,
+        8,
+      )
+        .shares.slice()
+        .sort((left, right) => left.participantId.localeCompare(right.participantId)),
+    ).toEqual(result.shares);
+  });
+  it('từ chối giảm quá tổng hoặc cộng phí tràn số', () => {
+    expect(() =>
+      calculateBillSplit([{ amount: 100, participantIds: ['a'] }], ['a'], 'equal', 0, 101),
+    ).toThrow();
+    expect(() =>
+      calculateBillSplit(
+        [{ amount: Number.MAX_SAFE_INTEGER, participantIds: ['a'] }],
+        ['a'],
+        'equal',
+        1,
+      ),
+    ).toThrow();
   });
 });

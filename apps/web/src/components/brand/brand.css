@@ -1,0 +1,29 @@
+.app-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-extrabold);
+  letter-spacing: var(--tracking-brand);
+  text-decoration: none;
+  font-size: var(--brand-wordmark-size);
+  white-space: nowrap;
+}
+.app-brand img {
+  display: block;
+  width: var(--brand-logo-size);
+  height: var(--brand-logo-size);
+  object-fit: contain;
+}
+.brand-dot {
+  color: var(--brand-green);
+}
+.app-brand[data-brand-size="small"] {
+  --brand-logo-size: var(--brand-logo-small);
+  --brand-wordmark-size: var(--font-size-section);
+}
+.app-brand[data-brand-size="large"] {
+  --brand-logo-size: var(--brand-logo-large);
+  --brand-wordmark-size: var(--font-size-title);
+}

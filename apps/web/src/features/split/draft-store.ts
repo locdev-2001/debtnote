@@ -7,7 +7,7 @@ export interface SplitDraftStore {
 }
 const draftKey = 'debtnote:split-prototype:v1';
 
-function isSplitDraft(candidate: unknown): candidate is SplitDraft {
+export function isSplitDraft(candidate: unknown): candidate is SplitDraft {
   if (!candidate || typeof candidate !== 'object') return false;
   const draft = candidate as SplitDraft;
   if (

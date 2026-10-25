@@ -35,11 +35,13 @@ export function ReceiptAmountRow({
   amount,
   detail,
   emphasis = 'regular',
+  deduction = false,
 }: {
   label: string;
   amount: number;
   detail?: string;
   emphasis?: 'regular' | 'total' | 'settlement';
+  deduction?: boolean;
 }) {
   return (
     <div className="receipt-amount-row" data-emphasis={emphasis}>
@@ -47,7 +49,10 @@ export function ReceiptAmountRow({
         <span>{label}</span>
         {detail && <small>{detail}</small>}
       </div>
-      <MoneyAmount amount={amount} />
+      <span className="receipt-value">
+        {deduction && '− '}
+        <MoneyAmount amount={amount} />
+      </span>
     </div>
   );
 }

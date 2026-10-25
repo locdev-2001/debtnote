@@ -1,8 +1,9 @@
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { ActionButton } from '../../components/actions/action-button';
 import { ActionSheet } from '../../components/actions/action-sheet';
 import { AppIcon } from '../../components/app-icon';
+import { Brand } from '../../components/brand/brand';
 import {
   MascotIllustration,
   type MascotState,
@@ -10,8 +11,8 @@ import {
 import { ExpenseReceipt, ReceiptAmountRow } from '../../components/money/expense-receipt';
 import { formatVnd } from '../../components/money/format-vnd';
 import { QrPreview } from '../../components/qr/qr-preview';
-import type { QrRenderer } from '../../lib/qr/qr-renderer';
 import { getTodayKey } from '../../lib/calendar';
+import type { QrRenderer } from '../../lib/qr/qr-renderer';
 import {
   applyRecipientCommand,
   emptyRecipientResponse,
@@ -39,14 +40,11 @@ const shortDate = (date: string) =>
     timeZone: 'Asia/Ho_Chi_Minh',
   }).format(new Date(`${date}T12:00:00Z`));
 
-function RecipientHeader() {
+function RecipientHeader({ preview }: { preview: boolean }) {
   return (
     <header className="recipient-header">
-      <div className="recipient-brand">
-        <img src="/favicon.svg" alt="" />
-        <span>debtnote.</span>
-      </div>
-      <span className="recipient-demo-label">Link mẫu</span>
+      <Brand size="small" />
+      {preview && <span className="recipient-demo-label">Link mẫu</span>}
     </header>
   );
 }
@@ -56,20 +54,23 @@ export function RecipientPage({
   store,
   reader,
   qrRenderer,
+  preview = true,
 }: {
   requestId: string;
   store: RecipientResponseStore;
   reader: PaymentRequestReader;
   qrRenderer: QrRenderer;
+  preview?: boolean;
 }) {
   const requestQuery = useQuery({
     queryKey: ['payment-request', requestId],
     queryFn: () => reader.load(requestId),
+    refetchInterval: preview ? false : 5_000,
   });
   if (requestQuery.isPending || requestQuery.isError)
     return (
       <div className="recipient-page">
-        <RecipientHeader />
+        <RecipientHeader preview={preview} />
         <main className="recipient-content">
           <section className="recipient-empty">
             {requestQuery.isPending ? (
@@ -91,6 +92,8 @@ export function RecipientPage({
       request={requestQuery.data}
       store={store}
       qrRenderer={qrRenderer}
+      preview={preview}
+      requestHref={new URL(window.location.pathname, window.location.origin).href}
     />
   );
 }
@@ -99,10 +102,14 @@ function RecipientRequestPage({
   request,
   store,
   qrRenderer,
+  preview,
+  requestHref,
 }: {
   request: PaymentRequest | null;
   store: RecipientResponseStore;
   qrRenderer: QrRenderer;
+  preview: boolean;
+  requestHref: string;
 }) {
   const today = getTodayKey();
   const [response, setResponse] = useState(() =>
@@ -110,21 +117,33 @@ function RecipientRequestPage({
   );
   const [sheet, setSheet] = useState<RecipientSheet>(null);
   const [issue, setIssue] = useState('');
+  const [saving, setSaving] = useState(false);
+  useEffect(() => {
+    if (request && !sheet && !saving) setResponse(store.load(request));
+  }, [request, store, sheet, saving]);
   const outstanding = request ? requestOutstanding(request) : 0;
   const active = request?.access === 'active';
   const canRespond = active && outstanding > 0;
-  function dispatch(command: RecipientCommand) {
-    if (!request) return;
+  async function dispatch(command: RecipientCommand) {
+    if (!request || saving) return;
+    setSaving(true);
     try {
       const nextResponse = applyRecipientCommand(request, response, command, today);
-      setResponse(nextResponse);
-      setIssue(store.save(request.id, nextResponse) ? '' : 'Chưa lưu được trên thiết bị.');
+      if (!(await store.save(request.id, nextResponse, command))) {
+        setIssue('Chưa lưu được. Vui lòng thử lại.');
+        return;
+      }
+      setResponse(store.load(request));
+      setIssue('');
       setSheet(null);
     } catch (error) {
       setIssue(error instanceof Error ? error.message : 'Chưa lưu được.');
+    } finally {
+      setSaving(false);
     }
   }
   function openSheet(nextSheet: RecipientSheet) {
+    if (saving) return;
     setIssue('');
     setSheet(nextSheet);
   }
@@ -151,6 +170,7 @@ function RecipientRequestPage({
               ? {
                   mascot: 'snoozed',
                   title: `Hẹn ${shortDate(response.promisedDate)}`,
+                  detail: formatVnd(response.promisedAmount ?? outstanding),
                   action: () => openSheet('promise'),
                 }
               : null;
@@ -165,7 +185,7 @@ function RecipientRequestPage({
           : 'upcoming');
   return (
     <div className="recipient-page">
-      <RecipientHeader />
+      <RecipientHeader preview={preview} />
       <main className="recipient-content">
         <h1 className="visually-hidden">
           {request && active
@@ -227,7 +247,12 @@ function RecipientRequestPage({
                       key={line.id}
                       label={line.title}
                       amount={line.personalAmount}
-                      detail={`${formatVnd(line.totalAmount)} / ${line.participantCount} người`}
+                      deduction={line.deduction ?? false}
+                      detail={
+                        line.proportional
+                          ? 'Theo phần dùng'
+                          : `${formatVnd(line.totalAmount)} / ${line.participantCount} người`
+                      }
                     />
                   ))}
               </div>
@@ -243,12 +268,20 @@ function RecipientRequestPage({
               <details className="recipient-original">
                 <summary>Xem bill gốc</summary>
                 <div className="recipient-original-rows">
-                  {request.lines.map((line) => (
+                  {(
+                    request.originalLines ??
+                    request.lines.map((line) => ({
+                      id: line.id,
+                      title: line.title,
+                      amount: line.totalAmount,
+                      deduction: line.deduction,
+                    }))
+                  ).map((line) => (
                     <ReceiptAmountRow
                       key={line.id}
                       label={line.title}
-                      amount={line.totalAmount}
-                      {...(line.personalAmount === 0 ? { detail: 'Không tính vào phần bạn' } : {})}
+                      amount={line.amount}
+                      deduction={line.deduction ?? false}
                     />
                   ))}
                   <ReceiptAmountRow label="Tổng bill" amount={request.billTotal} emphasis="total" />
@@ -290,28 +323,32 @@ function RecipientRequestPage({
             {issue}
           </p>
         )}
-        <p className="recipient-local-note">Bản mẫu · Chỉ lưu trên thiết bị này.</p>
-        <details className="recipient-preview">
-          <summary>Tùy chọn mẫu</summary>
-          <nav aria-label="Các mẫu người nhận">
-            <a href="/p/mau-binh">Trả một phần</a>
-            <a href="/p/mau-dung">Chưa trả</a>
-            <a href="/p/mau-da-tra">Đã trả đủ</a>
-            <a href="/p/mau-het-han">Hết hạn</a>
-            <a href="/">Tổng quan</a>
-            {request && (
-              <button
-                type="button"
-                onClick={() => {
-                  setResponse(emptyRecipientResponse());
-                  setIssue(store.reset(request.id) ? '' : 'Chưa xóa được lượt mẫu.');
-                }}
-              >
-                Khôi phục lượt này
-              </button>
-            )}
-          </nav>
-        </details>
+        {preview && (
+          <>
+            <p className="recipient-local-note">Bản mẫu · Chỉ lưu trên thiết bị này.</p>
+            <details className="recipient-preview">
+              <summary>Tùy chọn mẫu</summary>
+              <nav aria-label="Các mẫu người nhận">
+                <a href="/p/mau-binh">Trả một phần</a>
+                <a href="/p/mau-dung">Chưa trả</a>
+                <a href="/p/mau-da-tra">Đã trả đủ</a>
+                <a href="/p/mau-het-han">Hết hạn</a>
+                <a href="/">Tổng quan</a>
+                {request && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setResponse(emptyRecipientResponse());
+                      setIssue(store.reset(request.id) ? '' : 'Chưa xóa được lượt mẫu.');
+                    }}
+                  >
+                    Khôi phục lượt này
+                  </button>
+                )}
+              </nav>
+            </details>
+          </>
+        )}
       </main>
       <ActionSheet
         open={sheet !== null && active && (sheet === 'payment' || canRespond)}
@@ -321,7 +358,7 @@ function RecipientRequestPage({
         }}
       >
         {request && active && (
-          <div className="recipient-sheet">
+          <fieldset className="recipient-sheet" disabled={saving}>
             {sheet === 'report' && (
               <>
                 <ReportPaymentForm
@@ -343,7 +380,9 @@ function RecipientRequestPage({
               <RecipientPromiseForm
                 today={today}
                 promisedDate={response.promisedDate}
-                onConfirm={(date) => dispatch({ type: 'promise', date })}
+                promisedAmount={response.promisedAmount}
+                outstanding={requestOutstanding(request)}
+                onConfirm={(date, amount) => dispatch({ type: 'promise', date, amount })}
               />
             )}
             {sheet === 'dispute' && (
@@ -358,14 +397,13 @@ function RecipientRequestPage({
             {sheet === 'payment' && (
               <div className="recipient-qr-panel">
                 <QrPreview
-                  label={request.paymentQrPayload ? 'Mã QR chuyển khoản' : 'Mã QR mở bill mẫu'}
-                  payload={
-                    request.paymentQrPayload ??
-                    new URL(`/p/${encodeURIComponent(request.id)}`, window.location.origin).href
-                  }
+                  label={request.paymentQrPayload ? 'Mã QR chuyển khoản' : 'Mã QR mở khoản tiền'}
+                  payload={request.paymentQrPayload ?? requestHref}
                   renderer={qrRenderer}
                 />
-                {!request.paymentQrPayload && <p className="recipient-caption">QR bill mẫu</p>}
+                {!request.paymentQrPayload && (
+                  <p className="recipient-caption">{preview ? 'QR bill mẫu' : 'QR xem khoản'}</p>
+                )}
                 {canRespond && (
                   <ActionButton onClick={() => openSheet('report')}>Tôi đã chuyển</ActionButton>
                 )}
@@ -376,7 +414,12 @@ function RecipientRequestPage({
                 {issue}
               </p>
             )}
-          </div>
+            {saving && (
+              <p className="recipient-caption" role="status">
+                Đang lưu…
+              </p>
+            )}
+          </fieldset>
         )}
       </ActionSheet>
     </div>

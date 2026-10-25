@@ -9,11 +9,18 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@debtnote/database": "workspace:*",
+    "@debtnote/application": "workspace:*",
+    "@debtnote/contracts": "workspace:*",
+    "pg": "catalog:",
+    "ioredis": "catalog:",
+    "tesseract.js": "catalog:",
     "@debtnote/jobs": "workspace:*",
     "@debtnote/runtime": "workspace:*",
     "bullmq": "catalog:"
   },
   "devDependencies": {
+    "@types/pg": "catalog:",
     "@types/node": "catalog:",
     "tsup": "catalog:",
     "tsx": "catalog:",

@@ -1,0 +1,6 @@
+{
+  "tool": "image_gen built-in",
+  "reference": "design-assets/mascot/settled.png",
+  "source": "logo-mascot-v1.png",
+  "prompt": "Logo mark Debtnote: rái cá xanh giữ nguyên nhận diện mascot, ôm tờ bill trắng có dấu kiểm và đồng xu vàng. Hình khối tròn đơn giản, viền xanh đậm, nhận diện ở 32px. Không chữ, không nền, alpha trong suốt. Bảng màu xanh-vàng của ứng dụng. Wordmark dùng Manrope trong code."
+}

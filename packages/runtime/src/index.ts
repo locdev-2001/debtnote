@@ -12,7 +12,14 @@ const processEnvironmentSchema = z.object({
 });
 
 const apiEnvironmentSchema = processEnvironmentSchema.extend({
+  APP_ORIGIN: z.url().default('http://localhost:5173'),
+  APP_DATA_KEY: z
+    .string()
+    .regex(/^[a-fA-F0-9]{64}$/)
+    .optional(),
+  UPLOAD_DIR: z.string().default(`${workspaceRoot}.local/uploads`),
   API_HOST: z.string().default('127.0.0.1'),
+  API_TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(2).default(0),
   API_PORT: z.coerce.number().int().min(1).max(65_535).default(3001),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
   DATABASE_URL: z
@@ -38,7 +45,7 @@ export function readApiEnvironment() {
 }
 
 export function readWorkerEnvironment() {
-  return parseEnvironment(processEnvironmentSchema);
+  return parseEnvironment(apiEnvironmentSchema);
 }
 
 export function registerShutdown(closeResources: () => Promise<void>): void {
@@ -65,3 +72,5 @@ export function registerShutdown(closeResources: () => Promise<void>): void {
   process.once('SIGINT', shutdown);
   process.once('SIGTERM', shutdown);
 }
+
+export { systemClock, systemIds } from './primitives';
