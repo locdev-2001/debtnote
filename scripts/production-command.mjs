@@ -1,7 +1,8 @@
 import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { resolvePostgresTool } from './production-postgres.mjs';
 import {
   environmentPath,
   projectDirectory,
@@ -46,8 +47,12 @@ try {
   } else {
     const settings = readProductionSettings();
     if (operation === 'environment-path') console.log(environmentPath);
-    else if (operation === 'check') console.log('Đã kiểm tra cấu hình production.');
-    else if (operation === 'upload-directory') console.log(settings.UPLOAD_DIR);
+    else if (operation === 'check') {
+      const postgresOptions = { postgresBin: settings.POSTGRES_BIN || process.env.POSTGRES_BIN };
+      const psql = resolvePostgresTool('psql', postgresOptions);
+      resolvePostgresTool('pg_dump', postgresOptions);
+      console.log(`Đã kiểm tra cấu hình production. PostgreSQL tools: ${dirname(psql)}`);
+    } else if (operation === 'upload-directory') console.log(settings.UPLOAD_DIR);
     else if (operation === 'api-url')
       console.log(`http://127.0.0.1:${settings.API_PORT || '3001'}`);
     else if (operation === 'prepare') {
@@ -78,7 +83,10 @@ try {
       ])
         if (connection.searchParams.has(option))
           environment[variable] = connection.searchParams.get(option);
-      execute(command, parameters, environment);
+      const executable = resolvePostgresTool(command, {
+        postgresBin: settings.POSTGRES_BIN || process.env.POSTGRES_BIN,
+      });
+      execute(executable, parameters, environment);
     } else throw new Error('Thao tác production chưa được hỗ trợ.');
   }
 } catch (error) {

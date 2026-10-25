@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
-for executable in node pnpm pm2 psql pg_dump curl; do
+for executable in node pnpm pm2 curl; do
   command -v "$executable" > /dev/null || { printf 'Thiếu %s trong PATH của tài khoản triển khai.\n' "$executable" >&2; exit 1; }
 done
 node --input-type=module -e 'const [major, minor] = process.versions.node.split(".").map(Number); if (!((major === 22 && minor >= 18) || (major === 24 && minor >= 11) || major > 24)) { console.error("Cần Node.js 22.18+ hoặc 24.11+."); process.exit(1); }'

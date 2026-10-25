@@ -24,7 +24,7 @@ psql --version
 pg_dump --version
 ```
 
-Nếu `psql`/`pg_dump` chưa nằm trong PATH, thêm thư mục `bin` của PostgreSQL đã cài trong panel vào PATH. Dùng pg_dump cùng major với PostgreSQL server hoặc mới hơn.
+Script tự tìm bộ công cụ tại `/www/server/pgsql/bin`, sau đó trong PATH. Nếu cài ở chỗ khác, thêm `POSTGRES_BIN=/duong/dan/postgresql/bin` vào `.env.production`. Deploy, backup và restore đều dùng chung lựa chọn này. Dùng pg_dump cùng major với PostgreSQL server hoặc mới hơn.
 
 Chạy các lệnh deploy và PM2 bằng cùng một tài khoản hệ thống. Tài khoản đó cần đọc source/`.env.production`, ghi `.local` và kết nối PostgreSQL/Redis. Không đổi user PM2 giữa các lần cập nhật.
 
