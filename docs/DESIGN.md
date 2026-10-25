@@ -97,4 +97,4 @@ Lượt chỉnh này chỉ format source và review ảnh; không chạy test/bu
 - [Reicon](https://github.com/dqev/reicon), MIT; credits gồm Solar Icons của 480 Design (CC BY 4.0) và Zappicon.
 - [Manrope](https://fontsource.org/fonts/manrope), SIL Open Font License 1.1; font tự host, chỉ nạp Latin và tiếng Việt.
 
-Mascot trạng thái của người nhận được đặt làm hình chìm ở giữa bill qua prop `watermark` của `ExpenseReceipt`. Ảnh đơn sắc, độ mờ 8,5%, nằm dưới chữ, không nhận thao tác và không được đọc như nội dung. Kích thước/độ mờ nằm trong token `receipt-watermark-*`; không lặp ảnh trên thanh trạng thái.
+Mascot trạng thái của người nhận được đặt làm hình chìm ở giữa bill qua prop `watermark` của `ExpenseReceipt`. Ảnh giữ nguyên màu, độ hiện 24%, nằm dưới chữ, không nhận thao tác và không được đọc như nội dung. Kích thước/độ mờ nằm trong token `receipt-watermark-*`; không lặp ảnh trên thanh trạng thái.

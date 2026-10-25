@@ -246,8 +246,8 @@
   --receipt-heading-tracking: 0.025em;
   --receipt-watermark-size: 13rem;
   --receipt-watermark-max-width: 70%;
-  --receipt-watermark-opacity: 0.085;
-  --receipt-watermark-grayscale: 1;
+  --receipt-watermark-opacity: 0.24;
+  --receipt-watermark-grayscale: 0;
   --recipient-content-width: 26rem;
   --recipient-gutter: var(--space-4);
   --recipient-brand-mark-size: 1.5rem;
