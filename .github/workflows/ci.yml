@@ -1,0 +1,67 @@
+name: Kiểm tra khung ứng dụng
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Lint, kiểu dữ liệu, kiểm thử và build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_DB: debtnote
+          POSTGRES_USER: debtnote
+          POSTGRES_PASSWORD: debtnote
+        ports:
+          - 55432:5432
+        options: >-
+          --health-cmd "pg_isready -U debtnote -d debtnote"
+          --health-interval 3s --health-timeout 3s --health-retries 10
+      redis:
+        image: redis:8-alpine
+        ports:
+          - 56379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 3s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: cp .env.example .env
+      - run: pnpm check
+      - run: pnpm db:migrate
+      - name: Kiểm tra API và worker từ bản build
+        shell: bash
+        run: |
+          node apps/api/dist/main.js > "$RUNNER_TEMP/debtnote-api.log" 2>&1 &
+          api_process_id=$!
+          node apps/worker/dist/main.js > "$RUNNER_TEMP/debtnote-worker.log" 2>&1 &
+          worker_process_id=$!
+          trap 'kill "$api_process_id" "$worker_process_id" 2>/dev/null || true' EXIT
+
+          for attempt in {1..20}; do
+            if curl --fail --silent http://127.0.0.1:3001/readyz > /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+          if ! curl --fail --silent http://127.0.0.1:3001/readyz; then
+            cat "$RUNNER_TEMP/debtnote-api.log"
+            exit 1
+          fi
+
+          curl --fail --silent http://127.0.0.1:3001/trpc/system.status
+          pnpm worker:probe

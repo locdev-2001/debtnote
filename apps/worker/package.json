@@ -1,0 +1,22 @@
+{
+  "name": "@debtnote/worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --conditions=development src/main.ts",
+    "build": "tsup src/main.ts --config ../../tsup.config.ts",
+    "start": "node dist/main.js",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@debtnote/jobs": "workspace:*",
+    "@debtnote/runtime": "workspace:*",
+    "bullmq": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsup": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  }
+}

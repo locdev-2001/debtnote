@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>Debtnote</title>
+  <rect width="512" height="512" rx="112" fill="#172c28"/>
+  <path d="M160 144h76c94 0 148 42 148 112s-54 112-148 112h-76V144Zm64 58v108h20c47 0 73-19 73-54s-26-54-73-54h-20Z" fill="#f7f8f5"/>
+</svg>

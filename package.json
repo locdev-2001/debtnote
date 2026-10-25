@@ -1,0 +1,38 @@
+{
+  "name": "debtnote",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.8.0",
+  "engines": {
+    "node": "^22.18.0 || >=24.11.0"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter './apps/*' dev",
+    "dev:web": "pnpm --filter @debtnote/web dev",
+    "dev:api": "pnpm --filter @debtnote/api dev",
+    "dev:worker": "pnpm --filter @debtnote/worker dev",
+    "build": "pnpm -r --if-present build",
+    "typecheck": "tsc -p tsconfig.json && pnpm -r typecheck",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "test": "vitest run",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "infra:up": "docker compose up -d --wait",
+    "infra:down": "docker compose down",
+    "db:generate": "pnpm --filter @debtnote/runtime build && pnpm --filter @debtnote/database db:generate",
+    "db:migrate": "pnpm --filter @debtnote/runtime build && pnpm --filter @debtnote/database db:migrate",
+    "worker:probe": "tsx --conditions=development scripts/worker-probe.ts",
+    "start:api": "pnpm --filter @debtnote/api start",
+    "start:worker": "pnpm --filter @debtnote/worker start"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@debtnote/jobs": "workspace:*",
+    "@debtnote/runtime": "workspace:*",
+    "@types/node": "catalog:",
+    "tsup": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
