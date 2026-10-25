@@ -3,12 +3,20 @@ import { useState } from 'react';
 import { ActionButton } from './components/actions/action-button';
 import { browserPrototypeStorage, createHomePrototypeStore } from './features/home/demo-store';
 import { HomePage } from './features/home/home-page';
-import { getTodayKey } from './features/home/ledger';
+import { RecipientPage } from './features/recipient/recipient-page';
+import { createRecipientResponseStore } from './features/recipient/response-store';
+import { createSamplePaymentRequestReader } from './features/recipient/sample-requests';
 import { createSplitDraftStore } from './features/split/draft-store';
+import { getTodayKey } from './lib/calendar';
 
 export function App() {
   const [store] = useState(() => createHomePrototypeStore(browserPrototypeStorage(), getTodayKey));
   const [splitStore] = useState(() => createSplitDraftStore(browserPrototypeStorage()));
+  const [recipientStore] = useState(() => createRecipientResponseStore(browserPrototypeStorage()));
+  const [recipientReader] = useState(() => createSamplePaymentRequestReader(getTodayKey));
+  const currentPath = window.location.pathname;
+  const isRecipientRoute = currentPath === '/p' || currentPath.startsWith('/p/');
+  const requestId = currentPath.slice(3).replace(/\/$/, '');
   const {
     needRefresh: [needRefresh],
     updateServiceWorker,
@@ -16,7 +24,11 @@ export function App() {
 
   return (
     <>
-      <HomePage store={store} splitStore={splitStore} />
+      {isRecipientRoute ? (
+        <RecipientPage requestId={requestId} store={recipientStore} reader={recipientReader} />
+      ) : (
+        <HomePage store={store} splitStore={splitStore} />
+      )}
       {needRefresh && (
         <aside className="home-app-update" aria-label="Phiên bản mới">
           <p>Có phiên bản mới. Cập nhật khi bạn đã xong thao tác.</p>

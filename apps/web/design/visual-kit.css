@@ -456,16 +456,6 @@ h4 {
   font-size: var(--font-size-label);
   white-space: nowrap;
 }
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  clip-path: inset(50%);
-  overflow: hidden;
-  white-space: nowrap;
-}
 
 @media (max-width: 1000px) {
   .edition {

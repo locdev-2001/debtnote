@@ -1,38 +1,13 @@
 import { type FormEvent, useState } from 'react';
 import { ActionButton } from '../../components/actions/action-button';
 import { ChoiceGroup } from '../../components/actions/choice-group';
+import { PromiseDateField } from '../../components/dates/promise-date-field';
+import { AmountPresets } from '../../components/money/amount-presets';
 import { AmountField } from '../../components/money/amount-field';
 import { formatVnd } from '../../components/money/format-vnd';
 import { MoneyAmount } from '../../components/money/money-amount';
 import type { MoneyDirection } from '../../components/money/presentation';
 import { addDays, type HomeRecord, receiptError, remainingAmount } from './ledger';
-
-function AmountPresets({
-  amounts,
-  selected,
-  onSelect,
-  fullAmount,
-}: {
-  amounts: readonly number[];
-  selected: string;
-  onSelect: (amount: number) => void;
-  fullAmount?: number;
-}) {
-  return (
-    <div className="home-money-presets">
-      {[...new Set(amounts)].map((amount) => (
-        <button
-          type="button"
-          key={amount}
-          aria-pressed={selected === String(amount)}
-          onClick={() => onSelect(amount)}
-        >
-          {amount === fullAmount ? 'Nhận đủ' : formatVnd(amount)}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 export function ReceivePaymentForm({
   record,
@@ -96,32 +71,7 @@ export function PromiseForm({
   return (
     <form className="home-form" onSubmit={submit}>
       <p className="home-sheet-description">Còn {formatVnd(remainingAmount(record))}.</p>
-      <label className="money-form-field">
-        Ngày hẹn
-        <input
-          type="date"
-          required
-          min={today}
-          value={date}
-          onChange={(event) => setDate(event.target.value)}
-        />
-      </label>
-      <div className="home-money-presets">
-        {[
-          { days: 1, label: 'Ngày mai' },
-          { days: 3, label: '3 ngày nữa' },
-          { days: 7, label: 'Tuần sau' },
-        ].map((option) => (
-          <button
-            type="button"
-            key={option.days}
-            aria-pressed={date === addDays(today, option.days)}
-            onClick={() => setDate(addDays(today, option.days))}
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
+      <PromiseDateField value={date} today={today} onChange={setDate} />
       <ActionButton type="submit" icon="calendar" disabled={!date || date < today}>
         Lưu hẹn
       </ActionButton>

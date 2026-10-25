@@ -483,6 +483,7 @@ export function HomePage({
               Khôi phục mẫu
             </button>
             {import.meta.env.DEV && <a href="/design/">Bộ thiết kế ↗</a>}
+            {import.meta.env.DEV && <a href="/p/mau-binh">Mẫu người nhận ↗</a>}
           </div>
         </details>
       </main>

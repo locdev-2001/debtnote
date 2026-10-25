@@ -9,6 +9,7 @@ import { CheckCircle } from 'reicon-react/icons/CheckCircle';
 import { ChevronRight } from 'reicon-react/icons/ChevronRight';
 import { Home } from 'reicon-react/icons/Home';
 import { MoreH } from 'reicon-react/icons/MoreH';
+import { Qr } from 'reicon-react/icons/Qr';
 import { Receipt } from 'reicon-react/icons/Receipt';
 import { Search3 } from 'reicon-react/icons/Search3';
 import { Share } from 'reicon-react/icons/Share';
@@ -31,6 +32,7 @@ export const appIconDefinitions = {
   open: { component: ChevronRight, label: 'Mở chi tiết' },
   close: { component: X, label: 'Đóng' },
   more: { component: MoreH, label: 'Tùy chọn' },
+  qr: { component: Qr, label: 'Mã QR' },
 } as const;
 
 export type AppIconName = keyof typeof appIconDefinitions;

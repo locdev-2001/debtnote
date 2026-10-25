@@ -540,28 +540,6 @@
 
   gap: var(--home-form-gap);
 }
-.home-money-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-.home-money-presets button {
-  min-height: var(--home-preset-height);
-
-  padding: 0 var(--choice-padding-inline);
-  border: 0;
-  border-radius: var(--radius-pill);
-  color: var(--action-primary);
-  background: var(--action-subtle);
-  font: inherit;
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-}
-.home-money-presets button[aria-pressed="true"] {
-  color: var(--action-on-primary);
-  background: var(--action-primary);
-}
 .home-record-amount {
   display: flex;
   flex-direction: column;
@@ -618,16 +596,6 @@
   color: var(--text-secondary);
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
-}
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  clip-path: inset(50%);
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 @keyframes home-pulse {

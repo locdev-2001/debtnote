@@ -59,6 +59,8 @@ Chữ trên vàng/xanh sáng dùng màu tối. Chữ trên xanh chính dùng tr�
 | `MascotIllustration`                  | Inline 40 px, nhỏ 80 px, chuẩn 128 px, lớn 160 px     |
 | `.money-form-field`                   | Input/select/textarea dùng cùng recipe                |
 
+`AmountPresets` dùng chung cho nhận tiền và báo chuyển, nhãn nhận đủ/toàn bộ tùy thao tác. `PromiseDateField` dùng chung cho ngày hẹn với các lựa chọn ngày mai/3 ngày/tuần sau.
+
 Component nhận props và phát sự kiện, không gọi API hoặc database. Nhãn trạng thái ở `components/money/presentation.ts`; format ở `components/money/format-vnd.ts`. `money-core` giữ quy tắc số tiền trung tính.
 
 ## Nội dung

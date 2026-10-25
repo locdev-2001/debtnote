@@ -2,7 +2,7 @@
 
 Ứng dụng chia tiền và theo dõi các khoản cần thu, cần trả. Bản đầu là PWA: dùng ngay bằng link, có thể thêm vào màn hình chính. Người nhận yêu cầu thanh toán không phải cài ứng dụng.
 
-Repo đã có khung kỹ thuật, bộ thiết kế và prototype S01–S05: Trang chủ, chọn người, chia tiền và chốt. Các thao tác ở trang chủ chỉ cập nhật dữ liệu mẫu trên thiết bị. Chưa có tài khoản, bảng nghiệp vụ, API ghi tiền thật, OCR hoặc kết nối thanh toán/nhắc tiền.
+Repo đã có khung kỹ thuật, bộ thiết kế và prototype S01–S05 và S08: Trang chủ, chia tiền và màn người nhận qua link mẫu. Các thao tác ở trang chủ chỉ cập nhật dữ liệu mẫu trên thiết bị. Chưa có tài khoản, bảng nghiệp vụ, API ghi tiền thật, OCR hoặc kết nối thanh toán/nhắc tiền.
 
 ## Stack
 
@@ -92,3 +92,5 @@ Theo dõi [roadmap đầy đủ](docs/ROADMAP.md) để xem mốc bàn giao, th�
 Bộ thiết kế gồm Manrope, Reicon, mascot hoạt hình, token và component nghiệp vụ được mô tả tại [hướng hình ảnh](docs/DESIGN.md). Khi chạy local, mở http://localhost:5173/design/ để thử nền trắng, xanh–vàng, component compact và các trạng thái tương tác.
 
 Prototype [S01 — Trang chủ](docs/screens/S01-HOME.md) và [S02–S05 — Chia tiền](docs/screens/S02-S05-SPLIT.md) đã có tại http://localhost:5173/. Chọn Thêm khoản → Thử bill mẫu để xem bill trắng đen, bỏ người theo khoản và chốt vào sổ mẫu. Bản nháp giữ sau khi tải lại.
+
+Màn [S08 — Người nhận](docs/screens/S08-RECIPIENT.md): mở http://localhost:5173/p/mau-binh để xem phần tiền, báo đã chuyển, hẹn trả và báo sai. Mã QR hiện trạng thái chưa thiết lập; phản hồi chỉ lưu trên thiết bị, chưa gửi tới người tạo hoặc đồng bộ với sổ mẫu Trang chủ.
