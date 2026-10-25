@@ -31,7 +31,7 @@ Mở ứng dụng là thấy số cần thu/cần trả và việc cần xử l�
 
 Key lưu mẫu: `debtnote:home-prototype:v1`. Đọc lại phải kiểm tra hình dạng, số nguyên an toàn, tổng tiền, mã trùng và ngày hợp lệ; hỏng thì trở về mẫu. Chưa có dữ liệu người thật hoặc backend nghiệp vụ.
 
-## Công cụ duyệt ở cuối trang
+## Công cụ duyệt trong Tùy chọn mẫu ở cuối trang
 
 - Thử sổ trống: xóa riêng mẫu để xem trạng thái bắt đầu và tạo khoản đầu tiên.
 - Khôi phục mẫu: quay lại bộ ban đầu.
@@ -47,3 +47,11 @@ Key lưu mẫu: `debtnote:home-prototype:v1`. Đọc lại phải kiểm tra hì
 - Browser: lỗi có thử lại, loading có skeleton và không giả số dư bằng 0.
 
 S01 đang ở bước duyệt giao diện; không coi đăng nhập, OCR, thanh toán hoặc nhắc tự động đã hoàn thành.
+
+## Mật độ và nội dung
+
+Nền trắng, xanh–vàng theo token. Dòng khoản tiền chỉ hiện tên, số tiền và một badge ưu tiên; ghi chú xem trong chi tiết. Tùy chọn demo mặc định thu gọn. Không đặt đoạn hướng dẫn dài hoặc khẩu hiệu trên Trang chủ.
+
+## Mật độ và copy
+
+Nền trắng, token compact xanh–vàng. Dòng tiền chỉ giữ tên, tiền, một badge; ghi chú xem trong chi tiết. Hướng dẫn và khẩu hiệu đã bỏ. Tùy chọn mẫu mặc định thu gọn.

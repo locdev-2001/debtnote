@@ -9,10 +9,10 @@ export const moneyDirections = {
 } as const;
 
 export const settlementStates = {
-  unpaid: { label: 'Chưa thanh toán', tone: 'pending' },
+  unpaid: { label: 'Chưa trả', tone: 'pending' },
   partial: { label: 'Trả một phần', tone: 'partial' },
   confirmation: { label: 'Chờ xác nhận', tone: 'confirmation' },
-  paid: { label: 'Đã thanh toán đủ', tone: 'paid' },
+  paid: { label: 'Đã trả', tone: 'paid' },
 } as const;
 
 export type MoneyDirection = keyof typeof moneyDirections;

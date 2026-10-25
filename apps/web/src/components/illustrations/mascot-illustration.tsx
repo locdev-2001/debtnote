@@ -71,15 +71,18 @@ export function MascotIllustration({
   state,
   priority = false,
   decorative = false,
+  size = 'regular',
 }: {
   state: MascotState;
   priority?: boolean;
   decorative?: boolean;
+  size?: 'inline' | 'small' | 'regular' | 'large';
 }) {
   const illustration = mascotStates[state];
   return (
     <img
       className="mascot-illustration"
+      data-illustration-size={size}
       src={illustration.source}
       alt={decorative ? '' : illustration.alt}
       width={1254}

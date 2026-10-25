@@ -1,23 +1,42 @@
 import { type DeadlineKind, type SettlementState, settlementStates } from './presentation';
+import type { ComponentSize } from '../../design/component-size';
 
-export function SettlementBadge({ state }: { state: SettlementState }) {
+export function SettlementBadge({
+  state,
+  size = 'small',
+}: {
+  state: SettlementState;
+  size?: ComponentSize;
+}) {
   const presentation = settlementStates[state];
   return (
-    <span className="settlement-badge" data-tone={presentation.tone}>
+    <span className="settlement-badge" data-tone={presentation.tone} data-component-size={size}>
       <span className="settlement-dot" aria-hidden="true" />
       {presentation.label}
     </span>
   );
 }
 
-export function DeadlineBadge({ label, kind }: { label: string; kind: DeadlineKind }) {
+export function DeadlineBadge({
+  label,
+  kind,
+  size = 'small',
+}: {
+  label: string;
+  kind: DeadlineKind;
+  size?: ComponentSize;
+}) {
   return (
-    <span className="deadline-badge" data-deadline={kind}>
+    <span className="deadline-badge" data-deadline={kind} data-component-size={size}>
       {label}
     </span>
   );
 }
 
-export function DisputeBadge() {
-  return <span className="dispute-badge">Đang báo sai</span>;
+export function DisputeBadge({ size = 'small' }: { size?: ComponentSize }) {
+  return (
+    <span className="dispute-badge" data-component-size={size}>
+      Báo sai
+    </span>
+  );
 }

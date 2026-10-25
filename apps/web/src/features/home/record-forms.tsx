@@ -52,10 +52,10 @@ export function ReceivePaymentForm({
   return (
     <form className="home-form" onSubmit={submit}>
       <p className="home-sheet-description">
-        Còn cần thu <MoneyAmount amount={outstanding} />. Có thể ghi nhận một phần.
+        Còn lại <MoneyAmount amount={outstanding} />.
       </p>
       <AmountField
-        label="Số tiền đã nhận"
+        label="Số tiền"
         value={amount}
         onChange={setAmount}
         onValidityChange={setValid}
@@ -71,7 +71,7 @@ export function ReceivePaymentForm({
         }}
       />
       <ActionButton type="submit" icon="check" disabled={!valid || !amount || Boolean(issue)}>
-        Xác nhận đã nhận
+        Xác nhận
       </ActionButton>
     </form>
   );
@@ -95,11 +95,9 @@ export function PromiseForm({
   }
   return (
     <form className="home-form" onSubmit={submit}>
-      <p className="home-sheet-description">
-        Còn {formatVnd(remainingAmount(record))}. Chọn ngày đã thống nhất với {record.personName}.
-      </p>
-      <label className="home-field-label">
-        Ngày hẹn thanh toán
+      <p className="home-sheet-description">Còn {formatVnd(remainingAmount(record))}.</p>
+      <label className="money-form-field">
+        Ngày hẹn
         <input
           type="date"
           required
@@ -125,7 +123,7 @@ export function PromiseForm({
         ))}
       </div>
       <ActionButton type="submit" icon="calendar" disabled={!date || date < today}>
-        Lưu ngày hẹn
+        Lưu hẹn
       </ActionButton>
     </form>
   );
@@ -172,12 +170,12 @@ export function QuickEntryForm({
         value={direction}
         onChange={setDirection}
         options={[
-          { value: 'receivable', label: 'Người khác nợ tôi' },
-          { value: 'payable', label: 'Tôi nợ người khác' },
+          { value: 'receivable', label: 'Cần thu' },
+          { value: 'payable', label: 'Cần trả' },
         ]}
       />
-      <label className="home-field-label">
-        Người liên quan
+      <label className="money-form-field">
+        Người
         <select value={personId} onChange={(event) => setPersonId(event.target.value)}>
           {people.map((person) => (
             <option key={person.id} value={person.id}>
@@ -188,7 +186,7 @@ export function QuickEntryForm({
         </select>
       </label>
       {personId === 'other' && (
-        <label className="home-field-label">
+        <label className="money-form-field">
           Tên người
           <input
             value={personName}
@@ -213,7 +211,7 @@ export function QuickEntryForm({
         }}
       />
       <ActionButton type="submit" icon="add" disabled={!ready}>
-        Thêm vào sổ mẫu
+        Thêm khoản
       </ActionButton>
     </form>
   );

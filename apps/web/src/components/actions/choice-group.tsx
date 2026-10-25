@@ -1,8 +1,11 @@
+import type { ComponentSize } from '../../design/component-size';
+
 interface ChoiceGroupProps<Value extends string> {
   label: string;
   value: Value;
   options: readonly { value: Value; label: string }[];
   onChange: (value: Value) => void;
+  size?: ComponentSize;
 }
 
 export function ChoiceGroup<Value extends string>({
@@ -10,9 +13,10 @@ export function ChoiceGroup<Value extends string>({
   value,
   options,
   onChange,
+  size = 'small',
 }: ChoiceGroupProps<Value>) {
   return (
-    <fieldset className="choice-controls">
+    <fieldset className="choice-controls" data-component-size={size}>
       <legend>{label}</legend>
       {options.map((option) => (
         <button

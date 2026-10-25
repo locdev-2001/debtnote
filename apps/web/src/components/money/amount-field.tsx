@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
 import { NumericFormat } from 'react-number-format';
+import type { ComponentSize } from '../../design/component-size';
 import { isSafeVndInput, parseVndPaste, vndCurrencySymbol, vndNumberFormat } from './format-vnd';
 
 interface AmountFieldProps {
@@ -9,6 +10,7 @@ interface AmountFieldProps {
   error?: string;
   helperText?: string;
   onValidityChange?: (valid: boolean) => void;
+  size?: ComponentSize;
 }
 
 export function AmountField({
@@ -18,6 +20,7 @@ export function AmountField({
   error,
   helperText,
   onValidityChange,
+  size = 'regular',
 }: AmountFieldProps) {
   const fieldId = useId();
   const [entryError, setEntryError] = useState<string>();
@@ -26,7 +29,7 @@ export function AmountField({
   const message = fieldError || helperText;
 
   return (
-    <div className="amount-field" data-invalid={Boolean(fieldError)}>
+    <div className="amount-field" data-invalid={Boolean(fieldError)} data-component-size={size}>
       <label htmlFor={fieldId}>{label}</label>
       <div className="amount-input-shell">
         <NumericFormat

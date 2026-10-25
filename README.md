@@ -89,6 +89,6 @@ Service worker chỉ cache tài nguyên giao diện, không cache response API h
 
 Theo dõi [roadmap đầy đủ](docs/ROADMAP.md) để xem mốc bàn giao, thứ tự screen, công việc và tiêu chí nghiệm thu từng giai đoạn.
 
-Bộ thiết kế gồm Manrope, Reicon, mascot hoạt hình, token và component nghiệp vụ được mô tả tại [hướng hình ảnh](docs/DESIGN.md). Khi chạy local, mở http://localhost:5173/design/ để thử 3 template solid, borderless và các trạng thái tương tác.
+Bộ thiết kế gồm Manrope, Reicon, mascot hoạt hình, token và component nghiệp vụ được mô tả tại [hướng hình ảnh](docs/DESIGN.md). Khi chạy local, mở http://localhost:5173/design/ để thử nền trắng, xanh–vàng, component compact và các trạng thái tương tác.
 
 Prototype [S01 — Trang chủ](docs/screens/S01-HOME.md) đã sẵn sàng để duyệt tại http://localhost:5173/. Sau khi chốt S01 sẽ thiết kế tiếp luồng S02–S05: tạo khoản, chọn người, chia tiền và chốt.

@@ -65,12 +65,6 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
     .sort((left, right) => (left.deadline?.date ?? '').localeCompare(right.deadline?.date ?? ''));
   const people = ledger.people;
   const selectedDeadline = selectedRecord ? deadlineView(selectedRecord, today) : undefined;
-  const dayTitle = new Intl.DateTimeFormat('vi-VN', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    timeZone: 'Asia/Ho_Chi_Minh',
-  }).format(new Date());
   const filterChoices = [
     { value: 'all', label: 'Tất cả' },
     {
@@ -108,7 +102,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
   function openReminder(record: HomeRecord) {
     setReminderError('');
     setReminderDraft(
-      `${record.personName} ơi, phần còn lại của bạn là ${formatVnd(remainingAmount(record))}. Bạn xem và thanh toán giúp mình nhé. Cảm ơn bạn!`,
+      `${record.personName} ơi, bạn còn ${formatVnd(remainingAmount(record))}. Bạn thanh toán giúp mình nhé!`,
     );
     setSheet({ type: 'remind', id: record.id });
   }
@@ -127,7 +121,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
     if (
       ledger.dispatch(
         { type: 'add', record },
-        `Đã thêm khoản ${formatVnd(record.principalAmount)} với ${record.personName} vào dữ liệu mẫu.`,
+        `Đã thêm ${formatVnd(record.principalAmount)} · ${record.personName}.`,
       )
     ) {
       selectDirection(record.direction);
@@ -150,7 +144,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
   async function copyReminder() {
     try {
       await navigator.clipboard.writeText(reminderDraft);
-      ledger.setNotice('Đã sao chép lời nhắc. Chưa gửi thông báo cho ai.');
+      ledger.setNotice('Đã sao chép.');
       setSheet(null);
     } catch {
       setReminderError(
@@ -163,19 +157,19 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
     if (sheet.type === 'add') return 'Thêm khoản tiền';
     if (sheet.type === 'quick-entry') return 'Ghi khoản tiền';
     if (sheet.type === 'photo') return 'Ảnh hóa đơn';
-    if (sheet.type === 'attention') return 'Các khoản cần bạn xem';
+    if (sheet.type === 'attention') return 'Cần xem';
     const name = selectedRecord?.personName ?? '';
-    if (sheet.type === 'receive') return `Nhận tiền từ ${name}`;
-    if (sheet.type === 'promise') return `Hẹn lại với ${name}`;
-    if (sheet.type === 'remind') return `Nhắc ${name} thanh toán`;
-    return `Khoản tiền với ${name}`;
+    if (sheet.type === 'receive') return `Nhận từ ${name}`;
+    if (sheet.type === 'promise') return `Hẹn với ${name}`;
+    if (sheet.type === 'remind') return `Nhắc ${name}`;
+    return name;
   }
 
   return (
     <div className="home-page">
       <header className="home-header">
         <a className="home-brand" href="/" aria-label="Debtnote, trang chủ">
-          <img src="/favicon.svg" alt="" width="36" height="36" />
+          <img src="/favicon.svg" alt="" />
           <span>
             debtnote<span className="home-brand-dot">.</span>
           </span>
@@ -200,7 +194,6 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
       <main className="home-content">
         <div className="home-title-row">
           <div>
-            <p className="home-date">{dayTitle}</p>
             <h1>Tổng quan</h1>
           </div>
           <ActionButton
@@ -224,13 +217,13 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
           <div className="home-loading" role="status">
             <span className="home-skeleton" />
             <span className="home-skeleton" />
-            <p>Đang tải các khoản tiền…</p>
+            <p>Đang tải…</p>
           </div>
         ) : scenario === 'error' ? (
           <section className="home-state-card">
             <MascotIllustration state="confirmation" />
-            <h2>Chưa tải được các khoản tiền</h2>
-            <p>Thử lại để xem số dư và những việc cần xử lý.</p>
+            <h2>Chưa tải được</h2>
+
             <ActionButton onClick={() => setScenario('sample')}>Thử lại</ActionButton>
           </section>
         ) : (
@@ -239,14 +232,14 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
               <MoneySummaryCard
                 direction="receivable"
                 amount={receivable.amount}
-                description={`${receivable.people} người · ${receivable.count} khoản còn lại`}
+                description={`${receivable.people} người`}
                 selected={direction === 'receivable'}
                 onSelect={() => selectDirection('receivable')}
               />
               <MoneySummaryCard
                 direction="payable"
                 amount={payable.amount}
-                description={`${payable.people} người · ${payable.count} khoản còn lại`}
+                description={`${payable.people} người`}
                 selected={direction === 'payable'}
                 onSelect={() => selectDirection('payable')}
               />
@@ -258,20 +251,8 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
                   state={ledger.records.length === 0 ? 'welcome' : 'settled'}
                   priority
                 />
-                <span className="home-section-kicker">CHUYỆN TIỀN, GỌN LẠI</span>
-                <h2>
-                  {ledger.records.length === 0
-                    ? 'Khoản đầu tiên, bắt đầu thôi.'
-                    : 'Mọi khoản đã xong rồi.'}
-                </h2>
-                <p>
-                  {ledger.records.length === 0
-                    ? 'Chụp một bill hoặc ghi nhanh ai đang nợ ai. Phần còn lại mình cùng theo dõi.'
-                    : 'Các khoản mẫu đã được xử lý đủ. Bạn có thể thêm khoản mới khi cần.'}
-                </p>
-                <ActionButton icon="add" onClick={() => setSheet({ type: 'add' })}>
-                  {ledger.records.length === 0 ? 'Thêm khoản đầu tiên' : 'Thêm khoản mới'}
-                </ActionButton>
+
+                <h2>{ledger.records.length === 0 ? 'Sổ đang trống' : 'Đã xong'}</h2>
               </section>
             ) : (
               <div className="home-workspace">
@@ -282,6 +263,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
                     onClick={() => setSheet({ type: 'attention' })}
                   >
                     <MascotIllustration
+                      size="inline"
                       state={
                         overdue.length > 0
                           ? 'overdue'
@@ -294,12 +276,9 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
                     <span>
                       <strong>
                         {attention.length > 0
-                          ? `${attention.length} khoản cần bạn xem`
-                          : 'Hôm nay chưa có khoản đến hạn'}
+                          ? `Cần xem · ${attention.length}`
+                          : 'Chưa có khoản đến hạn'}
                       </strong>
-                      <span>
-                        {dueToday.length} đến hạn hôm nay · {overdue.length} quá hạn
-                      </span>
                     </span>
                     <AppIcon name="open" size="small" />
                   </button>
@@ -316,7 +295,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
                   )}
                   <div className="home-list-heading">
                     <h2>
-                      {direction === 'receivable' ? 'Khoản cần thu' : 'Khoản cần trả'}{' '}
+                      {direction === 'receivable' ? 'Cần thu' : 'Cần trả'}{' '}
                       <span>{list.length}</span>
                     </h2>
                     <button
@@ -333,8 +312,8 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
                     <div className="home-search">
                       <AppIcon name="search" size="small" />
                       <input
-                        aria-label="Tìm tên người hoặc nội dung"
-                        placeholder="Tìm tên người hoặc nội dung"
+                        aria-label="Tìm người hoặc khoản"
+                        placeholder="Tìm…"
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
                       />
@@ -370,14 +349,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
                       <MascotIllustration
                         state={filter === 'confirmation' ? 'confirmation' : 'settled'}
                       />
-                      <h3>
-                        {search ? 'Chưa tìm thấy khoản phù hợp' : 'Không có khoản trong mục này'}
-                      </h3>
-                      <p>
-                        {search
-                          ? 'Thử tên khác hoặc xóa tìm kiếm nhé.'
-                          : 'Các khoản còn lại vẫn ở mục Tất cả.'}
-                      </p>
+                      <h3>{search ? 'Không tìm thấy' : 'Chưa có khoản'}</h3>
                       <ActionButton
                         emphasis="secondary"
                         onClick={() => {
@@ -385,7 +357,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
                           setSearch('');
                         }}
                       >
-                        Xem tất cả
+                        Tất cả
                       </ActionButton>
                     </div>
                   )}
@@ -395,7 +367,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
                   <section className="home-promise-card">
                     <div className="home-card-heading">
                       <AppIcon name="calendar" size="small" />
-                      <h2>Lời hẹn sắp tới</h2>
+                      <h2>Lịch hẹn</h2>
                     </div>
                     {promises.length > 0 ? (
                       <div className="home-promise-list">
@@ -418,17 +390,8 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
                         ))}
                       </div>
                     ) : (
-                      <p>Chưa có lời hẹn nào. Bạn có thể hẹn ngày trả ngay trong từng khoản.</p>
+                      <p>Chưa có lịch hẹn.</p>
                     )}
-                  </section>
-                  <section className="home-companion">
-                    <MascotIllustration state="reminder" decorative />
-                    <h3>
-                      Nhắc một chút.
-                      <br />
-                      Nhẹ chuyện tiền.
-                    </h3>
-                    <p>Mở một khoản để soạn lời nhắc hoặc thống nhất ngày thanh toán.</p>
                   </section>
                 </aside>
               </div>
@@ -436,46 +399,48 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
           </>
         )}
 
-        <footer className="home-prototype-controls">
-          <div>
-            <strong>Bản xem thử S01</strong>
-            <p>Thao tác chỉ thay đổi dữ liệu mẫu trên thiết bị.</p>
-          </div>
-          <label>
-            <span className="visually-hidden">Trạng thái xem thử</span>
-            <select
-              aria-label="Trạng thái xem thử"
-              value={scenario}
-              onChange={(event) => setScenario(event.target.value as Scenario)}
+        <details className="home-preview-options">
+          <summary>Tùy chọn mẫu</summary>
+          <div className="home-prototype-controls">
+            <div>
+              <strong>Bản xem thử S01</strong>
+            </div>
+            <label>
+              <span className="visually-hidden">Trạng thái xem thử</span>
+              <select
+                aria-label="Trạng thái xem thử"
+                value={scenario}
+                onChange={(event) => setScenario(event.target.value as Scenario)}
+              >
+                <option value="sample">Dữ liệu đang có</option>
+                <option value="loading">Thử trạng thái tải</option>
+                <option value="error">Thử trạng thái lỗi</option>
+              </select>
+            </label>
+            <button
+              type="button"
+              onClick={() => {
+                ledger.clear();
+                setScenario('sample');
+                setFilter('all');
+                setSearch('');
+              }}
             >
-              <option value="sample">Dữ liệu đang có</option>
-              <option value="loading">Thử trạng thái tải</option>
-              <option value="error">Thử trạng thái lỗi</option>
-            </select>
-          </label>
-          <button
-            type="button"
-            onClick={() => {
-              ledger.clear();
-              setScenario('sample');
-              setFilter('all');
-              setSearch('');
-            }}
-          >
-            Thử sổ trống
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              ledger.reset();
-              setScenario('sample');
-              selectDirection('receivable');
-            }}
-          >
-            Khôi phục mẫu
-          </button>
-          {import.meta.env.DEV && <a href="/design/">Bộ thiết kế ↗</a>}
-        </footer>
+              Thử sổ trống
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                ledger.reset();
+                setScenario('sample');
+                selectDirection('receivable');
+              }}
+            >
+              Khôi phục mẫu
+            </button>
+            {import.meta.env.DEV && <a href="/design/">Bộ thiết kế ↗</a>}
+          </div>
+        </details>
       </main>
 
       <input
@@ -504,7 +469,6 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
         )}
         {sheet?.type === 'add' && (
           <>
-            <p className="home-sheet-description">Bạn muốn bắt đầu từ đâu?</p>
             <button
               type="button"
               className="home-source-choice"
@@ -515,7 +479,6 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
               </span>
               <span>
                 <strong>Chụp bill</strong>
-                <small>Chụp hoặc chọn ảnh hóa đơn</small>
               </span>
               <AppIcon name="open" size="small" />
             </button>
@@ -531,14 +494,10 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
               </span>
               <span>
                 <strong>Ghi khoản tiền</strong>
-                <small>Cho vay, mượn tiền, ứng hoặc trả hộ</small>
               </span>
               <AppIcon name="open" size="small" />
             </button>
-            <p className="home-sheet-footnote">
-              Đây là bản xem thử. Ảnh chỉ xem trên thiết bị, chưa đọc bill hoặc tạo khoản nợ tự
-              động.
-            </p>
+            <p className="home-sheet-footnote">Ảnh xem trước · Chưa đọc bill.</p>
             {photoError && (
               <p className="home-inline-error" role="alert">
                 {photoError}
@@ -577,7 +536,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
           (attention.length > 0 ? (
             <>
               <p className="home-sheet-description">
-                {dueToday.length} khoản đến hạn hôm nay, {overdue.length} khoản đã quá hạn.
+                Hôm nay {dueToday.length} · Quá hạn {overdue.length}
               </p>
               <div className="debt-list">
                 {attention.map((record) => (
@@ -592,8 +551,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
           ) : (
             <div className="home-filter-empty">
               <MascotIllustration state="settled" />
-              <h3>Hôm nay chưa có khoản đến hạn</h3>
-              <p>Bạn vẫn có thể xem và hẹn ngày trả cho các khoản còn lại.</p>
+              <h3>Chưa có khoản đến hạn</h3>
             </div>
           ))}
         {selectedRecord && sheet?.type === 'record' && (
@@ -613,7 +571,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
             </div>
             {selectedRecord.direction === 'receivable' ? (
               <ActionButton icon="check" onClick={() => openReceipt(selectedRecord)}>
-                Ghi nhận tiền đã nhận
+                Nhận tiền
               </ActionButton>
             ) : (
               <ActionButton
@@ -623,15 +581,13 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
                   if (
                     ledger.dispatch(
                       { type: 'report-payment', id: selectedRecord.id },
-                      'Đã đánh dấu đã chuyển trong dữ liệu mẫu. Số cần trả vẫn giữ đến khi người nhận xác nhận.',
+                      'Đã ghi nhận · Chờ xác nhận.',
                     )
                   )
                     setSheet(null);
                 }}
               >
-                {selectedRecord.awaitingConfirmation
-                  ? 'Đang chờ người nhận xác nhận'
-                  : 'Đánh dấu đã chuyển'}
+                {selectedRecord.awaitingConfirmation ? 'Chờ xác nhận' : 'Đã chuyển'}
               </ActionButton>
             )}
             <div className="home-sheet-action-row">
@@ -641,7 +597,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
                   icon="reminder"
                   onClick={() => openReminder(selectedRecord)}
                 >
-                  Soạn lời nhắc
+                  Nhắc tiền
                 </ActionButton>
               )}
               <ActionButton
@@ -652,10 +608,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
                 Hẹn lại
               </ActionButton>
             </div>
-            <p className="home-sheet-footnote">
-              Mọi thao tác trong bản xem thử chỉ cập nhật sổ mẫu, không chuyển tiền hoặc gửi thông
-              báo thật.
-            </p>
+            <p className="home-sheet-footnote">Dữ liệu mẫu.</p>
           </>
         )}
         {selectedRecord && sheet?.type === 'receive' && (
@@ -665,7 +618,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
               if (
                 ledger.dispatch(
                   { type: 'receive', id: selectedRecord.id, amount },
-                  `Đã ghi nhận ${formatVnd(amount)} từ ${selectedRecord.personName} trong dữ liệu mẫu.`,
+                  `Đã nhận ${formatVnd(amount)} · ${selectedRecord.personName}.`,
                 )
               )
                 setSheet(null);
@@ -680,7 +633,7 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
               if (
                 ledger.dispatch(
                   { type: 'promise', id: selectedRecord.id, date },
-                  `Đã đổi hẹn với ${selectedRecord.personName} sang ${relativeDate(date, today)} trong dữ liệu mẫu.`,
+                  `Đã hẹn ${relativeDate(date, today)} · ${selectedRecord.personName}.`,
                 )
               )
                 setSheet(null);
@@ -689,8 +642,8 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
         )}
         {sheet?.type === 'remind' && (
           <div className="home-form">
-            <label className="home-field-label">
-              Nội dung lời nhắc
+            <label className="money-form-field">
+              Lời nhắc
               <textarea
                 rows={5}
                 value={reminderDraft}
@@ -702,16 +655,14 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
               disabled={!reminderDraft.trim()}
               onClick={() => void copyReminder()}
             >
-              Sao chép lời nhắc
+              Sao chép
             </ActionButton>
             {reminderError && (
               <p className="home-inline-error" role="alert">
                 {reminderError}
               </p>
             )}
-            <p className="home-sheet-footnote">
-              Chỉ sao chép nội dung. Bạn chủ động gửi qua ứng dụng chat của mình.
-            </p>
+            <p className="home-sheet-footnote">Chưa gửi.</p>
           </div>
         )}
       </ActionSheet>

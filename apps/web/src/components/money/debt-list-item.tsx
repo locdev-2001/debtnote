@@ -1,4 +1,5 @@
 import { AppIcon } from '../app-icon';
+import type { ComponentSize } from '../../design/component-size';
 import { PersonAvatar } from '../people/person-avatar';
 import { MoneyAmount } from './money-amount';
 import type { DeadlineKind, MoneyDirection, SettlementState } from './presentation';
@@ -12,6 +13,8 @@ export interface DebtListItemProps {
   description: string;
   deadline?: { label: string; kind: DeadlineKind };
   onOpen: () => void;
+  size?: ComponentSize;
+  showDescription?: boolean;
 }
 
 export function DebtListItem({
@@ -22,16 +25,27 @@ export function DebtListItem({
   description,
   deadline,
   onOpen,
+  size = 'regular',
+  showDescription = false,
 }: DebtListItemProps) {
   return (
-    <button type="button" className="debt-list-item" onClick={onOpen}>
-      <PersonAvatar name={name} />
+    <button
+      type="button"
+      className="debt-list-item"
+      data-component-size={size}
+      onClick={onOpen}
+      title={description}
+    >
+      <PersonAvatar name={name} size={size} />
       <span className="debt-person">
         <span className="debt-name">{name}</span>
-        <span className="debt-description">{description}</span>
+        {showDescription && <span className="debt-description">{description}</span>}
         <span className="debt-signals">
-          <SettlementBadge state={state} />
-          {deadline && <DeadlineBadge label={deadline.label} kind={deadline.kind} />}
+          {!deadline || state === 'confirmation' || state === 'paid' ? (
+            <SettlementBadge state={state} />
+          ) : (
+            <DeadlineBadge label={deadline.label} kind={deadline.kind} />
+          )}
         </span>
       </span>
       <span className="debt-trailing">

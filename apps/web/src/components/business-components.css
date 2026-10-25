@@ -1,10 +1,10 @@
 .money-amount {
   color: var(--text-primary);
-  font-size: var(--font-size-reading);
+  font-size: var(--row-money-size);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-compact);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--tracking-number);
   white-space: nowrap;
 }
 .money-amount[data-direction="receivable"] {
@@ -14,13 +14,13 @@
   color: var(--money-payable-amount);
 }
 .money-amount[data-size="summary"] {
-  font-size: var(--font-size-amount);
+  font-size: var(--summary-amount-size);
 }
 .money-summary-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-5);
+  gap: var(--summary-gap);
+  padding: var(--component-card-padding);
   border: 0;
   border-radius: var(--radius-card);
   background: var(--money-receivable-surface);
@@ -55,35 +55,35 @@
 }
 .money-summary-label {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--button-gap);
   align-items: center;
   color: var(--text-primary);
-  font-size: var(--font-size-body);
+  font-size: var(--component-font-size);
   font-weight: var(--font-weight-semibold);
 }
 .money-summary-description {
   color: var(--text-secondary);
-  font-size: var(--font-size-caption);
+  font-size: var(--summary-description-size);
 }
 .person-avatar {
   display: grid;
-  flex: 0 0 var(--size-avatar);
+  flex: 0 0 var(--component-avatar-size);
   place-items: center;
-  width: var(--size-avatar);
-  height: var(--size-avatar);
+  width: var(--component-avatar-size);
+  height: var(--component-avatar-size);
   border-radius: var(--radius-pill);
   color: var(--action-primary);
   background: var(--action-subtle);
-  font-size: var(--font-size-body);
+  font-size: var(--component-font-size);
   font-weight: var(--font-weight-bold);
 }
 .debt-list-item {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--row-gap);
   width: 100%;
   min-height: var(--size-touch-target);
-  padding: var(--space-4);
+  padding: var(--component-row-padding);
   border: 0;
   border-radius: var(--radius-control);
   background: var(--surface-row);
@@ -92,8 +92,8 @@
 }
 .debt-list {
   display: grid;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
+  gap: var(--row-list-gap);
+  margin-top: var(--space-2);
 }
 .debt-list-item:nth-child(even) {
   background: var(--surface-row-alternate);
@@ -102,29 +102,31 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--row-content-gap);
   min-width: 0;
 }
 .debt-name {
   color: var(--text-primary);
-  font-size: var(--font-size-body);
+  font-size: var(--component-font-size);
   font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-compact);
 }
 .debt-description {
   color: var(--text-secondary);
-  font-size: var(--font-size-caption);
+  font-size: var(--row-description-size);
+  line-height: var(--line-height-body);
 }
 .debt-signals {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-top: var(--space-1);
+  gap: var(--row-signal-gap);
+  margin-top: var(--row-content-gap);
 }
 .debt-trailing {
   display: flex;
   flex-direction: column;
   align-items: end;
-  gap: var(--space-3);
+  gap: var(--row-trailing-gap);
   color: var(--text-secondary);
 }
 .settlement-badge,
@@ -132,13 +134,13 @@
 .dispute-badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--badge-gap);
   width: fit-content;
-  padding: var(--space-1) var(--space-2);
+  padding: var(--component-badge-padding-y) var(--component-badge-padding-x);
   border-radius: var(--radius-pill);
   color: var(--settlement-pending-text);
   background: var(--settlement-pending-surface);
-  font-size: var(--font-size-caption);
+  font-size: var(--component-badge-font);
   line-height: var(--line-height-compact);
   font-weight: var(--font-weight-medium);
 }
@@ -155,8 +157,8 @@
   background: var(--settlement-paid-surface);
 }
 .settlement-dot {
-  width: var(--space-1);
-  height: var(--space-1);
+  width: var(--badge-dot-size);
+  height: var(--badge-dot-size);
   border-radius: var(--radius-pill);
   background: currentColor;
 }
@@ -181,13 +183,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
-  min-height: var(--size-control);
-  padding: 0 var(--space-5);
+  gap: var(--button-gap);
+  min-height: var(--component-button-height);
+  padding: 0 var(--button-padding-inline);
   border: 0;
   border-radius: var(--radius-control);
   font: inherit;
-  font-size: var(--font-size-body);
+  font-size: var(--component-font-size);
   font-weight: var(--font-weight-bold);
   cursor: pointer;
   transition:
@@ -221,19 +223,25 @@
   cursor: default;
 }
 .icon-action {
-  width: var(--size-touch-target);
+  position: relative;
+  min-height: var(--icon-button-size);
+  width: var(--icon-button-size);
+  height: var(--icon-button-size);
   padding: 0;
   color: var(--text-secondary);
   background: var(--surface-subtle);
 }
+.action-button {
+  white-space: nowrap;
+}
 .amount-field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--input-gap);
 }
 .amount-field > label {
   color: var(--text-primary);
-  font-size: var(--font-size-body);
+  font-size: var(--input-label-size);
   font-weight: var(--font-weight-semibold);
 }
 .amount-input-shell {
@@ -246,28 +254,29 @@
 }
 .amount-input-shell:focus-within {
   outline: var(--focus-width) solid var(--focus-ring);
-  outline-offset: var(--space-1);
+  outline-offset: var(--focus-offset);
 }
 .amount-input-shell input {
   width: 100%;
   min-width: 0;
-  height: var(--size-control);
+  height: var(--component-input-height);
   border: 0;
-  padding: 0 var(--space-4);
+  padding: 0 var(--input-padding-inline);
   color: var(--input-text);
   background: transparent;
   font: inherit;
-  font-size: var(--font-size-reading);
+  font-size: var(--component-input-font-size);
   font-variant-numeric: tabular-nums;
   outline: none;
 }
 .amount-input-shell > span {
-  padding-right: var(--space-4);
+  padding-right: var(--input-padding-inline);
   color: var(--input-text);
+  font-size: var(--component-input-font-size);
 }
 .amount-field-message {
   color: var(--text-secondary);
-  font-size: var(--font-size-caption);
+  font-size: var(--input-helper-size);
 }
 .amount-field[data-invalid="true"] .amount-input-shell {
   background: var(--input-error-surface);
@@ -282,8 +291,11 @@
   object-fit: contain;
 }
 .money-action-sheet {
+  margin: auto;
+  max-height: var(--sheet-max-height);
+  overflow-y: auto;
   width: min(calc(100% - var(--space-8)), var(--size-sheet));
-  padding: var(--space-6);
+  padding: var(--sheet-padding);
   border: 0;
   border-radius: var(--radius-sheet);
   color: var(--text-primary);
@@ -298,58 +310,52 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 .money-sheet-header > h2 {
   margin: 0;
-  font-size: var(--font-size-section);
+  font-size: var(--sheet-title-size);
 }
 .money-sheet-body {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
-  padding-top: var(--space-5);
+  gap: var(--sheet-content-gap);
+  padding-top: var(--sheet-content-gap);
 }
 :where(button, a):focus-visible {
   outline: var(--focus-width) solid var(--focus-ring);
-  outline-offset: var(--space-1);
+  outline-offset: var(--focus-offset);
 }
 
 @media (max-width: 560px) {
-  .money-amount[data-size="summary"] {
-    font-size: var(--font-size-title);
-  }
-  .money-summary-card {
-    padding: var(--space-4);
-  }
   .money-action-sheet {
     width: 100%;
     max-width: none;
-    max-height: 85dvh;
+    max-height: var(--sheet-max-height);
     margin: auto 0 0;
-    padding: var(--space-6);
+    padding: var(--sheet-padding);
     border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
   }
 }
 
 .choice-controls {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--choice-gap);
   min-width: 0;
-  margin: 0 0 var(--space-4);
+  margin: 0 0 var(--space-2);
   padding: 0;
   border: 0;
 }
 .choice-controls button {
-  min-width: 4rem;
-  min-height: var(--size-touch-target);
-  padding: 0 var(--space-4);
+  min-width: 0;
+  min-height: var(--component-choice-height);
+  padding: 0 var(--choice-padding-inline);
   border: 0;
   border-radius: var(--radius-control);
   color: var(--text-secondary);
   background: var(--surface-card);
   font: inherit;
-  font-size: var(--font-size-label);
+  font-size: var(--component-font-size);
   cursor: pointer;
 }
 .choice-controls button[aria-pressed="true"] {
@@ -370,4 +376,63 @@
 
 .amount-field[data-invalid="true"] {
   --input-text: var(--input-error-text);
+}
+
+.icon-action::before {
+  content: "";
+  position: absolute;
+  inset: calc((var(--icon-button-size) - var(--size-touch-target)) / 2);
+  border-radius: inherit;
+}
+
+.money-form-field {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--input-gap);
+  color: var(--text-primary);
+
+  font-size: var(--input-label-size);
+  font-weight: var(--font-weight-semibold);
+}
+.money-form-field :where(input, select, textarea) {
+  width: 100%;
+  min-width: 0;
+
+  min-height: var(--component-input-height);
+
+  padding: 0 var(--input-padding-inline);
+  border: 0;
+  border-radius: var(--radius-control);
+  outline: none;
+  color: var(--text-primary);
+  background: var(--surface-subtle);
+  font: inherit;
+  font-weight: var(--font-weight-regular);
+  height: var(--component-input-height);
+  font-size: var(--component-input-font-size);
+}
+.money-form-field textarea {
+  resize: vertical;
+  line-height: var(--line-height-body);
+  height: var(--textarea-min-height);
+  min-height: var(--textarea-min-height);
+  padding-block: var(--textarea-padding-block);
+}
+.money-form-field :where(input, select, textarea):focus-visible {
+  outline: var(--focus-width) solid var(--focus-ring);
+
+  outline-offset: var(--focus-offset);
+}
+
+.mascot-illustration[data-illustration-size="inline"] {
+  width: var(--size-illustration-inline);
+  height: var(--size-illustration-inline);
+  flex-shrink: 0;
+}
+.mascot-illustration[data-illustration-size="small"] {
+  height: var(--size-illustration-small);
+}
+.mascot-illustration[data-illustration-size="large"] {
+  height: var(--size-illustration-large);
 }

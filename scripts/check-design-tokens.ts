@@ -24,6 +24,19 @@ function luminance(hexColor: string): number {
   return (channels[0] ?? 0) * 0.2126 + (channels[1] ?? 0) * 0.7152 + (channels[2] ?? 0) * 0.0722;
 }
 
+function resolveToken(tokens: Record<string, string>, name: string): string {
+  const visited = new Set<string>();
+  let current = name;
+  while (!visited.has(current)) {
+    visited.add(current);
+    const value = tokens[current] ?? '';
+    const alias = value.match(/^var\((--[a-z0-9-]+)\)$/)?.[1];
+    if (!alias) return value;
+    current = alias;
+  }
+  throw new Error(`Token tham chiếu vòng: ${name}`);
+}
+
 const baseTokens = parseDeclarations(tokenCss.slice(0, tokenCss.indexOf('}')));
 const contrastPairs = [
   ['--text-primary', '--surface-app', 4.5],
@@ -59,14 +72,14 @@ const contrastPairs = [
   ['--input-surface', '--surface-card', 3],
 ] as const;
 
-for (const template of ['sage', 'mist', 'sand']) {
+for (const template of ['money-gold']) {
   const templateBlock =
     tokenCss.match(new RegExp(`\\[data-design-theme="${template}"\\]\\s*\\{([^}]+)\\}`))?.[1] ?? '';
   const templateTokens = { ...baseTokens, ...parseDeclarations(templateBlock) };
 
   for (const [foreground, background, minimum] of contrastPairs) {
-    const foregroundLuminance = luminance(templateTokens[foreground] ?? '');
-    const backgroundLuminance = luminance(templateTokens[background] ?? '');
+    const foregroundLuminance = luminance(resolveToken(templateTokens, foreground));
+    const backgroundLuminance = luminance(resolveToken(templateTokens, background));
     const ratio =
       (Math.max(foregroundLuminance, backgroundLuminance) + 0.05) /
       (Math.min(foregroundLuminance, backgroundLuminance) + 0.05);
@@ -79,5 +92,5 @@ for (const template of ['sage', 'mist', 'sand']) {
 
 assert.equal(baseTokens['--font-body']?.startsWith('"Manrope Variable"'), true);
 assert.ok(Number.parseFloat(baseTokens['--size-touch-target'] ?? '') * 16 >= 44);
-assert.ok(Number.parseFloat(baseTokens['--size-control'] ?? '') * 16 >= 44);
-console.info('Đã kiểm tra 3 template: chữ trên màu solid, nền nhập liệu, Manrope và vùng chạm.');
+assert.ok(Number.parseFloat(baseTokens['--size-control'] ?? '') * 16 >= 32);
+console.info('Đã kiểm tra token Green & Gold: màu semantic, Manrope, control gọn và vùng chạm.');

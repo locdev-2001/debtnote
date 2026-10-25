@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActionButton } from '../src/components/actions/action-button';
 import { ActionSheet } from '../src/components/actions/action-sheet';
 import { ChoiceGroup } from '../src/components/actions/choice-group';
@@ -25,11 +25,13 @@ import {
 } from '../src/components/money/settlement-badge';
 import { exampleDebts } from './fixtures';
 import { IconGallery } from './icons';
+import { ComponentSizes } from './component-sizes';
 
-const templates = [
-  { id: 'sage', name: 'Trà xanh · Kem', description: 'Dịu, ấm và rõ ràng', recommended: true },
-  { id: 'mist', name: 'Oải hương · Sương', description: 'Mát và yên tĩnh', recommended: false },
-  { id: 'sand', name: 'Đào · Cát', description: 'Ấm áp và gần gũi', recommended: false },
+const brandColors = [
+  { label: 'Xanh chính', token: '--brand-green' },
+  { label: 'Xanh sáng', token: '--brand-green-bright' },
+  { label: 'Vàng', token: '--brand-yellow' },
+  { label: 'Vàng đậm', token: '--brand-gold' },
 ] as const;
 
 const paletteRoles = [
@@ -42,7 +44,10 @@ const paletteRoles = [
 ] as const;
 
 export function DesignPage() {
-  const [template, setTemplate] = useState<(typeof templates)[number]['id']>('sage');
+  useEffect(() => {
+    const sectionId = window.location.hash.slice(1);
+    if (sectionId) document.getElementById(sectionId)?.scrollIntoView();
+  }, []);
   const [direction, setDirection] = useState<MoneyDirection>('receivable');
   const [selectedDebt, setSelectedDebt] = useState<(typeof exampleDebts)[number] | null>(null);
   const [paymentAmount, setPaymentAmount] = useState('200000');
@@ -60,15 +65,15 @@ export function DesignPage() {
       : undefined;
 
   function showExampleNotice() {
-    setNotice('Đã thử thao tác. Đây là dữ liệu minh họa, chưa ghi nhận hoặc gửi thanh toán thật.');
+    setNotice('Đã chọn · Dữ liệu mẫu.');
   }
 
   return (
-    <div className="design-page" data-design-theme={template}>
+    <div className="design-page" data-design-theme="money-gold">
       <div className="design-sheet">
         <header className="sheet-header">
           <a className="wordmark" href="/" aria-label="Debtnote, về ứng dụng">
-            <img src="/favicon.svg" width="36" height="36" alt="" />
+            <img src="/favicon.svg" alt="" />
             <span>
               debtnote<span className="wordmark-dot">.</span>
             </span>
@@ -79,75 +84,30 @@ export function DesignPage() {
             <a href="#illustrations">Nhân vật</a>
             <a href="#icons">Reicon</a>
           </nav>
-          <span className="edition">MANROPE · SOLID</span>
         </header>
 
         <main>
-          <section className="introduction" aria-labelledby="visual-title">
-            <div>
-              <p className="eyebrow">DEBTNOTE / NỀN TẢNG THIẾT KẾ</p>
-              <h1 id="visual-title">
-                Rõ chuyện tiền.
-                <br />
-                <span>Nhẹ cả ngày.</span>
-              </h1>
-              <p className="introduction-copy">
-                Màu rõ hơn, chữ Manrope dễ đọc. Màu sắc giúp nhận ra việc cần làm, để những con số
-                luôn là điều dễ thấy nhất.
-              </p>
-              <div className="design-principles">
-                <span>Font tự host</span>
-                <span>Token theo nghiệp vụ</span>
-                <span>Thao tác bằng chạm</span>
-              </div>
-            </div>
-            <div className="brand-art">
-              <span className="art-caption">
-                <span className="small-dot" /> Có bạn đồng hành rồi.
-              </span>
-              <MascotIllustration state="welcome" priority decorative />
-              <span className="art-signature">Một lời chào nhỏ, chuyện tiền nhẹ hơn.</span>
-            </div>
-          </section>
+          <h1 className="design-heading">Bộ thiết kế</h1>
 
           <section id="templates" aria-labelledby="templates-title">
             <div className="section-heading">
               <div>
-                <p className="eyebrow">01 / TEMPLATE</p>
-                <h2 id="templates-title">Dịu mắt, vẫn rõ việc.</h2>
+                <h2 id="templates-title">Màu sắc</h2>
               </div>
-              <p>
-                Cùng component, đổi phối màu để so sánh.
-                <br />
-                Tao đề xuất Trà xanh · Kem cho Debtnote.
-              </p>
             </div>
-            <fieldset className="template-picker">
-              <legend className="visually-hidden">Chọn template màu</legend>
-              {templates.map((choice) => (
-                <button
-                  type="button"
-                  key={choice.id}
-                  data-template-choice={choice.id}
-                  aria-pressed={template === choice.id}
-                  onClick={() => setTemplate(choice.id)}
-                >
-                  <span className="template-color" />
-                  <span>
-                    <strong>{choice.name}</strong>
-                    <small>{choice.description}</small>
-                  </span>
-                  {choice.recommended && <span className="recommended-label">Đề xuất</span>}
-                </button>
+            <div className="brand-pattern" aria-label="Bảng màu Xanh và Vàng">
+              {brandColors.map((color) => (
+                <div key={color.token}>
+                  <span style={{ background: `var(${color.token})` }} />
+                  <strong>{color.label}</strong>
+                </div>
               ))}
-            </fieldset>
-
+            </div>
             <div className="workbench-grid">
               <section className="money-preview panel" aria-label="Ví dụ các khoản tiền">
                 <div className="preview-title">
                   <div>
-                    <span className="eyebrow">VÍ DỤ GIAO DIỆN</span>
-                    <h3>Tổng quan của bạn</h3>
+                    <h3>Tổng quan</h3>
                   </div>
                   <span className="example-label">Dữ liệu mẫu</span>
                 </div>
@@ -155,20 +115,20 @@ export function DesignPage() {
                   <MoneySummaryCard
                     direction="receivable"
                     amount={940_000}
-                    description="4 người còn cần thanh toán"
+                    description="4 người"
                     selected={direction === 'receivable'}
                     onSelect={() => setDirection('receivable')}
                   />
                   <MoneySummaryCard
                     direction="payable"
                     amount={200_000}
-                    description="1 khoản bạn cần thanh toán"
+                    description="1 người"
                     selected={direction === 'payable'}
                     onSelect={() => setDirection('payable')}
                   />
                 </div>
                 <div className="list-caption">
-                  <h4>{direction === 'receivable' ? 'Các khoản cần thu' : 'Các khoản cần trả'}</h4>
+                  <h4>{direction === 'receivable' ? 'Cần thu' : 'Các khoản cần trả'}</h4>
                   <span>{visibleDebts.length} khoản</span>
                 </div>
                 <div className="debt-list">
@@ -176,19 +136,11 @@ export function DesignPage() {
                     <DebtListItem {...debt} key={debt.id} onOpen={() => setSelectedDebt(debt)} />
                   ))}
                 </div>
-                <p className="sample-caption">
-                  Bấm số dư để lọc; bấm một người để xem bảng thao tác mẫu.
-                </p>
               </section>
 
               <aside className="token-column">
                 <section className="panel">
-                  <p className="eyebrow">MÀU CÓ VAI TRÒ</p>
-                  <h3>
-                    Màu solid cho trạng thái.
-                    <br />
-                    Màu đậm cho thông tin.
-                  </h3>
+                  <h3>Màu nghiệp vụ</h3>
                   <div className="semantic-palette">
                     {paletteRoles.map((role) => (
                       <div key={role.token}>
@@ -198,20 +150,14 @@ export function DesignPage() {
                         />
                         <span>
                           <strong>{role.label}</strong>
-                          <code>{role.token}</code>
                         </span>
                       </div>
                     ))}
                   </div>
                 </section>
                 <section className="panel type-panel">
-                  <p className="eyebrow">MANROPE · TIẾNG VIỆT</p>
-                  <h3>Đúng số, đúng người.</h3>
+                  <h3>Số tiền</h3>
                   <MoneyAmount amount={940_000} size="summary" />
-                  <p>
-                    Chữ số thẳng hàng. Cần thu và cần trả có nhãn riêng, không chỉ phân biệt bằng
-                    màu.
-                  </p>
                 </section>
               </aside>
             </div>
@@ -220,46 +166,35 @@ export function DesignPage() {
           <section id="business" aria-labelledby="business-title">
             <div className="section-heading">
               <div>
-                <p className="eyebrow">02 / COMPONENT THEO NGHIỆP VỤ</p>
-                <h2 id="business-title">Mỗi trạng thái, một ý nghĩa.</h2>
+                <h2 id="business-title">Thành phần</h2>
               </div>
-              <p>
-                Thanh toán, hạn trả và báo sai được tách riêng.
-                <br />
-                Dùng chung cho bill, ứng hộ và cho vay.
-              </p>
             </div>
             <div className="component-grid">
               <section className="panel">
-                <h3>Trạng thái khoản tiền</h3>
-                <p className="component-note">Tiến độ thanh toán</p>
+                <h3>Trạng thái</h3>
+
                 <div className="badge-examples">
                   {(Object.keys(settlementStates) as SettlementState[]).map((state) => (
                     <SettlementBadge key={state} state={state} />
                   ))}
                 </div>
-                <p className="component-note">Lịch hẹn và đồng thuận</p>
+
                 <div className="badge-examples">
                   <DeadlineBadge label="Hẹn ngày mai" kind="promised" />
                   <DeadlineBadge label="Quá hạn 2 ngày" kind="overdue" />
                   <DisputeBadge />
                 </div>
-                <p className="sample-caption">Một khoản có thể vừa trả một phần, vừa quá hạn.</p>
               </section>
               <section className="panel">
-                <h3>Ghi nhận thanh toán</h3>
+                <h3>Nhận tiền</h3>
                 <AmountField
-                  label="Số tiền đã nhận"
+                  label="Số tiền"
                   value={paymentAmount}
                   onChange={setPaymentAmount}
                   onValidityChange={setPaymentInputValid}
-                  {...(amountError
-                    ? { error: amountError }
-                    : { helperText: 'Có thể nhận một phần khoản tiền.' })}
+                  {...(amountError ? { error: amountError } : {})}
                 />
-                <p className="sample-caption">
-                  Số tiền xác nhận: <MoneyAmount amount={Number(paymentAmount || '0')} />
-                </p>
+
                 <div className="demo-actions">
                   <ActionButton
                     icon="check"
@@ -267,7 +202,7 @@ export function DesignPage() {
                     disabled={!paymentInputValid || Boolean(amountError) || paymentAmount === ''}
                     onClick={showExampleNotice}
                   >
-                    Xác nhận đã nhận
+                    Xác nhận
                   </ActionButton>
                   <label className="pending-control">
                     <input
@@ -275,19 +210,19 @@ export function DesignPage() {
                       checked={pending}
                       onChange={(event) => setPending(event.target.checked)}
                     />
-                    Thử trạng thái đang xử lý
+                    Đang xử lý
                   </label>
                 </div>
               </section>
               <section className="panel">
-                <h3>Hành động rõ ràng</h3>
-                <p className="component-note">Một hành động chính trong mỗi bước.</p>
+                <h3>Nút bấm</h3>
+
                 <div className="action-examples">
                   <ActionButton icon="camera" onClick={showExampleNotice}>
                     Chụp bill
                   </ActionButton>
                   <ActionButton icon="reminder" emphasis="secondary" onClick={showExampleNotice}>
-                    Nhắc thanh toán
+                    Nhắc tiền
                   </ActionButton>
                   <ActionButton
                     emphasis="quiet"
@@ -296,19 +231,9 @@ export function DesignPage() {
                     Để sau
                   </ActionButton>
                 </div>
-                <div className="size-specs">
-                  <span>
-                    Vùng chạm <strong>48 px</strong>
-                  </span>
-                  <span>
-                    Nội dung <strong>14–16 px</strong>
-                  </span>
-                  <span>
-                    Số tiền <strong>28–32 px</strong>
-                  </span>
-                </div>
               </section>
             </div>
+            <ComponentSizes />
             {notice && (
               <p className="demo-feedback" role="status">
                 {notice}
@@ -319,14 +244,8 @@ export function DesignPage() {
           <section id="illustrations" aria-labelledby="illustrations-title">
             <div className="section-heading">
               <div>
-                <p className="eyebrow">03 / MASCOT RIÊNG</p>
-                <h2 id="illustrations-title">Một chút vui, đúng lúc.</h2>
+                <h2 id="illustrations-title">Mascot</h2>
               </div>
-              <p>
-                Rái cá xanh ngọc, cùng một nhân vật ở tám trạng thái.
-                <br />
-                Chỉ xuất hiện ở chỗ cần hướng dẫn hoặc xác nhận.
-              </p>
             </div>
             <ChoiceGroup
               label="Nhóm trạng thái mascot"
@@ -349,7 +268,6 @@ export function DesignPage() {
                   <span className="card-index">0{index + 1}</span>
                   <MascotIllustration state={state} />
                   <h3>{mascotStates[state].title}</h3>
-                  <p>{mascotStates[state].description}</p>
                 </article>
               ))}
             </div>
@@ -358,20 +276,14 @@ export function DesignPage() {
           <section id="icons" aria-labelledby="icons-title">
             <div className="section-heading">
               <div>
-                <p className="eyebrow">04 / REICON</p>
-                <h2 id="icons-title">Nhìn rõ, bấm nhanh.</h2>
+                <h2 id="icons-title">Icon</h2>
               </div>
-              <p>
-                Import đúng từng icon được dùng.
-                <br />
-                Thử hai kiểu nét và đặc ngay bên dưới.
-              </p>
             </div>
             <IconGallery />
           </section>
           <footer className="sheet-footer">
             <span>debtnote.</span>
-            <p>Manrope · Reicon · Token nghiệp vụ · Mascot tạo bằng imagegen</p>
+
             <a href="/">Về ứng dụng ↗</a>
           </footer>
         </main>
@@ -400,9 +312,6 @@ export function DesignPage() {
             >
               {moneyDirections[selectedDebt.direction].actionLabel}
             </ActionButton>
-            <p className="sample-caption">
-              Bảng thao tác minh họa; không gửi thông báo hoặc ghi nhận tiền thật.
-            </p>
           </>
         )}
       </ActionSheet>

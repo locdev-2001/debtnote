@@ -30,12 +30,12 @@ export function useHomePrototype(store: HomePrototypeStore) {
   function reset() {
     const initialRecords = store.reset();
     setRecords(initialRecords);
-    setNotice('Đã khôi phục bộ dữ liệu mẫu.');
+    setNotice('Đã khôi phục mẫu.');
   }
   function clear() {
     store.save([]);
     setRecords([]);
-    setNotice('Đang xem sổ mẫu trống. Có thể khôi phục bộ mẫu bất kỳ lúc nào.');
+    setNotice('Sổ mẫu trống.');
   }
   const people = [
     ...new Map(

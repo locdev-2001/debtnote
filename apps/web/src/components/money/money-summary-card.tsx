@@ -1,4 +1,5 @@
 import { AppIcon } from '../app-icon';
+import type { ComponentSize } from '../../design/component-size';
 import { MoneyAmount } from './money-amount';
 import { type MoneyDirection, moneyDirections } from './presentation';
 
@@ -8,6 +9,7 @@ interface MoneySummaryCardProps {
   description: string;
   selected: boolean;
   onSelect: () => void;
+  size?: ComponentSize;
 }
 
 export function MoneySummaryCard({
@@ -16,6 +18,7 @@ export function MoneySummaryCard({
   description,
   selected,
   onSelect,
+  size = 'regular',
 }: MoneySummaryCardProps) {
   const presentation = moneyDirections[direction];
   return (
@@ -23,6 +26,7 @@ export function MoneySummaryCard({
       type="button"
       className="money-summary-card"
       data-direction={direction}
+      data-component-size={size}
       aria-pressed={selected}
       onClick={onSelect}
     >

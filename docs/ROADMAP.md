@@ -40,7 +40,7 @@ Chưa có bảng nghiệp vụ, đăng nhập, lưu bill thật, OCR, QR thanh t
 
 ## 1. Thiết kế screen và prototype — bước làm ngay
 
-- [x] P1.0 Có nền tảng thiết kế bản đầu: Manrope, 3 template solid, borderless, token nghiệp vụ, component dùng chung, Reicon, 8 ảnh mascot và trang xem thử riêng.
+- [x] P1.0 Có nền tảng thiết kế bản đầu: Manrope, nền trắng, xanh–vàng, component compact, token nghiệp vụ, component dùng chung, Reicon, 8 ảnh mascot và trang xem thử riêng.
 - [ ] P1.1 Chốt cấu trúc điều hướng, hành động tạo mới và cách quay lại mà không mất bản nháp.
 - [x] P1.2 Dựng prototype Trang chủ: cần thu, cần trả, đến hạn/quá hạn, danh sách cần xử lý và nút tạo khoản tiền. Bản đầu để duyệt, xem [S01](screens/S01-HOME.md).
 - [ ] P1.3 Thiết kế flow tạo khoản: chụp/chọn ảnh bill hoặc khoản trực tiếp; chọn người; chia đều/tùy chỉnh; xem lại và chốt.
