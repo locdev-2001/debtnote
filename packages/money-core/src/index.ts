@@ -3,7 +3,7 @@ export interface MoneyShare {
   readonly amount: number;
 }
 
-function assertMinorUnits(amount: number): void {
+export function assertMinorUnits(amount: number): void {
   if (!Number.isSafeInteger(amount) || amount < 0) {
     throw new RangeError('Số tiền phải là số nguyên không âm trong giới hạn an toàn.');
   }

@@ -16,7 +16,8 @@
     "@trpc/tanstack-react-query": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "reicon-react": "catalog:"
+    "reicon-react": "catalog:",
+    "react-number-format": "catalog:"
   },
   "devDependencies": {
     "@debtnote/rpc": "workspace:*",

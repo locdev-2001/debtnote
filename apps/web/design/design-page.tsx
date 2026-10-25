@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ActionButton } from '../src/components/actions/action-button';
 import { ActionSheet } from '../src/components/actions/action-sheet';
+import { ChoiceGroup } from '../src/components/actions/choice-group';
 import {
   MascotIllustration,
   type MascotState,
@@ -8,6 +9,7 @@ import {
 } from '../src/components/illustrations/mascot-illustration';
 import { AmountField } from '../src/components/money/amount-field';
 import { DebtListItem } from '../src/components/money/debt-list-item';
+import { formatVnd } from '../src/components/money/format-vnd';
 import { MoneyAmount } from '../src/components/money/money-amount';
 import { MoneySummaryCard } from '../src/components/money/money-summary-card';
 import {
@@ -45,11 +47,16 @@ export function DesignPage() {
   const [selectedDebt, setSelectedDebt] = useState<(typeof exampleDebts)[number] | null>(null);
   const [paymentAmount, setPaymentAmount] = useState('200000');
   const [pending, setPending] = useState(false);
+  const [paymentInputValid, setPaymentInputValid] = useState(true);
   const [notice, setNotice] = useState('');
+  const [mascotGroup, setMascotGroup] = useState<'all' | 'reminder' | 'payment'>('reminder');
+  const visibleMascots = (Object.keys(mascotStates) as MascotState[])
+    .filter((state) => mascotGroup === 'all' || mascotStates[state].group === mascotGroup)
+    .sort((left, right) => mascotStates[left].order - mascotStates[right].order);
   const visibleDebts = exampleDebts.filter((debt) => debt.direction === direction);
   const amountError =
     paymentAmount !== '' && !/^\d+$/.test(paymentAmount)
-      ? 'Nhập số tiền bằng đồng, ví dụ 200000.'
+      ? `Nhập số tiền bằng đồng, ví dụ ${formatVnd(200_000)}.`
       : undefined;
 
   function showExampleNotice() {
@@ -72,7 +79,7 @@ export function DesignPage() {
             <a href="#illustrations">Nhân vật</a>
             <a href="#icons">Reicon</a>
           </nav>
-          <span className="edition">MANROPE · PASTEL</span>
+          <span className="edition">MANROPE · SOLID</span>
         </header>
 
         <main>
@@ -85,7 +92,7 @@ export function DesignPage() {
                 <span>Nhẹ cả ngày.</span>
               </h1>
               <p className="introduction-copy">
-                Pastel dịu, chữ Manrope rõ ràng. Màu sắc giúp nhận ra việc cần làm, để những con số
+                Màu rõ hơn, chữ Manrope dễ đọc. Màu sắc giúp nhận ra việc cần làm, để những con số
                 luôn là điều dễ thấy nhất.
               </p>
               <div className="design-principles">
@@ -164,7 +171,7 @@ export function DesignPage() {
                   <h4>{direction === 'receivable' ? 'Các khoản cần thu' : 'Các khoản cần trả'}</h4>
                   <span>{visibleDebts.length} khoản</span>
                 </div>
-                <div>
+                <div className="debt-list">
                   {visibleDebts.map((debt) => (
                     <DebtListItem {...debt} key={debt.id} onOpen={() => setSelectedDebt(debt)} />
                   ))}
@@ -178,7 +185,7 @@ export function DesignPage() {
                 <section className="panel">
                   <p className="eyebrow">MÀU CÓ VAI TRÒ</p>
                   <h3>
-                    Pastel cho nền.
+                    Màu solid cho trạng thái.
                     <br />
                     Màu đậm cho thông tin.
                   </h3>
@@ -245,15 +252,19 @@ export function DesignPage() {
                   label="Số tiền đã nhận"
                   value={paymentAmount}
                   onChange={setPaymentAmount}
+                  onValidityChange={setPaymentInputValid}
                   {...(amountError
                     ? { error: amountError }
                     : { helperText: 'Có thể nhận một phần khoản tiền.' })}
                 />
+                <p className="sample-caption">
+                  Số tiền xác nhận: <MoneyAmount amount={Number(paymentAmount || '0')} />
+                </p>
                 <div className="demo-actions">
                   <ActionButton
                     icon="check"
                     pending={pending}
-                    disabled={Boolean(amountError) || paymentAmount === ''}
+                    disabled={!paymentInputValid || Boolean(amountError) || paymentAmount === ''}
                     onClick={showExampleNotice}
                   >
                     Xác nhận đã nhận
@@ -312,14 +323,29 @@ export function DesignPage() {
                 <h2 id="illustrations-title">Một chút vui, đúng lúc.</h2>
               </div>
               <p>
-                Rái cá xanh ngọc, cùng một nhân vật ở ba trạng thái.
+                Rái cá xanh ngọc, cùng một nhân vật ở tám trạng thái.
                 <br />
                 Chỉ xuất hiện ở chỗ cần hướng dẫn hoặc xác nhận.
               </p>
             </div>
+            <ChoiceGroup
+              label="Nhóm trạng thái mascot"
+              value={mascotGroup}
+              onChange={setMascotGroup}
+              options={[
+                { value: 'reminder', label: 'Nhắc hẹn' },
+                { value: 'payment', label: 'Thanh toán' },
+                { value: 'all', label: 'Tất cả' },
+              ]}
+            />
             <div className="illustration-grid">
-              {(Object.keys(mascotStates) as MascotState[]).map((state, index) => (
-                <article className="illustration-card" key={state} data-mascot={state}>
+              {visibleMascots.map((state, index) => (
+                <article
+                  className="illustration-card"
+                  key={state}
+                  data-mascot={state}
+                  style={{ background: `var(--mascot-${state}-surface)` }}
+                >
                   <span className="card-index">0{index + 1}</span>
                   <MascotIllustration state={state} />
                   <h3>{mascotStates[state].title}</h3>

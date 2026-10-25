@@ -18,6 +18,36 @@
       "reference": "welcome.png",
       "usage": "Đến ngày hẹn",
       "prompt": "Use case: identity-preserve. Ảnh tham chiếu là mascot rái cá nguyên bản của Debtnote, dùng làm nguồn nhận diện. Tạo một hình minh họa mới cho trạng thái ĐẾN NGÀY HẸN. Giữ nguyên nhân vật, hình dáng đầu/thân, màu xanh ngọc, mõm và bụng kem, mũi xanh đậm, hai tai tròn nhỏ, mắt lớn sáng, má đào, đuôi, chất liệu và phong cách hoạt hình 2D mềm mại của ảnh tham chiếu. Chỉ đổi tư thế và đạo cụ: rái cá đứng toàn thân, nghiêng đầu nhẹ, cười thân thiện và tinh nghịch; một tay ôm trang lịch nhỏ nền kem có gáy xanh trầm, các ô lịch đơn giản và một ô xanh non, không chữ hay số; tay kia chỉ vào ô lịch. Có chiếc chuông nhỏ màu đào cạnh trang lịch để gợi nhắc, không gây cảm giác báo động hoặc đòi nợ căng thẳng. Một nhân vật duy nhất giữa khung vuông, đủ khoảng trống quanh đầu, chân, đuôi, đạo cụ; không cắt bộ phận. Nền thật sự trong suốt; không nền cảnh, không chữ, không số, không watermark. Giữ đúng nét minh họa và tỷ lệ mascot ở ảnh tham chiếu, cảm giác vui như ứng dụng Duolingo nhưng là nhân vật rái cá riêng."
+    },
+    {
+      "source": "upcoming.png",
+      "reference": "welcome.png",
+      "usage": "Sắp đến hẹn",
+      "prompt": "Use case: identity-preserve. Ảnh tham chiếu là mascot rái cá nguyên bản của Debtnote. Giữ nguyên màu xanh ngọc, mõm và bụng kem, mắt đen lớn, mũi xanh trầm, má đào, tai nhỏ tròn, đuôi rái cá, tỷ lệ đầu lớn/thân tròn và phong cách hoạt hình 2D mềm mại vui nhộn của ảnh tham chiếu. Chỉ thay tư thế, biểu cảm và đạo cụ theo mô tả trạng thái. Một nhân vật toàn thân duy nhất ở giữa khung vuông, chiếm khoảng 80%, đủ khoảng trống quanh tai, chân, đuôi và đạo cụ; không cắt bộ phận. Bối cảnh thật sự trong suốt, không cảnh nền, không chữ, không chữ số, không watermark. Màu đạo cụ đậm vừa, hài hòa với xanh ngọc; nhìn rõ khi thu nhỏ trong app. Rái cá cười tinh nghịch, nghiêng người và cầm chiếc đồng hồ báo thức tròn màu xanh lam dịu, một tay giơ một ngón như nhắc trước một chút. Đồng hồ chỉ có kim và các chấm, không chữ số. Tư thế chủ động, nhẹ nhàng, không gây áp lực."
+    },
+    {
+      "source": "overdue.png",
+      "reference": "welcome.png",
+      "usage": "Đã quá hạn",
+      "prompt": "Use case: identity-preserve. Ảnh tham chiếu là mascot rái cá nguyên bản của Debtnote. Giữ nguyên màu xanh ngọc, mõm và bụng kem, mắt đen lớn, mũi xanh trầm, má đào, tai nhỏ tròn, đuôi rái cá, tỷ lệ đầu lớn/thân tròn và phong cách hoạt hình 2D mềm mại vui nhộn của ảnh tham chiếu. Chỉ thay tư thế, biểu cảm và đạo cụ theo mô tả trạng thái. Một nhân vật toàn thân duy nhất ở giữa khung vuông, chiếm khoảng 80%, đủ khoảng trống quanh tai, chân, đuôi và đạo cụ; không cắt bộ phận. Bối cảnh thật sự trong suốt, không cảnh nền, không chữ, không chữ số, không watermark. Màu đạo cụ đậm vừa, hài hòa với xanh ngọc; nhìn rõ khi thu nhỏ trong app. Rái cá hơi băn khoăn với lông mày nhướng, vẫn thân thiện, ôm một đồng hồ cát màu hổ phách lớn vừa, tay kia mở lòng bàn tay như mời cùng xử lý khoản còn lại. Có một giọt mồ hôi nhỏ hoạt hình; không giận dữ, không đe dọa hay làm người nợ xấu hổ."
+    },
+    {
+      "source": "snoozed.png",
+      "reference": "welcome.png",
+      "usage": "Đã hẹn lại",
+      "prompt": "Use case: identity-preserve. Ảnh tham chiếu là mascot rái cá nguyên bản của Debtnote. Giữ nguyên màu xanh ngọc, mõm và bụng kem, mắt đen lớn, mũi xanh trầm, má đào, tai nhỏ tròn, đuôi rái cá, tỷ lệ đầu lớn/thân tròn và phong cách hoạt hình 2D mềm mại vui nhộn của ảnh tham chiếu. Chỉ thay tư thế, biểu cảm và đạo cụ theo mô tả trạng thái. Một nhân vật toàn thân duy nhất ở giữa khung vuông, chiếm khoảng 80%, đủ khoảng trống quanh tai, chân, đuôi và đạo cụ; không cắt bộ phận. Bối cảnh thật sự trong suốt, không cảnh nền, không chữ, không chữ số, không watermark. Màu đạo cụ đậm vừa, hài hòa với xanh ngọc; nhìn rõ khi thu nhỏ trong app. Rái cá vui vẻ ngồi thoải mái, giữ một trang lịch màu tím oải hương bên cạnh chiếc đồng hồ tròn, một mũi tên cong mềm nhỏ phía trên lịch thể hiện đổi ngày hẹn. Lịch không chữ số. Biểu cảm yên tâm vì đã thống nhất ngày mới; không ngủ và không bỏ mặc trách nhiệm."
+    },
+    {
+      "source": "partial.png",
+      "reference": "welcome.png",
+      "usage": "Đã trả một phần",
+      "prompt": "Use case: identity-preserve. Ảnh tham chiếu là mascot rái cá nguyên bản của Debtnote. Giữ nguyên màu xanh ngọc, mõm và bụng kem, mắt đen lớn, mũi xanh trầm, má đào, tai nhỏ tròn, đuôi rái cá, tỷ lệ đầu lớn/thân tròn và phong cách hoạt hình 2D mềm mại vui nhộn của ảnh tham chiếu. Chỉ thay tư thế, biểu cảm và đạo cụ theo mô tả trạng thái. Một nhân vật toàn thân duy nhất ở giữa khung vuông, chiếm khoảng 80%, đủ khoảng trống quanh tai, chân, đuôi và đạo cụ; không cắt bộ phận. Bối cảnh thật sự trong suốt, không cảnh nền, không chữ, không chữ số, không watermark. Màu đạo cụ đậm vừa, hài hòa với xanh ngọc; nhìn rõ khi thu nhỏ trong app. Rái cá đang đếm những đồng xu vàng đào không có ký hiệu, một tay giữ hai đồng xu, tay kia đặt một đồng xu vào chiếc khay nhỏ; vẻ mặt vui vì đã tiến thêm một bước. Có vòng tiến độ nửa đầy nhỏ màu tím bên cạnh khay. Không dấu kiểm hoàn tất, không chữ số hoặc ký hiệu tiền."
+    },
+    {
+      "source": "confirmation.png",
+      "reference": "welcome.png",
+      "usage": "Chờ xác nhận tiền về",
+      "prompt": "Use case: identity-preserve. Ảnh tham chiếu là mascot rái cá nguyên bản của Debtnote. Giữ nguyên màu xanh ngọc, mõm và bụng kem, mắt đen lớn, mũi xanh trầm, má đào, tai nhỏ tròn, đuôi rái cá, tỷ lệ đầu lớn/thân tròn và phong cách hoạt hình 2D mềm mại vui nhộn của ảnh tham chiếu. Chỉ thay tư thế, biểu cảm và đạo cụ theo mô tả trạng thái. Một nhân vật toàn thân duy nhất ở giữa khung vuông, chiếm khoảng 80%, đủ khoảng trống quanh tai, chân, đuôi và đạo cụ; không cắt bộ phận. Bối cảnh thật sự trong suốt, không cảnh nền, không chữ, không chữ số, không watermark. Màu đạo cụ đậm vừa, hài hòa với xanh ngọc; nhìn rõ khi thu nhỏ trong app. Rái cá chăm chú nhưng vui vẻ, cầm một tờ biên nhận màu kem không chữ và một kính lúp để kiểm tra. Bên cạnh là biểu tượng đồng hồ cát nhỏ màu xanh lam, thể hiện đang chờ xác nhận. Không dấu kiểm đã hoàn tất, không tiền bay, không chữ số."
     }
   ]
 }

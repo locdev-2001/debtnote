@@ -29,6 +29,7 @@ export function MoneySummaryCard({
       <span className="money-summary-label">
         <AppIcon name={presentation.icon} size="small" />
         {presentation.label}
+        {selected && <AppIcon name="check" size="compact" className="summary-selection" />}
       </span>
       <MoneyAmount amount={amount} direction={direction} size="summary" />
       <span className="money-summary-description">{description}</span>

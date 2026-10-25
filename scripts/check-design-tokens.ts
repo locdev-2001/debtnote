@@ -30,15 +30,22 @@ const contrastPairs = [
   ['--text-secondary', '--surface-app', 4.5],
   ['--text-secondary', '--surface-card', 4.5],
   ['--text-secondary', '--surface-subtle', 4.5],
-  ['--text-secondary', '--money-receivable-surface', 4.5],
-  ['--text-secondary', '--money-payable-surface', 4.5],
-  ['--text-secondary', '--mascot-welcome-surface', 4.5],
-  ['--text-secondary', '--mascot-settled-surface', 4.5],
-  ['--text-secondary', '--mascot-reminder-surface', 4.5],
+  ['--text-primary', '--mascot-welcome-surface', 4.5],
+  ['--text-primary', '--mascot-settled-surface', 4.5],
+  ['--text-primary', '--mascot-reminder-surface', 4.5],
+  ['--text-primary', '--mascot-upcoming-surface', 4.5],
+  ['--text-primary', '--mascot-overdue-surface', 4.5],
+  ['--text-primary', '--mascot-snoozed-surface', 4.5],
+  ['--text-primary', '--mascot-partial-surface', 4.5],
+  ['--text-primary', '--mascot-confirmation-surface', 4.5],
   ['--action-on-primary', '--action-primary', 4.5],
   ['--action-on-primary', '--action-primary-hover', 4.5],
   ['--money-receivable-text', '--money-receivable-surface', 4.5],
   ['--money-payable-text', '--money-payable-surface', 4.5],
+  ['--money-receivable-text', '--money-receivable-selected', 4.5],
+  ['--money-payable-text', '--money-payable-selected', 4.5],
+  ['--money-receivable-amount', '--surface-row', 4.5],
+  ['--money-payable-amount', '--surface-row', 4.5],
   ['--settlement-pending-text', '--settlement-pending-surface', 4.5],
   ['--settlement-partial-text', '--settlement-partial-surface', 4.5],
   ['--settlement-confirmation-text', '--settlement-confirmation-surface', 4.5],
@@ -46,7 +53,9 @@ const contrastPairs = [
   ['--deadline-attention-text', '--deadline-attention-surface', 4.5],
   ['--dispute-text', '--dispute-surface', 4.5],
   ['--feedback-error-text', '--feedback-error-surface', 4.5],
-  ['--border-control', '--surface-card', 3],
+  ['--input-text', '--input-surface', 4.5],
+  ['--input-error-text', '--input-error-surface', 4.5],
+  ['--input-surface', '--surface-card', 3],
 ] as const;
 
 for (const template of ['sage', 'mist', 'sand']) {
@@ -70,6 +79,4 @@ for (const template of ['sage', 'mist', 'sand']) {
 assert.equal(baseTokens['--font-body']?.startsWith('"Manrope Variable"'), true);
 assert.ok(Number.parseFloat(baseTokens['--size-touch-target'] ?? '') * 16 >= 44);
 assert.ok(Number.parseFloat(baseTokens['--size-control'] ?? '') * 16 >= 44);
-console.info(
-  'Đã kiểm tra 3 template: tương phản chữ/trạng thái, biên nhập liệu, Manrope và vùng chạm.',
-);
+console.info('Đã kiểm tra 3 template: chữ trên màu solid, nền nhập liệu, Manrope và vùng chạm.');

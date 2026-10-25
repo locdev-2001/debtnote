@@ -1,4 +1,6 @@
-import { useId } from 'react';
+import { useId, useState } from 'react';
+import { NumericFormat } from 'react-number-format';
+import { isSafeVndInput, parseVndPaste, vndCurrencySymbol, vndNumberFormat } from './format-vnd';
 
 interface AmountFieldProps {
   label: string;
@@ -6,27 +8,55 @@ interface AmountFieldProps {
   onChange: (value: string) => void;
   error?: string;
   helperText?: string;
+  onValidityChange?: (valid: boolean) => void;
 }
 
-export function AmountField({ label, value, onChange, error, helperText }: AmountFieldProps) {
+export function AmountField({
+  label,
+  value,
+  onChange,
+  error,
+  helperText,
+  onValidityChange,
+}: AmountFieldProps) {
   const fieldId = useId();
+  const [entryError, setEntryError] = useState<string>();
   const helpId = `${fieldId}-help`;
-  const message = error || helperText;
+  const fieldError = error || entryError;
+  const message = fieldError || helperText;
 
   return (
-    <div className="amount-field" data-invalid={Boolean(error)}>
+    <div className="amount-field" data-invalid={Boolean(fieldError)}>
       <label htmlFor={fieldId}>{label}</label>
       <div className="amount-input-shell">
-        <input
+        <NumericFormat
+          {...vndNumberFormat}
           id={fieldId}
           inputMode="numeric"
           autoComplete="off"
           value={value}
-          onChange={(event) => onChange(event.target.value)}
-          aria-invalid={Boolean(error)}
+          valueIsNumericString
+          isAllowed={({ value: digits }) => isSafeVndInput(digits)}
+          onValueChange={({ value: digits }, source) => {
+            if (source.source !== 'event') return;
+            setEntryError(undefined);
+            onValidityChange?.(true);
+            onChange(digits);
+          }}
+          onPaste={(event) => {
+            if (parseVndPaste(event.clipboardData.getData('text')) === null) {
+              event.preventDefault();
+              setEntryError('Số tiền vừa dán không hợp lệ. Giá trị hiện tại chưa thay đổi.');
+              onValidityChange?.(false);
+            } else {
+              setEntryError(undefined);
+              onValidityChange?.(true);
+            }
+          }}
+          aria-invalid={Boolean(fieldError)}
           aria-describedby={message ? helpId : undefined}
         />
-        <span aria-hidden="true">đ</span>
+        <span aria-hidden="true">{vndCurrencySymbol}</span>
       </div>
       {message && (
         <span className="amount-field-message" id={helpId}>

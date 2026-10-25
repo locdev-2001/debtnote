@@ -63,15 +63,15 @@ body {
   width: var(--space-2);
   height: var(--space-2);
   border-radius: var(--radius-pill);
-  background: var(--deadline-attention-text);
+  background: var(--deadline-attention-surface);
 }
 .connection-status[data-connected="true"] .connection-dot {
-  background: var(--settlement-paid-text);
+  background: var(--settlement-paid-surface);
 }
 .foundation-update {
   margin-top: var(--space-8);
   padding: var(--space-4);
-  border: var(--border-width) solid var(--border-default);
+  border: 0;
   border-radius: var(--radius-card);
   background: var(--surface-card);
 }

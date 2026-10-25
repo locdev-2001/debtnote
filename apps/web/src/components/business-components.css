@@ -8,10 +8,10 @@
   white-space: nowrap;
 }
 .money-amount[data-direction="receivable"] {
-  color: var(--money-receivable-text);
+  color: var(--money-receivable-amount);
 }
 .money-amount[data-direction="payable"] {
-  color: var(--money-payable-text);
+  color: var(--money-payable-amount);
 }
 .money-amount[data-size="summary"] {
   font-size: var(--font-size-amount);
@@ -21,20 +21,34 @@
   flex-direction: column;
   gap: var(--space-3);
   padding: var(--space-5);
-  border: var(--border-width) solid transparent;
+  border: 0;
   border-radius: var(--radius-card);
   background: var(--money-receivable-surface);
   text-align: left;
   cursor: pointer;
   transition:
-    border-color var(--motion-feedback),
+    background var(--motion-feedback),
     transform var(--motion-feedback);
 }
 .money-summary-card[data-direction="payable"] {
   background: var(--money-payable-surface);
 }
-.money-summary-card[aria-pressed="true"] {
-  border-color: var(--action-primary);
+.money-summary-card[data-direction="receivable"][aria-pressed="true"] {
+  background: var(--money-receivable-selected);
+}
+.money-summary-card[data-direction="payable"][aria-pressed="true"] {
+  background: var(--money-payable-selected);
+}
+.money-summary-card[data-direction="receivable"]
+  :where(.money-amount, .money-summary-label, .money-summary-description) {
+  color: var(--money-receivable-text);
+}
+.money-summary-card[data-direction="payable"]
+  :where(.money-amount, .money-summary-label, .money-summary-description) {
+  color: var(--money-payable-text);
+}
+.summary-selection {
+  margin-left: auto;
 }
 .money-summary-card:active {
   transform: translateY(1px);
@@ -69,15 +83,20 @@
   gap: var(--space-3);
   width: 100%;
   min-height: var(--size-touch-target);
-  padding: var(--space-4) 0;
+  padding: var(--space-4);
   border: 0;
-  border-bottom: var(--border-width) solid var(--border-default);
-  background: transparent;
+  border-radius: var(--radius-control);
+  background: var(--surface-row);
   text-align: left;
   cursor: pointer;
 }
-.debt-list-item:last-child {
-  border-bottom: 0;
+.debt-list {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.debt-list-item:nth-child(even) {
+  background: var(--surface-row-alternate);
 }
 .debt-person {
   display: flex;
@@ -161,7 +180,7 @@
   gap: var(--space-2);
   min-height: var(--size-control);
   padding: 0 var(--space-5);
-  border: var(--border-width) solid transparent;
+  border: 0;
   border-radius: var(--radius-control);
   font: inherit;
   font-size: var(--font-size-body);
@@ -183,7 +202,7 @@
   background: var(--action-subtle);
 }
 .action-button[data-emphasis="secondary"]:hover:not(:disabled) {
-  background: var(--border-default);
+  background: var(--action-subtle-hover);
 }
 .action-button[data-emphasis="quiet"] {
   color: var(--text-secondary);
@@ -216,9 +235,9 @@
 .amount-input-shell {
   display: flex;
   align-items: center;
-  border: var(--border-width) solid var(--border-control);
+  border: 0;
   border-radius: var(--radius-control);
-  background: var(--surface-card);
+  background: var(--input-surface);
   overflow: hidden;
 }
 .amount-input-shell:focus-within {
@@ -231,7 +250,7 @@
   height: var(--size-control);
   border: 0;
   padding: 0 var(--space-4);
-  color: var(--text-primary);
+  color: var(--input-text);
   background: transparent;
   font: inherit;
   font-size: var(--font-size-reading);
@@ -240,14 +259,14 @@
 }
 .amount-input-shell > span {
   padding-right: var(--space-4);
-  color: var(--text-secondary);
+  color: var(--input-text);
 }
 .amount-field-message {
   color: var(--text-secondary);
   font-size: var(--font-size-caption);
 }
 .amount-field[data-invalid="true"] .amount-input-shell {
-  border-color: var(--feedback-error-text);
+  background: var(--input-error-surface);
 }
 .amount-field[data-invalid="true"] .amount-field-message {
   color: var(--feedback-error-text);
@@ -261,7 +280,7 @@
 .money-action-sheet {
   width: min(calc(100% - var(--space-8)), var(--size-sheet));
   padding: var(--space-6);
-  border: var(--border-width) solid var(--border-default);
+  border: 0;
   border-radius: var(--radius-sheet);
   color: var(--text-primary);
   background: var(--surface-card);
@@ -307,4 +326,44 @@
     padding: var(--space-6);
     border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
   }
+}
+
+.choice-controls {
+  display: flex;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  border: 0;
+}
+.choice-controls button {
+  min-width: 4rem;
+  min-height: var(--size-touch-target);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-control);
+  color: var(--text-secondary);
+  background: var(--surface-card);
+  font: inherit;
+  font-size: var(--font-size-label);
+  cursor: pointer;
+}
+.choice-controls button[aria-pressed="true"] {
+  color: var(--action-on-primary);
+  background: var(--action-primary);
+}
+
+.choice-controls > legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.amount-field[data-invalid="true"] {
+  --input-text: var(--input-error-text);
 }

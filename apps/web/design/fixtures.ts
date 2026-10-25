@@ -1,4 +1,5 @@
 import type { DebtListItemProps } from '../src/components/money/debt-list-item';
+import { formatVnd } from '../src/components/money/format-vnd';
 
 export const exampleDebts: (Omit<DebtListItemProps, 'onOpen'> & { id: string })[] = [
   {
@@ -7,7 +8,7 @@ export const exampleDebts: (Omit<DebtListItemProps, 'onOpen'> & { id: string })[
     amount: 160_000,
     direction: 'receivable',
     state: 'partial',
-    description: 'Đã nhận 200.000đ · còn một phần',
+    description: `Đã nhận ${formatVnd(200_000)} · còn một phần`,
   },
   {
     id: 'chi',

@@ -12,7 +12,7 @@ Debtnote giúp ghi nhận tiền giữa mọi người, chia tiền đúng phầ
 - Chia tiền chỉ có hai lựa chọn chính: chia đều hoặc tùy chỉnh người tham gia từng món.
 - Mặc định mọi người cùng chịu khoản tiền; người tạo bấm bỏ các ngoại lệ, có thao tác chọn nhiều dòng và chỉ chọn một người.
 - MVP dùng VND. QR hướng dẫn chuyển khoản; xác nhận tiền về ban đầu do người nhận tiền thực hiện.
-- Dùng Manrope tự host, icon Reicon và mascot hoạt hình riêng. Màu pastel dùng cho nền/trạng thái; chữ và hành động giữ tương phản rõ. Token và component đặt theo nghiệp vụ, mô tả tại [hướng hình ảnh](DESIGN.md).
+- Dùng Manrope tự host, icon Reicon và mascot hoạt hình riêng. Card và badge dùng màu solid đậm, bố cục borderless phân biệt bằng màu nền; tiền nhập và hiển thị cùng được format. Token và component đặt theo nghiệp vụ, mô tả tại [hướng hình ảnh](DESIGN.md).
 
 ## Mốc bàn giao
 
@@ -40,7 +40,7 @@ Chưa có bảng nghiệp vụ, đăng nhập, lưu bill, OCR, QR thanh toán ho
 
 ## 1. Thiết kế screen và prototype — bước làm ngay
 
-- [x] P1.0 Có nền tảng thiết kế bản đầu: Manrope, 3 template pastel, token nghiệp vụ, component dùng chung, Reicon, 3 ảnh mascot và trang xem thử riêng.
+- [x] P1.0 Có nền tảng thiết kế bản đầu: Manrope, 3 template solid, borderless, token nghiệp vụ, component dùng chung, Reicon, 8 ảnh mascot và trang xem thử riêng.
 - [ ] P1.1 Chốt cấu trúc điều hướng, hành động tạo mới và cách quay lại mà không mất bản nháp.
 - [ ] P1.2 Thiết kế trang chủ: cần thu, cần trả, đến hạn/quá hạn, danh sách cần xử lý và nút tạo khoản tiền.
 - [ ] P1.3 Thiết kế flow tạo khoản: chụp/chọn ảnh bill hoặc khoản trực tiếp; chọn người; chia đều/tùy chỉnh; xem lại và chốt.
