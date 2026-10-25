@@ -143,3 +143,7 @@ Backup gồm PostgreSQL custom dump, ảnh/model OCR, env, Git revision và chec
 Restore thử cần role PostgreSQL có quyền CREATEDB: script tạo database tên ngẫu nhiên riêng, restore/đếm bản ghi rồi xóa DB tạm, không ghi vào DB đang chạy. Nếu role app không có quyền này, nhờ quản trị PostgreSQL thực hiện kiểm tra restore.
 
 Khi cần phục hồi thật, dừng đúng API/worker, phục hồi DB và ảnh của cùng bộ backup, giữ khóa mã hóa rồi khởi động lại. Rollback source cần chọn Git revision tương thích schema và build/deploy lại; script không tự đảo migration.
+
+## Lỗi migration
+
+Migration chạy qua Drizzle ORM và in rõ kết nối, quyền tạo schema/bảng, mã lỗi PostgreSQL và nguyên nhân. Deploy dừng ngay nếu kiểm tra kết nối DB thất bại. Nếu lỗi `42501`, kiểm tra quyền database/schema của user đã cấu hình trong aaPanel; không tự cấp SUPERUSER.

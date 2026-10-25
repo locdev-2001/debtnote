@@ -23,7 +23,7 @@
     "infra:up": "docker compose up -d --wait",
     "infra:down": "docker compose down",
     "db:generate": "pnpm --filter @debtnote/runtime build && pnpm --filter @debtnote/database db:generate",
-    "db:migrate": "pnpm --filter @debtnote/runtime build && pnpm --filter @debtnote/database db:migrate",
+    "db:migrate": "pnpm --filter @debtnote/runtime build && pnpm --filter @debtnote/database build && pnpm --filter @debtnote/database db:migrate",
     "worker:probe": "tsx --conditions=development scripts/worker-probe.ts",
     "start:api": "pnpm --filter @debtnote/api start",
     "start:worker": "pnpm --filter @debtnote/worker start",

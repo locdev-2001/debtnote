@@ -9,8 +9,9 @@ if [[ ! -f .env.production ]]; then bash scripts/production-init.sh; fi
 node scripts/production-command.mjs check
 node scripts/production-command.mjs prepare
 pnpm install --frozen-lockfile --prod=false
+has_accounts=$(node scripts/production-command.mjs postgres psql -X -v ON_ERROR_STOP=1 -Atc "SELECT to_regclass('public.accounts') IS NOT NULL")
 node scripts/production-command.mjs run pnpm build
-if [[ $(node scripts/production-command.mjs postgres psql -X -Atc "SELECT to_regclass('public.accounts') IS NOT NULL") == t ]]; then
+if [[ "$has_accounts" == t ]]; then
   bash scripts/production-backup.sh
 fi
 node scripts/production-command.mjs run pnpm --filter @debtnote/database db:migrate
