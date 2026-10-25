@@ -17,6 +17,8 @@ Cập nhật 25/10/2026. Bản local dùng PostgreSQL thật. Production chưa �
 - [ ] Chạy image/Compose trên server và xác nhận HTTPS/API/browser production. Máy phát triển không có Docker; người quản trị tự pull/chạy ở `/www/wwwroot/debtnote.robertnguyen.io.vn`.
 - [ ] Nghiệm thu Android/iPhone vật lý và dùng thử nhóm. Các kích thước mobile/desktop bên dưới là kiểm tra viewport trên browser, không thay thế thiết bị thật.
 
+CI tự động đã tắt theo yêu cầu; chỉ giữ workflow chạy tay khi cần. Kết quả nghiệm thu dưới đây là kiểm tra local.
+
 ## Bằng chứng local
 
 - `pnpm check`: 63 kiểm thử unit, lint, typecheck toàn workspace, token, unit test và build web/API/worker. Bộ kiểm thử bảo vệ phép chia, phần dư, phí/giảm giá, input tiền, pending/confirmed, tách tiền thừa, phạm vi link và trùng request.
