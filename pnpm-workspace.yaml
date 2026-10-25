@@ -3,6 +3,7 @@ packages:
   - packages/*
 
 catalog:
+  "@fontsource-variable/manrope": 5.3.0
   "@biomejs/biome": 2.6.3
   "@tailwindcss/vite": 4.3.3
   "@tanstack/react-query": 5.104.5
@@ -22,6 +23,7 @@ catalog:
   pg: 8.23.1
   react: 19.3.1
   react-dom: 19.3.1
+  reicon-react: 1.2.6
   tailwindcss: 4.3.3
   tsup: 9.0.0
   tsx: 4.23.15

@@ -1,13 +1,16 @@
 @import "tailwindcss";
+@import "./design/fonts.css";
+@import "./design/tokens.css";
+@import "./components/business-components.css";
 
 @theme {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: var(--font-body);
 }
 
 :root {
   font-family: var(--font-sans);
-  color: #172c28;
-  background: #f7f8f5;
+  color: var(--text-primary);
+  background: var(--surface-app);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -16,4 +19,64 @@
 body {
   margin: 0;
   min-width: 320px;
+}
+
+.foundation-page {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: var(--space-12) var(--space-6);
+}
+.foundation-panel {
+  width: 100%;
+  max-width: var(--size-sheet);
+}
+.foundation-logo {
+  margin-bottom: var(--space-8);
+  border-radius: var(--radius-control);
+}
+.foundation-brand {
+  margin-bottom: var(--space-3);
+  color: var(--text-secondary);
+  font-size: var(--font-size-body);
+}
+.foundation-panel h1 {
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-compact);
+}
+.foundation-description {
+  margin-top: var(--space-4);
+  color: var(--text-secondary);
+  font-size: var(--font-size-reading);
+  line-height: var(--line-height-body);
+}
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-8) 0 var(--space-4);
+  color: var(--text-secondary);
+  font-size: var(--font-size-body);
+}
+.connection-dot {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--deadline-attention-text);
+}
+.connection-status[data-connected="true"] .connection-dot {
+  background: var(--settlement-paid-text);
+}
+.foundation-update {
+  margin-top: var(--space-8);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-card);
+  background: var(--surface-card);
+}
+.foundation-update p {
+  margin-bottom: var(--space-3);
+  color: var(--text-secondary);
+  font-size: var(--font-size-body);
 }

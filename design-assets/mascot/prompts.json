@@ -1,0 +1,23 @@
+{
+  "tool": "image_gen",
+  "transparent_background": true,
+  "assets": [
+    {
+      "source": "welcome.png",
+      "usage": "Chưa có khoản tiền",
+      "prompt": "Use case: illustration-story. Tạo một tài nguyên minh họa hoạt hình riêng cho ứng dụng Debtnote, dùng cho trạng thái bắt đầu/chưa có khoản tiền. Nhân vật là một bé rái cá xanh ngọc dễ mến, thân tròn thấp, đầu lớn, tai tròn nhỏ, mõm và bụng màu kem, mũi nhỏ xanh đậm, mắt đen lớn có điểm sáng trắng, má hồng đào, bàn chân tròn, đuôi rái cá ngắn rõ ràng. Phong cách minh họa ứng dụng vui nhộn và biểu cảm như Duolingo: hình khối 2D đơn giản, màu tươi, nét mềm, mảng bóng phẳng tinh tế, không kết cấu, không 3D bóng bẩy. Thiết kế mascot nguyên bản, không phải cú Duo. Bé rái cá đứng toàn thân, nhìn người dùng với nụ cười tò mò thân thiện; một tay ôm cuốn sổ nhỏ màu kem bìa xanh trầm, tay kia vẫy chào. Cuốn sổ chỉ có vài đường kẻ, không chữ. Bố cục vuông, nhân vật ở giữa, chiếm khoảng 80% khung, đủ khoảng trống quanh tai, chân và đuôi, không cắt bất kỳ bộ phận nào. Bảng màu chính xanh ngọc, xanh trầm #172c28, xanh non #d9edac, kem ấm, điểm đào. Nền thực sự trong suốt, không cảnh vật, không chữ, không số, không watermark. Tạo thành một hình duy nhất, độ phân giải khoảng 1024x1024, rõ khi hiển thị nhỏ trong app."
+    },
+    {
+      "source": "settled.png",
+      "reference": "welcome.png",
+      "usage": "Đã thanh toán đủ",
+      "prompt": "Use case: identity-preserve. Ảnh tham chiếu là mascot rái cá nguyên bản của Debtnote, dùng làm nguồn nhận diện. Tạo một hình minh họa mới cho trạng thái ĐÃ THANH TOÁN ĐỦ. Giữ nguyên nhân vật, hình dáng đầu/thân, màu xanh ngọc, mõm và bụng kem, mũi xanh đậm, hai tai tròn nhỏ, mắt lớn, má đào, đuôi, chất liệu và phong cách hoạt hình 2D mềm mại của ảnh tham chiếu. Chỉ đổi tư thế và biểu cảm: rái cá vui mừng giơ hai tay lên, cười tươi với đôi mắt cong hạnh phúc, một bàn chân nhấc nhẹ như vừa nhảy lên. Có một huy hiệu tròn xanh non cỡ vừa với dấu kiểm xanh trầm đơn giản bên cạnh thân, dễ đọc khi thu nhỏ. Không cần cuốn sổ. Một nhân vật toàn thân duy nhất, ở giữa khung vuông, khoảng trống đủ quanh đầu, chân, đuôi và huy hiệu; không cắt bộ phận. Nền thật sự trong suốt; không nền cảnh, không chữ, không số, không watermark. Giữ đúng nét minh họa và tỷ lệ mascot ở ảnh tham chiếu, cảm giác vui như ứng dụng Duolingo nhưng là nhân vật rái cá riêng."
+    },
+    {
+      "source": "reminder.png",
+      "reference": "welcome.png",
+      "usage": "Đến ngày hẹn",
+      "prompt": "Use case: identity-preserve. Ảnh tham chiếu là mascot rái cá nguyên bản của Debtnote, dùng làm nguồn nhận diện. Tạo một hình minh họa mới cho trạng thái ĐẾN NGÀY HẸN. Giữ nguyên nhân vật, hình dáng đầu/thân, màu xanh ngọc, mõm và bụng kem, mũi xanh đậm, hai tai tròn nhỏ, mắt lớn sáng, má đào, đuôi, chất liệu và phong cách hoạt hình 2D mềm mại của ảnh tham chiếu. Chỉ đổi tư thế và đạo cụ: rái cá đứng toàn thân, nghiêng đầu nhẹ, cười thân thiện và tinh nghịch; một tay ôm trang lịch nhỏ nền kem có gáy xanh trầm, các ô lịch đơn giản và một ô xanh non, không chữ hay số; tay kia chỉ vào ô lịch. Có chiếc chuông nhỏ màu đào cạnh trang lịch để gợi nhắc, không gây cảm giác báo động hoặc đòi nợ căng thẳng. Một nhân vật duy nhất giữa khung vuông, đủ khoảng trống quanh đầu, chân, đuôi, đạo cụ; không cắt bộ phận. Nền thật sự trong suốt; không nền cảnh, không chữ, không số, không watermark. Giữ đúng nét minh họa và tỷ lệ mascot ở ảnh tham chiếu, cảm giác vui như ứng dụng Duolingo nhưng là nhân vật rái cá riêng."
+    }
+  ]
+}

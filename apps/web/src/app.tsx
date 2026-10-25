@@ -1,5 +1,6 @@
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { useQuery } from '@tanstack/react-query';
+import { ActionButton } from './components/actions/action-button';
 import { rpc } from './lib/rpc';
 
 export function App() {
@@ -10,44 +11,29 @@ export function App() {
   } = useRegisterSW();
 
   return (
-    <main className="flex min-h-dvh items-center justify-center px-6 py-12">
-      <section className="w-full max-w-md" aria-labelledby="app-title">
-        <img src="/favicon.svg" alt="" width="56" height="56" className="mb-8 rounded-2xl" />
-        <p className="mb-3 text-sm font-medium tracking-wide text-stone-500">Debtnote</p>
-        <h1 id="app-title" className="text-3xl font-semibold tracking-tight text-stone-900">
-          Khung ứng dụng đã sẵn sàng.
-        </h1>
-        <p className="mt-4 text-base leading-7 text-stone-600">
+    <main className="foundation-page">
+      <section className="foundation-panel" aria-labelledby="app-title">
+        <img src="/favicon.svg" alt="" width="56" height="56" className="foundation-logo" />
+        <p className="foundation-brand">Debtnote</p>
+        <h1 id="app-title">Khung ứng dụng đã sẵn sàng.</h1>
+        <p className="foundation-description">
           Mình sẽ cùng thiết kế từng màn hình và thao tác ở bước tiếp theo.
         </p>
-        <div role="status" className="mt-8 flex items-center gap-2 text-sm text-stone-600">
-          <span
-            aria-hidden="true"
-            className={`h-2 w-2 rounded-full ${connection.isSuccess ? 'bg-emerald-600' : 'bg-amber-600'}`}
-          />
+        <div role="status" className="connection-status" data-connected={connection.isSuccess}>
+          <span aria-hidden="true" className="connection-dot" />
           {connection.isPending && 'Đang kết nối…'}
           {connection.isSuccess && 'Đã kết nối.'}
           {connection.isError && 'Chưa thể kết nối. Vui lòng thử lại.'}
         </div>
         {connection.isError && (
-          <button
-            type="button"
-            onClick={() => void connection.refetch()}
-            className="mt-4 min-h-11 rounded-xl bg-stone-900 px-5 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-4"
-          >
-            Thử lại
-          </button>
+          <ActionButton onClick={() => void connection.refetch()}>Thử lại</ActionButton>
         )}
         {needRefresh && (
-          <aside className="mt-8 rounded-xl border border-stone-200 bg-white p-4">
-            <p className="text-sm text-stone-600">Có phiên bản mới.</p>
-            <button
-              type="button"
-              onClick={() => void updateServiceWorker(true)}
-              className="mt-2 min-h-11 font-medium text-stone-900 underline underline-offset-4"
-            >
+          <aside className="foundation-update">
+            <p>Có phiên bản mới.</p>
+            <ActionButton emphasis="secondary" onClick={() => void updateServiceWorker(true)}>
               Cập nhật
-            </button>
+            </ActionButton>
           </aside>
         )}
       </section>

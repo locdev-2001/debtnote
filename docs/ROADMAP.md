@@ -12,16 +12,17 @@ Debtnote giúp ghi nhận tiền giữa mọi người, chia tiền đúng phầ
 - Chia tiền chỉ có hai lựa chọn chính: chia đều hoặc tùy chỉnh người tham gia từng món.
 - Mặc định mọi người cùng chịu khoản tiền; người tạo bấm bỏ các ngoại lệ, có thao tác chọn nhiều dòng và chỉ chọn một người.
 - MVP dùng VND. QR hướng dẫn chuyển khoản; xác nhận tiền về ban đầu do người nhận tiền thực hiện.
+- Dùng Manrope tự host, icon Reicon và mascot hoạt hình riêng. Màu pastel dùng cho nền/trạng thái; chữ và hành động giữ tương phản rõ. Token và component đặt theo nghiệp vụ, mô tả tại [hướng hình ảnh](DESIGN.md).
 
 ## Mốc bàn giao
 
-| Mốc | Phạm vi | Bằng chứng hoàn thành |
-|---|---|---|
-| M0 — Khung kỹ thuật | Giai đoạn 0 | Build, kiểm thử, API/database/worker và CI hoạt động |
-| M1 — Prototype để duyệt | Giai đoạn 1 | Bấm được flow bằng dữ liệu mẫu; rõ đầu vào, đầu ra và số thao tác |
+| Mốc                                  | Phạm vi       | Bằng chứng hoàn thành                                                 |
+| ------------------------------------ | ------------- | --------------------------------------------------------------------- |
+| M0 — Khung kỹ thuật                  | Giai đoạn 0   | Build, kiểm thử, API/database/worker và CI hoạt động                  |
+| M1 — Prototype để duyệt              | Giai đoạn 1   | Bấm được flow bằng dữ liệu mẫu; rõ đầu vào, đầu ra và số thao tác     |
 | M2 — Alpha dùng được từ đầu đến cuối | Giai đoạn 2–5 | Tạo khoản tiền thật, chia, chia sẻ, trả một phần/đủ và lưu sau reload |
-| M3 — MVP dùng thử thực tế | Giai đoạn 6–8 | Theo dõi, nhắc, báo cáo, dự toán theo lịch và vận hành production |
-| M4 — Mở rộng | Giai đoạn 9 | Chọn tính năng dựa trên số liệu và phản hồi từ M3 |
+| M3 — MVP dùng thử thực tế            | Giai đoạn 6–8 | Theo dõi, nhắc, báo cáo, dự toán theo lịch và vận hành production     |
+| M4 — Mở rộng                         | Giai đoạn 9   | Chọn tính năng dựa trên số liệu và phản hồi từ M3                     |
 
 Không ấn định ngày giao trong tài liệu này. Ước lượng lịch sau khi có prototype được duyệt và biết nguồn lực thực hiện.
 
@@ -39,6 +40,7 @@ Chưa có bảng nghiệp vụ, đăng nhập, lưu bill, OCR, QR thanh toán ho
 
 ## 1. Thiết kế screen và prototype — bước làm ngay
 
+- [x] P1.0 Có nền tảng thiết kế bản đầu: Manrope, 3 template pastel, token nghiệp vụ, component dùng chung, Reicon, 3 ảnh mascot và trang xem thử riêng.
 - [ ] P1.1 Chốt cấu trúc điều hướng, hành động tạo mới và cách quay lại mà không mất bản nháp.
 - [ ] P1.2 Thiết kế trang chủ: cần thu, cần trả, đến hạn/quá hạn, danh sách cần xử lý và nút tạo khoản tiền.
 - [ ] P1.3 Thiết kế flow tạo khoản: chụp/chọn ảnh bill hoặc khoản trực tiếp; chọn người; chia đều/tùy chỉnh; xem lại và chốt.
@@ -51,21 +53,21 @@ Nghiệm thu: có flow bấm được với dữ liệu mẫu và các trạng t
 
 ### Thứ tự screen
 
-| Thứ tự | Screen hoặc bảng thao tác | Hành động cần duyệt |
-|---|---|---|
-| S01 | Trang chủ | Xem số dư, lọc cần thu/cần trả, mở người hoặc khoản, tạo mới |
-| S02 | Nguồn khoản tiền | Chụp/chọn bill, tạo khoản trực tiếp |
-| S03 | Chọn người | Người gần đây, nhóm quen, thêm người, chọn/bỏ nhiều người |
-| S04 | Chia tiền | Chia đều, bỏ người theo món, chọn nhiều dòng, chỉ một người |
-| S05 | Xem lại và chốt | Ai đã trả, phần của mình, từng người cần chuyển, phí/giảm giá |
-| S06 | Chi tiết khoản/bill | Nguồn tiền, phép chia, còn nợ, lịch sử, chia sẻ, đề nghị điều chỉnh |
-| S07 | Chi tiết một người | Tổng cần thu/cần trả, các khoản cấu thành, lịch sử thanh toán |
-| S08 | Trang người nhận qua link | Xem phần mình, QR, báo đã chuyển, hẹn trả, báo sai |
-| S09 | Ghi nhận tiền | Nhận đủ, nhận một phần, chọn các khoản được trả, xử lý thừa |
-| S10 | Theo dõi | Đến hạn, quá hạn, lời hẹn, trạng thái cần xác nhận, thao tác nhắc |
-| S11 | Báo cáo và lịch thu | Tiền đã ứng, chi tiêu cá nhân, đã thu, còn nợ, lịch dự kiến |
-| S12 | Thiết lập | Thông tin nhận tiền, quy tắc nhắc, tùy chọn tài khoản |
-| S13 | Đăng nhập và tiếp tục | Đăng nhập cho người tạo, quay lại bản nháp, liên kết người nhận với tài khoản |
+| Thứ tự | Screen hoặc bảng thao tác | Hành động cần duyệt                                                           |
+| ------ | ------------------------- | ----------------------------------------------------------------------------- |
+| S01    | Trang chủ                 | Xem số dư, lọc cần thu/cần trả, mở người hoặc khoản, tạo mới                  |
+| S02    | Nguồn khoản tiền          | Chụp/chọn bill, tạo khoản trực tiếp                                           |
+| S03    | Chọn người                | Người gần đây, nhóm quen, thêm người, chọn/bỏ nhiều người                     |
+| S04    | Chia tiền                 | Chia đều, bỏ người theo món, chọn nhiều dòng, chỉ một người                   |
+| S05    | Xem lại và chốt           | Ai đã trả, phần của mình, từng người cần chuyển, phí/giảm giá                 |
+| S06    | Chi tiết khoản/bill       | Nguồn tiền, phép chia, còn nợ, lịch sử, chia sẻ, đề nghị điều chỉnh           |
+| S07    | Chi tiết một người        | Tổng cần thu/cần trả, các khoản cấu thành, lịch sử thanh toán                 |
+| S08    | Trang người nhận qua link | Xem phần mình, QR, báo đã chuyển, hẹn trả, báo sai                            |
+| S09    | Ghi nhận tiền             | Nhận đủ, nhận một phần, chọn các khoản được trả, xử lý thừa                   |
+| S10    | Theo dõi                  | Đến hạn, quá hạn, lời hẹn, trạng thái cần xác nhận, thao tác nhắc             |
+| S11    | Báo cáo và lịch thu       | Tiền đã ứng, chi tiêu cá nhân, đã thu, còn nợ, lịch dự kiến                   |
+| S12    | Thiết lập                 | Thông tin nhận tiền, quy tắc nhắc, tùy chọn tài khoản                         |
+| S13    | Đăng nhập và tiếp tục     | Đăng nhập cho người tạo, quay lại bản nháp, liên kết người nhận với tài khoản |
 
 Đây là thứ tự duyệt nghiệp vụ, không phải bắt người dùng đi qua 13 màn hình. Các thao tác ngắn có thể dùng bảng trượt trong cùng màn hình. Sau khi có cấu trúc chung, triển khai và duyệt từng screen theo giai đoạn liên quan.
 

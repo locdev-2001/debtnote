@@ -9,12 +9,14 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@fontsource-variable/manrope": "catalog:",
     "@debtnote/money-core": "workspace:*",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:",
     "@trpc/tanstack-react-query": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:"
+    "react-dom": "catalog:",
+    "reicon-react": "catalog:"
   },
   "devDependencies": {
     "@debtnote/rpc": "workspace:*",

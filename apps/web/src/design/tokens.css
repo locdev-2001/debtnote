@@ -1,0 +1,125 @@
+:root,
+[data-design-theme] {
+  color-scheme: light;
+  --font-body: "Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-size-caption: 0.75rem;
+  --font-size-label: 0.8125rem;
+  --font-size-body: 0.875rem;
+  --font-size-reading: 1rem;
+  --font-size-section: 1.375rem;
+  --font-size-title: 1.75rem;
+  --font-size-display: clamp(2.25rem, 4.3vw, 3.5rem);
+  --font-size-amount: 2rem;
+  --font-size-amount-large: 2.5rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --line-height-compact: 1.25;
+  --line-height-body: 1.65;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --size-touch-target: 3rem;
+  --size-control: 3rem;
+  --size-icon: 1.5rem;
+  --size-icon-small: 1.25rem;
+  --size-icon-compact: 1.125rem;
+  --size-icon-large: 1.75rem;
+  --size-avatar: 2.75rem;
+  --size-illustration: 13rem;
+  --size-page-gutter: clamp(1.25rem, 4vw, 3rem);
+  --size-content: 73rem;
+  --size-sheet: 28rem;
+  --radius-control: 0.875rem;
+  --radius-card: 1.25rem;
+  --radius-sheet: 1.75rem;
+  --radius-pill: 999px;
+  --border-width: 1px;
+  --focus-width: 2px;
+  --motion-feedback: 140ms;
+  --motion-overlay: 200ms;
+  --shadow-card: 0 8px 28px #293a3505;
+  --shadow-overlay: 0 20px 64px #293a351f;
+  --surface-app: #f6f5f1;
+  --surface-card: #fdfcf9;
+  --surface-subtle: #efeee8;
+  --text-primary: #293a35;
+  --text-secondary: #5d695f;
+  --text-disabled: #7c857e;
+  --border-default: #dce0d6;
+  --border-control: #829087;
+  --overlay-scrim: #293a3566;
+  --action-primary: #355e50;
+  --action-primary-hover: #294d40;
+  --action-on-primary: #fcfdf9;
+  --action-subtle: #e5ede5;
+  --focus-ring: #355e50;
+  --money-receivable-text: #365e4d;
+  --money-receivable-surface: #e4eee5;
+  --money-payable-text: #825544;
+  --money-payable-surface: #f3e6df;
+  --settlement-pending-text: #626d67;
+  --settlement-pending-surface: #eceee9;
+  --settlement-partial-text: #655b7c;
+  --settlement-partial-surface: #eeebf3;
+  --settlement-confirmation-text: #52687c;
+  --settlement-confirmation-surface: #e6edf2;
+  --settlement-paid-text: #365e4d;
+  --settlement-paid-surface: #e4eee5;
+  --deadline-attention-text: #7f5d29;
+  --deadline-attention-surface: #f3e9d1;
+  --dispute-text: #8d514a;
+  --dispute-surface: #f5e6e1;
+  --feedback-error-text: #8d443d;
+  --feedback-error-surface: #f8e8e3;
+  --mascot-welcome-surface: #e8efe6;
+  --mascot-settled-surface: #eef1dd;
+  --mascot-reminder-surface: #f5e9df;
+}
+
+[data-design-theme="mist"] {
+  --surface-app: #f3f4f6;
+  --surface-card: #fcfcfd;
+  --surface-subtle: #eaeaf0;
+  --text-primary: #303744;
+  --text-secondary: #5e6370;
+  --border-default: #dedfe7;
+  --action-primary: #5e6380;
+  --action-primary-hover: #4c506b;
+  --action-subtle: #e9e8f0;
+  --focus-ring: #5e6380;
+  --mascot-welcome-surface: #e9edf2;
+  --mascot-settled-surface: #e9eee6;
+  --mascot-reminder-surface: #eeebf3;
+}
+
+[data-design-theme="sand"] {
+  --surface-app: #f7f3ef;
+  --surface-card: #fffcf8;
+  --surface-subtle: #f0e9e1;
+  --text-primary: #443a34;
+  --text-secondary: #6c6058;
+  --border-default: #e5dcd2;
+  --action-primary: #805d4d;
+  --action-primary-hover: #694938;
+  --action-subtle: #f1e6de;
+  --focus-ring: #805d4d;
+  --mascot-welcome-surface: #f2e8de;
+  --mascot-settled-surface: #edf0df;
+  --mascot-reminder-surface: #f5e6df;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-feedback: 0ms;
+    --motion-overlay: 0ms;
+  }
+}
