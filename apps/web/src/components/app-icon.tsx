@@ -8,6 +8,7 @@ import { Camera } from 'reicon-react/icons/Camera';
 import { CheckCircle } from 'reicon-react/icons/CheckCircle';
 import { ChevronRight } from 'reicon-react/icons/ChevronRight';
 import { Home } from 'reicon-react/icons/Home';
+import { MoreH } from 'reicon-react/icons/MoreH';
 import { Receipt } from 'reicon-react/icons/Receipt';
 import { Search3 } from 'reicon-react/icons/Search3';
 import { Share } from 'reicon-react/icons/Share';
@@ -29,6 +30,7 @@ export const appIconDefinitions = {
   search: { component: Search3, label: 'Tìm kiếm' },
   open: { component: ChevronRight, label: 'Mở chi tiết' },
   close: { component: X, label: 'Đóng' },
+  more: { component: MoreH, label: 'Tùy chọn' },
 } as const;
 
 export type AppIconName = keyof typeof appIconDefinitions;

@@ -10,6 +10,10 @@ import { MoneyAmount } from '../../components/money/money-amount';
 import { MoneySummaryCard } from '../../components/money/money-summary-card';
 import { type MoneyDirection, moneyDirections } from '../../components/money/presentation';
 import { DeadlineBadge, SettlementBadge } from '../../components/money/settlement-badge';
+import type { SplitDraftStore } from '../split/draft-store';
+import { currentPerson, type SplitPreview } from '../split/split-draft';
+import { SplitExpenseFlow } from '../split/split-expense-flow';
+import { useSplitDraft } from '../split/use-split-draft';
 import type { HomePrototypeStore } from './demo-store';
 import {
   getTodayKey,
@@ -37,8 +41,15 @@ type Sheet =
   | null;
 type Scenario = 'sample' | 'loading' | 'error';
 
-export function HomePage({ store }: { store: HomePrototypeStore }) {
+export function HomePage({
+  store,
+  splitStore,
+}: {
+  store: HomePrototypeStore;
+  splitStore: SplitDraftStore;
+}) {
   const ledger = useHomePrototype(store);
+  const split = useSplitDraft(splitStore);
   const today = getTodayKey();
   const [direction, setDirection] = useState<MoneyDirection>('receivable');
   const [filter, setFilter] = useState<HomeFilter>('all');
@@ -129,6 +140,32 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
       setSheet(null);
     }
   }
+  function openSplit(sample = false) {
+    setSheet(null);
+    split.start(sample);
+  }
+  function confirmSplit(preview: SplitPreview) {
+    const shares =
+      preview.direction === 'receivable'
+        ? preview.shares.filter((person) => person.id !== currentPerson.id && person.amount > 0)
+        : preview.shares.filter((person) => person.id === currentPerson.id && person.amount > 0);
+    const records: HomeRecord[] = shares.map((person) => ({
+      id: `${preview.id}:${person.id}`,
+      personId: preview.direction === 'receivable' ? person.id : preview.payer.id,
+      personName: preview.direction === 'receivable' ? person.name : preview.payer.name,
+      direction: preview.direction,
+      principalAmount: person.amount,
+      confirmedAmounts: [],
+      awaitingConfirmation: false,
+      deadline: null,
+      note: `Chia tiền · ${person.itemTitles.join(', ')}`,
+    }));
+    if (!ledger.dispatch({ type: 'add-batch', records }, 'Đã ghi khoản chia tiền.')) return false;
+    selectDirection(preview.direction);
+    setScenario('sample');
+    split.finish(preview);
+    return true;
+  }
   function choosePhoto(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -211,6 +248,13 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
               <AppIcon name="close" size="small" />
             </button>
           </div>
+        )}
+        {split.draft && (
+          <button type="button" className="home-photo-draft" onClick={() => openSplit()}>
+            <AppIcon name="receipt" size="small" />
+            <span>Tiếp tục chia tiền</span>
+            <AppIcon name="open" size="small" />
+          </button>
         )}
 
         {scenario === 'loading' ? (
@@ -469,6 +513,15 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
         )}
         {sheet?.type === 'add' && (
           <>
+            <button type="button" className="home-source-choice" onClick={() => openSplit()}>
+              <span className="home-source-icon">
+                <AppIcon name="people" />
+              </span>
+              <span>
+                <strong>{split.draft ? 'Tiếp tục chia tiền' : 'Chia nhóm'}</strong>
+              </span>
+              <AppIcon name="open" size="small" />
+            </button>
             <button
               type="button"
               className="home-source-choice"
@@ -498,6 +551,11 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
               <AppIcon name="open" size="small" />
             </button>
             <p className="home-sheet-footnote">Ảnh xem trước · Chưa đọc bill.</p>
+            {!split.draft && (
+              <ActionButton emphasis="quiet" size="small" onClick={() => openSplit(true)}>
+                Thử bill mẫu
+              </ActionButton>
+            )}
             {photoError && (
               <p className="home-inline-error" role="alert">
                 {photoError}
@@ -666,6 +724,17 @@ export function HomePage({ store }: { store: HomePrototypeStore }) {
           </div>
         )}
       </ActionSheet>
+      <SplitExpenseFlow
+        open={split.open}
+        draft={split.draft}
+        completed={split.completed}
+        people={people}
+        storageIssue={split.storageIssue}
+        onChange={split.update}
+        onClose={split.close}
+        onDiscard={split.discard}
+        onConfirm={confirmSplit}
+      />
     </div>
   );
 }

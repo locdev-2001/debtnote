@@ -149,6 +149,7 @@
   --input-font-small: 0.8125rem;
   --input-font-regular: 0.875rem;
   --input-font-large: 1rem;
+  --mobile-input-font-size: 1rem;
   --card-padding-small: 0.625rem;
   --card-padding-regular: 0.75rem;
   --card-padding-large: 1rem;
@@ -225,6 +226,24 @@
   --home-bottom-inset: 0.75rem;
   --home-notice-max-width: 20rem;
   --photo-preview-max-height: 45dvh;
+  --split-content-gap: var(--space-3);
+  --split-item-padding: var(--space-2);
+  --split-step-size: 1.5rem;
+  --split-person-height: 2rem;
+  --split-menu-width: 12rem;
+  --receipt-paper: var(--neutral-white);
+  --receipt-ink: #111111;
+  --receipt-muted: #444444;
+  --receipt-mat: #eeeeec;
+  --receipt-input-surface: #f0f0ee;
+  --receipt-rule: #aaaaaa;
+  --receipt-padding: var(--space-2);
+  --receipt-row-padding: 0;
+  --receipt-row-gap: var(--space-1);
+  --receipt-rule-height: 1px;
+  --receipt-rule-dash: 0.25rem;
+  --receipt-brand-size: 1.25rem;
+  --receipt-heading-tracking: 0.025em;
   --design-header-height: 4rem;
   --design-hero-gap: 2rem;
   --design-hero-illustration-size: 10rem;
@@ -280,6 +299,9 @@
 @media (max-width: 620px) {
   :root,
   [data-design-theme] {
+    --input-font-small: var(--mobile-input-font-size);
+    --input-font-regular: var(--mobile-input-font-size);
+    --input-font-large: var(--mobile-input-font-size);
     --summary-amount-size: 1.375rem;
     --home-header-height: 3rem;
     --design-hero-illustration-size: 8rem;
@@ -290,9 +312,9 @@
   [data-design-theme] {
     --button-height-regular: 2.5rem;
     --input-height-regular: 2.5rem;
-    --input-font-small: 1rem;
-    --input-font-regular: 1rem;
-    --input-font-large: 1rem;
+    --input-font-small: var(--mobile-input-font-size);
+    --input-font-regular: var(--mobile-input-font-size);
+    --input-font-large: var(--mobile-input-font-size);
   }
 }
 @media (prefers-reduced-motion: reduce) {

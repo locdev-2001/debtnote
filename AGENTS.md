@@ -7,5 +7,6 @@
 - Rà chữ/nút bị cắt, overflow, xuống dòng sai, khoảng cách, icon, input, trạng thái focus và các khối che nội dung. Sửa lỗi thấy trên ảnh rồi chụp lại.
 - Kích thước, typography, spacing, màu và recipe của component lấy từ `apps/web/src/design/tokens.css`. Không đặt size riêng theo cảm tính ở từng screen.
 - Mặc định nền trắng, Manrope, Reicon, card/badge solid theo bảng màu xanh–vàng hiện tại. Giá trị tiền luôn dùng formatter chung.
+- Riêng hóa đơn và luồng chia tiền dùng giấy trắng/mực đen như bill quán ăn, không hoa văn hay watermark. Input/select/textarea trên mobile tối thiểu 16 px qua token chung; không khóa zoom bằng viewport meta.
 - Ưu tiên ít chữ: màn chính chỉ giữ tên, số tiền, trạng thái cần biết và hành động. Ghi chú/giải thích để trong chi tiết; không thêm đoạn hướng dẫn hoặc khẩu hiệu lặp lại.
 - Khi người dùng yêu cầu bỏ test cho lượt chỉnh UI, không chạy test/build/CI thay cho review ảnh; ghi đúng những kiểm tra thực sự đã làm.

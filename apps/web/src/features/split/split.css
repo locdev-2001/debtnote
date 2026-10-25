@@ -1,0 +1,206 @@
+.split-flow {
+  --action-primary: var(--receipt-ink);
+  --action-primary-hover: var(--receipt-muted);
+  --action-subtle: var(--receipt-input-surface);
+  --focus-ring: var(--receipt-ink);
+}
+.split-flow,
+.split-items,
+.split-item-editor {
+  display: grid;
+  gap: var(--split-content-gap);
+  min-width: 0;
+}
+.split-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+.split-steps button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--choice-height-small);
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--font-size-label);
+  cursor: pointer;
+}
+.split-steps button > span {
+  display: grid;
+  place-items: center;
+  width: var(--split-step-size);
+  height: var(--split-step-size);
+  border-radius: var(--radius-pill);
+  background: var(--surface-subtle);
+}
+.split-steps button[aria-current="step"] {
+  color: var(--action-primary);
+  font-weight: var(--font-weight-bold);
+}
+.split-steps button[aria-current="step"] > span {
+  background: var(--action-primary);
+  color: var(--action-on-primary);
+}
+.split-steps button:disabled {
+  cursor: default;
+}
+.split-person-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+.split-person-choices button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--split-person-height);
+  padding: 0 var(--choice-padding-inline);
+  max-width: 100%;
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--text-secondary);
+  background: var(--surface-subtle);
+  font: inherit;
+  font-size: var(--font-size-label);
+  cursor: pointer;
+}
+.split-person-choices button span {
+  overflow-wrap: anywhere;
+}
+.split-person-choices button[aria-pressed="true"] {
+  color: var(--action-on-primary);
+  background: var(--action-primary);
+}
+.split-person-choices button svg {
+  flex-shrink: 0;
+}
+.split-item,
+.split-bulk {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--split-item-padding) 0;
+  background: var(--receipt-paper);
+  min-width: 0;
+}
+.split-bulk {
+  padding: var(--split-item-padding);
+  border-radius: var(--radius-card);
+  background: var(--mascot-reminder-surface);
+}
+.split-line,
+.split-item-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.split-line {
+  justify-content: space-between;
+}
+.split-item-heading {
+  flex: 1;
+  min-height: var(--choice-height-small);
+  padding: 0;
+  border: 0;
+  color: var(--text-primary);
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.split-item-heading strong {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+.split-item-heading .money-amount {
+  font-size: var(--font-size-body);
+}
+.split-item .icon-action[aria-pressed="true"] {
+  background: var(--action-primary);
+  color: var(--action-on-primary);
+}
+.split-item-tools {
+  position: relative;
+}
+.split-item-tools > summary {
+  list-style: none;
+}
+.split-item-tools > summary::-webkit-details-marker {
+  display: none;
+}
+.split-item-tools-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + var(--space-1));
+  z-index: var(--layer-bottom-action);
+  display: grid;
+  gap: var(--space-2);
+  width: var(--split-menu-width);
+  padding: var(--space-3);
+  border-radius: var(--radius-control);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-overlay);
+}
+.split-item-tools-panel .money-form-field {
+  flex: 1;
+}
+
+.split-caption {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+}
+.split-error {
+  margin: 0;
+  color: var(--feedback-error-text);
+  font-size: var(--font-size-label);
+}
+.split-success {
+  display: grid;
+  gap: var(--space-3);
+  text-align: center;
+}
+.split-success > span:not(.money-amount) {
+  color: var(--text-secondary);
+}
+.split-add-person {
+  display: flex;
+  align-items: end;
+  gap: var(--space-2);
+}
+.split-add-person .money-form-field {
+  flex: 1;
+  min-width: 0;
+}
+@media (pointer: coarse) {
+  .split-person-choices button {
+    min-height: var(--size-control);
+  }
+}
+
+.split-item + .split-item {
+  background:
+    repeating-linear-gradient(
+      to right,
+      var(--receipt-rule) 0 var(--receipt-rule-dash),
+      transparent var(--receipt-rule-dash) calc(var(--receipt-rule-dash) * 2)
+    )
+    left top / 100% var(--receipt-rule-height) no-repeat;
+}
+
+.split-flow-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--layer-bottom-action);
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-2);
+  background: var(--surface-card);
+}
+.split-flow-footer > .action-button {
+  width: 100%;
+}

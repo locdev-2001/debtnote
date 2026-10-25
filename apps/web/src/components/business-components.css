@@ -436,3 +436,126 @@
 .mascot-illustration[data-illustration-size="large"] {
   height: var(--size-illustration-large);
 }
+
+.expense-receipt-mat {
+  min-width: 0;
+  padding: var(--receipt-padding);
+  padding-bottom: var(--receipt-padding);
+  background: var(--receipt-mat);
+}
+.expense-receipt {
+  --text-primary: var(--receipt-ink);
+  --text-secondary: var(--receipt-muted);
+  --action-primary: var(--receipt-ink);
+  --action-primary-hover: var(--receipt-muted);
+  --action-subtle: var(--receipt-input-surface);
+  --surface-subtle: var(--receipt-input-surface);
+  --input-surface: var(--receipt-input-surface);
+  --input-text: var(--receipt-ink);
+  --focus-ring: var(--receipt-ink);
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--receipt-padding);
+  background: var(--receipt-paper);
+  color: var(--receipt-ink);
+  min-width: 0;
+  isolation: isolate;
+}
+.receipt-heading {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+  padding-bottom: var(--space-2);
+  text-align: center;
+}
+.receipt-heading > strong {
+  font-size: var(--receipt-brand-size);
+  letter-spacing: var(--tracking-brand);
+}
+.receipt-heading > span {
+  font-size: var(--font-size-reading);
+  letter-spacing: var(--receipt-heading-tracking);
+  font-weight: var(--font-weight-bold);
+}
+.receipt-heading > small {
+  font-size: var(--font-size-caption);
+  color: var(--text-secondary);
+}
+.receipt-column-labels,
+.receipt-amount-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.receipt-column-labels {
+  padding-top: var(--space-2);
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+  text-transform: uppercase;
+  background:
+    repeating-linear-gradient(
+      to right,
+      var(--receipt-rule) 0 var(--receipt-rule-dash),
+      transparent var(--receipt-rule-dash) calc(var(--receipt-rule-dash) * 2)
+    )
+    left top / 100% var(--receipt-rule-height) no-repeat;
+}
+.receipt-rows {
+  display: grid;
+  gap: var(--receipt-row-gap);
+}
+.receipt-amount-row {
+  padding-block: var(--receipt-row-padding);
+  font-size: var(--font-size-body);
+}
+.receipt-amount-row > div {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.receipt-amount-row small {
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+}
+.receipt-amount-row .money-amount {
+  font-size: var(--font-size-body);
+}
+.receipt-amount-row[data-emphasis="total"] {
+  padding-top: var(--space-3);
+  font-weight: var(--font-weight-bold);
+  background:
+    repeating-linear-gradient(
+      to right,
+      var(--receipt-rule) 0 var(--receipt-rule-dash),
+      transparent var(--receipt-rule-dash) calc(var(--receipt-rule-dash) * 2)
+    )
+    left top / 100% var(--receipt-rule-height) no-repeat;
+}
+.receipt-amount-row[data-emphasis="settlement"] {
+  padding: var(--space-3) 0;
+  color: var(--receipt-ink);
+  font-weight: var(--font-weight-extrabold);
+}
+.receipt-amount-row[data-emphasis="settlement"] .money-amount {
+  color: inherit;
+  font-size: var(--font-size-reading);
+}
+
+@media (max-width: 620px), (pointer: coarse) {
+  :root body :is(input, select, textarea) {
+    font-size: var(--mobile-input-font-size);
+  }
+}
+
+.expense-receipt .money-amount {
+  color: var(--receipt-ink);
+  font-weight: var(--font-weight-regular);
+}
+.expense-receipt .receipt-amount-row[data-emphasis="total"] .money-amount,
+.expense-receipt .receipt-amount-row[data-emphasis="settlement"] .money-amount {
+  font-weight: var(--font-weight-extrabold);
+}

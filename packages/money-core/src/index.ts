@@ -53,3 +53,28 @@ export function calculateOutstandingAmount(
 
   return outstandingAmount;
 }
+
+export interface SharedExpenseItem {
+  readonly amount: number;
+  readonly participantIds: readonly string[];
+}
+
+export function splitExpenseItems(
+  items: readonly SharedExpenseItem[],
+  participantIds: readonly string[],
+): readonly MoneyShare[] {
+  const totals = new Map(splitEvenly(0, participantIds).map((share) => [share.participantId, 0]));
+  let expenseTotal = 0;
+  for (const item of items) {
+    expenseTotal += item.amount;
+    assertMinorUnits(expenseTotal);
+    for (const share of splitEvenly(item.amount, item.participantIds)) {
+      const previousAmount = totals.get(share.participantId);
+      if (previousAmount === undefined) throw new Error('Người được chia không thuộc khoản chi.');
+      const nextAmount = previousAmount + share.amount;
+      assertMinorUnits(nextAmount);
+      totals.set(share.participantId, nextAmount);
+    }
+  }
+  return [...totals].map(([participantId, amount]) => ({ participantId, amount }));
+}

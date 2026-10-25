@@ -18,7 +18,8 @@ export type HomeCommand =
   | { type: 'receive'; id: string; amount: number }
   | { type: 'report-payment'; id: string }
   | { type: 'promise'; id: string; date: string }
-  | { type: 'add'; record: HomeRecord };
+  | { type: 'add'; record: HomeRecord }
+  | { type: 'add-batch'; records: readonly HomeRecord[] };
 
 export function getTodayKey(instant = new Date()): string {
   const parts = new Intl.DateTimeFormat('en', {
@@ -122,16 +123,18 @@ export function applyHomeCommand(
   records: readonly HomeRecord[],
   command: HomeCommand,
 ): HomeRecord[] {
-  if (command.type === 'add') {
-    assertMinorUnits(command.record.principalAmount);
-    if (
-      command.record.principalAmount === 0 ||
-      !command.record.personName.trim() ||
-      records.some((record) => record.id === command.record.id)
-    )
-      throw new Error('Khoản tiền mới chưa hợp lệ.');
-    const nextRecords = [...records, command.record];
-    summarize(nextRecords, command.record.direction);
+  if (command.type === 'add' || command.type === 'add-batch') {
+    const additions = command.type === 'add' ? [command.record] : command.records;
+    const recordIds = new Set(records.map((record) => record.id));
+    for (const record of additions) {
+      assertMinorUnits(record.principalAmount);
+      if (record.principalAmount === 0 || !record.personName.trim() || recordIds.has(record.id))
+        throw new Error('Khoản tiền mới chưa hợp lệ hoặc đã được thêm.');
+      recordIds.add(record.id);
+    }
+    const nextRecords = [...records, ...additions];
+    summarize(nextRecords, 'receivable');
+    summarize(nextRecords, 'payable');
     return nextRecords;
   }
   const target = records.find((record) => record.id === command.id);

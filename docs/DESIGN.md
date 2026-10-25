@@ -41,28 +41,31 @@ Chữ trên vàng/xanh sáng dùng màu tối. Chữ trên xanh chính dùng tr�
 
 ## Component và pattern dùng chung
 
-| Component            | Trách nhiệm                                          |
-| -------------------- | ---------------------------------------------------- |
-| `ActionButton`       | Primary/secondary/quiet, size, disabled, pending     |
-| `AmountField`        | Tiền đã format, size, nhãn, helper/error             |
-| `ChoiceGroup`        | Nhóm lựa chọn đơn, size, trạng thái chọn             |
-| `AppIcon`            | Ánh xạ hành động sang Reicon, bốn cỡ                 |
-| `PersonAvatar`       | Chữ viết tắt, ba cỡ                                  |
-| `SettlementBadge`    | Chưa trả/một phần/chờ xác nhận/đã trả                |
-| `DeadlineBadge`      | Ngày hẹn/hôm nay/quá hạn                             |
-| `DisputeBadge`       | Báo sai                                              |
-| `MoneySummaryCard`   | Tổng theo chiều tiền, chọn bộ lọc, size              |
-| `DebtListItem`       | Tên, tiền, một badge ưu tiên; ghi chú trong chi tiết |
-| `MoneyAmount`        | Format VND và cấp nhấn mạnh                          |
-| `ActionSheet`        | Dialog giữa desktop, bảng đáy điện thoại, focus/đóng |
-| `MascotIllustration` | Inline 40 px, nhỏ 80 px, chuẩn 128 px, lớn 160 px    |
-| `.money-form-field`  | Input/select/textarea dùng cùng recipe               |
+| Component                             | Trách nhiệm                                           |
+| ------------------------------------- | ----------------------------------------------------- |
+| `ActionButton`                        | Primary/secondary/quiet, size, disabled, pending      |
+| `AmountField`                         | Tiền đã format, size, nhãn, helper/error              |
+| `ChoiceGroup`                         | Nhóm lựa chọn đơn, size, trạng thái chọn              |
+| `AppIcon`                             | Ánh xạ hành động sang Reicon, bốn cỡ                  |
+| `PersonAvatar`                        | Chữ viết tắt, ba cỡ                                   |
+| `SettlementBadge`                     | Chưa trả/một phần/chờ xác nhận/đã trả                 |
+| `DeadlineBadge`                       | Ngày hẹn/hôm nay/quá hạn                              |
+| `DisputeBadge`                        | Báo sai                                               |
+| `MoneySummaryCard`                    | Tổng theo chiều tiền, chọn bộ lọc, size               |
+| `DebtListItem`                        | Tên, tiền, một badge ưu tiên; ghi chú trong chi tiết  |
+| `MoneyAmount`                         | Format VND và cấp nhấn mạnh                           |
+| `ExpenseReceipt` / `ReceiptAmountRow` | Giấy bill trắng đen, các dòng tiền, tổng và phần chia |
+| `ActionSheet`                         | Dialog giữa desktop, bảng đáy điện thoại, focus/đóng  |
+| `MascotIllustration`                  | Inline 40 px, nhỏ 80 px, chuẩn 128 px, lớn 160 px     |
+| `.money-form-field`                   | Input/select/textarea dùng cùng recipe                |
 
 Component nhận props và phát sự kiện, không gọi API hoặc database. Nhãn trạng thái ở `components/money/presentation.ts`; format ở `components/money/format-vnd.ts`. `money-core` giữ quy tắc số tiền trung tính.
 
 ## Nội dung
 
 Màn chính chỉ giữ tên, số tiền, một trạng thái và hành động. Bỏ khẩu hiệu/hướng dẫn lặp. Ghi chú trong chi tiết; tùy chọn mẫu mặc định đóng. Trạng thái thanh toán và hạn trả độc lập, không gộp vào một enum backend.
+
+Phần chia tiền dùng kiểu giấy bill quán ăn: nền trắng, mực đen, không hoa văn/watermark, tên bên trái và tiền bên phải, tổng in đậm. Ngoại lệ màu này chỉ nằm trong component bill và luồng chia; Trang chủ vẫn xanh–vàng. Input/select/textarea trên mobile dùng token 16 px để tránh tự zoom khi focus; giữ khả năng zoom thủ công của người dùng.
 
 ## Tài nguyên
 

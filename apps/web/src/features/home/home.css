@@ -719,3 +719,7 @@
 .home-preview-options .home-prototype-controls {
   margin-top: var(--space-2);
 }
+
+.home-content > .home-photo-draft {
+  margin: 0 0 var(--space-3);
+}

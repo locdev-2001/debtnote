@@ -43,7 +43,7 @@ Chưa có bảng nghiệp vụ, đăng nhập, lưu bill thật, OCR, QR thanh t
 - [x] P1.0 Có nền tảng thiết kế bản đầu: Manrope, nền trắng, xanh–vàng, component compact, token nghiệp vụ, component dùng chung, Reicon, 8 ảnh mascot và trang xem thử riêng.
 - [ ] P1.1 Chốt cấu trúc điều hướng, hành động tạo mới và cách quay lại mà không mất bản nháp.
 - [x] P1.2 Dựng prototype Trang chủ: cần thu, cần trả, đến hạn/quá hạn, danh sách cần xử lý và nút tạo khoản tiền. Bản đầu để duyệt, xem [S01](screens/S01-HOME.md).
-- [ ] P1.3 Thiết kế flow tạo khoản: chụp/chọn ảnh bill hoặc khoản trực tiếp; chọn người; chia đều/tùy chỉnh; xem lại và chốt.
+- [x] P1.3 Prototype tạo/chia khoản thủ công và bill mẫu: chọn người; chia đều/tùy chỉnh; xem lại và chốt vào sổ mẫu. Ảnh bill hiện chỉ xem trước, chưa nối OCR. Xem [S02–S05](screens/S02-S05-SPLIT.md).
 - [ ] P1.4 Thiết kế flow người nhận: mở link, xem phép chia, QR, báo đã chuyển, hẹn trả và báo sai.
 - [ ] P1.5 Thiết kế chi tiết người/khoản tiền, nhận một phần, nhận đủ và xử lý nhận thừa.
 - [ ] P1.6 Thiết kế theo dõi, báo cáo và thiết lập nhận tiền/nhắc hạn.
@@ -190,4 +190,4 @@ Các con số hiệu năng và quy mô dùng thử là mục tiêu nghiệm thu,
 
 ## Việc thực hiện tiếp theo
 
-Duyệt prototype S01 tại trang chủ: dữ liệu mẫu ban đầu cần thu 940.000đ, cần trả 200.000đ, 1 khoản đến hạn hôm nay và 1 khoản quá hạn. Sau khi chốt bố cục và thao tác sẽ chuyển sang S02–S05. Nút ghi nhanh hiện chỉ thử trên sổ mẫu, chưa đánh dấu toàn bộ luồng tạo bill/chia tiền đã hoàn thành.
+Duyệt prototype S02–S05 tại Trang chủ → Thêm khoản → Thử bill mẫu. Giao diện chia tiền theo giấy bill trắng đen; lưu bản nháp và chốt vào sổ mẫu trên thiết bị. Tiếp theo là S08: người nhận mở link và xem phần mình. OCR, database và link thật vẫn thuộc các giai đoạn triển khai sau.
