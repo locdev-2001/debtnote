@@ -29,11 +29,11 @@ Ghi chú không bắt buộc, mặc định thu gọn. Chỉ cần gõ nếu s�
 - Chặn số tiền không hợp lệ, bằng 0 hoặc vượt số còn cần trả.
 - Lời hẹn độc lập với hạn gốc. Không đổi tiền hoặc tự xác nhận người nhận tiền đã đồng ý.
 - Báo sai giữ lý do, dòng bill bị báo và ghi chú. Không tự sửa phần chia hoặc đóng nợ.
-- Khi đã được xác nhận đủ, ẩn các hành động báo chuyển/hẹn/báo sai.
+- Khi đã được xác nhận đủ, ẩn các hành động báo chuyển/hẹn/báo sai; vẫn mở được QR của bill.
 - Link hết hạn hoặc không hợp lệ không hiện bill hay các hành động thanh toán.
 - Có trạng thái tải/lỗi và nút thử lại cho nguồn đọc khoản tiền.
 
-`Mã QR` hiện trạng thái chưa thiết lập vì người tạo chưa có thông tin nhận tiền. Không tạo QR giả hoặc số tài khoản có thể bị hiểu là tài khoản thật.
+`Mã QR` mở cây 3D nhúng từ WebGL QR Tree. Chạm cây để trải thành QR rồi quét. Khi có `paymentQrPayload`, cây mã hóa đúng chuỗi đó; fixture chưa cấu hình nhận tiền nên dùng QR mở bill mẫu, ghi rõ `QR bill mẫu`. Xem [tích hợp và giới hạn](../integrations/WEBGL-QR.md).
 
 ## Kiến trúc
 
@@ -59,4 +59,4 @@ Thay nguồn đọc khoản tiền qua reader khi triển khai API. Việc lưu 
 - Đã xem lại hai form nhận tiền/hẹn trả ở Trang chủ sau khi tách component dùng chung.
 - Đã đọc computed style input tiền và ngày ở 390 px: 16 px. Chưa kiểm tra Safari trên iPhone thật.
 
-Không chạy test/build/CI theo yêu cầu cho lượt prototype này. Chưa có QR thật, xác nhận tiền từ ngân hàng, link có phân quyền, gửi thông báo hoặc đồng bộ giữa thiết bị. Trạng thái mẫu của S08 tách khỏi sổ mẫu S01, không âm thầm sửa nợ của người tạo.
+Không chạy test/build/CI theo yêu cầu cho lượt prototype này. QR hiện mở bill mẫu; chưa có cấu hình tài khoản/giao dịch thật, xác nhận tiền từ ngân hàng, link có phân quyền, gửi thông báo hoặc đồng bộ giữa thiết bị. Trạng thái mẫu của S08 tách khỏi sổ mẫu S01, không âm thầm sửa nợ của người tạo.

@@ -98,3 +98,5 @@ Lượt chỉnh này chỉ format source và review ảnh; không chạy test/bu
 - [Manrope](https://fontsource.org/fonts/manrope), SIL Open Font License 1.1; font tự host, chỉ nạp Latin và tiếng Việt.
 
 Mascot trạng thái của người nhận được đặt làm hình chìm ở giữa bill qua prop `watermark` của `ExpenseReceipt`. Ảnh giữ nguyên màu, độ hiện 24%, nằm dưới chữ, không nhận thao tác và không được đọc như nội dung. Kích thước/độ mờ nằm trong token `receipt-watermark-*`; không lặp ảnh trên thanh trạng thái.
+
+QR chỉ dùng giao diện cây 3D theo lựa chọn đã chốt. `QrPreview` nhận renderer qua contract trung tính; adapter WebGL giữ tham số nhúng. Chữ trong sheet rút gọn, payload chuyển khoản và hình thức hiển thị là hai lớp riêng.

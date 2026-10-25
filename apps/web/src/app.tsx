@@ -1,6 +1,7 @@
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { useState } from 'react';
 import { ActionButton } from './components/actions/action-button';
+import { createWebglQrRenderer } from './adapters/qr/webgl-qr-renderer';
 import { browserPrototypeStorage, createHomePrototypeStore } from './features/home/demo-store';
 import { HomePage } from './features/home/home-page';
 import { RecipientPage } from './features/recipient/recipient-page';
@@ -14,6 +15,7 @@ export function App() {
   const [splitStore] = useState(() => createSplitDraftStore(browserPrototypeStorage()));
   const [recipientStore] = useState(() => createRecipientResponseStore(browserPrototypeStorage()));
   const [recipientReader] = useState(() => createSamplePaymentRequestReader(getTodayKey));
+  const [qrRenderer] = useState(() => createWebglQrRenderer());
   const currentPath = window.location.pathname;
   const isRecipientRoute = currentPath === '/p' || currentPath.startsWith('/p/');
   const requestId = currentPath.slice(3).replace(/\/$/, '');
@@ -25,7 +27,12 @@ export function App() {
   return (
     <>
       {isRecipientRoute ? (
-        <RecipientPage requestId={requestId} store={recipientStore} reader={recipientReader} />
+        <RecipientPage
+          requestId={requestId}
+          store={recipientStore}
+          reader={recipientReader}
+          qrRenderer={qrRenderer}
+        />
       ) : (
         <HomePage store={store} splitStore={splitStore} />
       )}

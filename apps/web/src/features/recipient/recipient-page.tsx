@@ -9,6 +9,8 @@ import {
 } from '../../components/illustrations/mascot-illustration';
 import { ExpenseReceipt, ReceiptAmountRow } from '../../components/money/expense-receipt';
 import { formatVnd } from '../../components/money/format-vnd';
+import { QrPreview } from '../../components/qr/qr-preview';
+import type { QrRenderer } from '../../lib/qr/qr-renderer';
 import { getTodayKey } from '../../lib/calendar';
 import {
   applyRecipientCommand,
@@ -24,7 +26,7 @@ import './recipient.css';
 
 type RecipientSheet = 'payment' | 'report' | 'promise' | 'dispute' | null;
 const sheetTitles = {
-  payment: 'Thông tin nhận tiền',
+  payment: 'Mã QR',
   report: 'Báo đã chuyển',
   promise: 'Hẹn trả',
   dispute: 'Báo sai',
@@ -53,10 +55,12 @@ export function RecipientPage({
   requestId,
   store,
   reader,
+  qrRenderer,
 }: {
   requestId: string;
   store: RecipientResponseStore;
   reader: PaymentRequestReader;
+  qrRenderer: QrRenderer;
 }) {
   const requestQuery = useQuery({
     queryKey: ['payment-request', requestId],
@@ -81,15 +85,24 @@ export function RecipientPage({
         </main>
       </div>
     );
-  return <RecipientRequestPage key={requestId} request={requestQuery.data} store={store} />;
+  return (
+    <RecipientRequestPage
+      key={requestId}
+      request={requestQuery.data}
+      store={store}
+      qrRenderer={qrRenderer}
+    />
+  );
 }
 
 function RecipientRequestPage({
   request,
   store,
+  qrRenderer,
 }: {
   request: PaymentRequest | null;
   store: RecipientResponseStore;
+  qrRenderer: QrRenderer;
 }) {
   const today = getTodayKey();
   const [response, setResponse] = useState(() =>
@@ -242,28 +255,32 @@ function RecipientRequestPage({
                 </div>
               </details>
             </ExpenseReceipt>
-            {canRespond && (
+            {active && (
               <div className="recipient-actions">
                 <div className="recipient-primary-actions">
                   <ActionButton emphasis="secondary" icon="qr" onClick={() => openSheet('payment')}>
                     Mã QR
                   </ActionButton>
-                  <ActionButton icon="send" onClick={() => openSheet('report')}>
-                    {response.reportedAmount !== null ? 'Sửa báo chuyển' : 'Đã chuyển'}
-                  </ActionButton>
+                  {canRespond && (
+                    <ActionButton icon="send" onClick={() => openSheet('report')}>
+                      {response.reportedAmount !== null ? 'Sửa báo chuyển' : 'Đã chuyển'}
+                    </ActionButton>
+                  )}
                 </div>
-                <div className="recipient-secondary-actions">
-                  <ActionButton
-                    emphasis="quiet"
-                    icon="calendar"
-                    onClick={() => openSheet('promise')}
-                  >
-                    Hẹn trả
-                  </ActionButton>
-                  <ActionButton emphasis="quiet" onClick={() => openSheet('dispute')}>
-                    Báo sai
-                  </ActionButton>
-                </div>
+                {canRespond && (
+                  <div className="recipient-secondary-actions">
+                    <ActionButton
+                      emphasis="quiet"
+                      icon="calendar"
+                      onClick={() => openSheet('promise')}
+                    >
+                      Hẹn trả
+                    </ActionButton>
+                    <ActionButton emphasis="quiet" onClick={() => openSheet('dispute')}>
+                      Báo sai
+                    </ActionButton>
+                  </div>
+                )}
               </div>
             )}
           </>
@@ -297,13 +314,13 @@ function RecipientRequestPage({
         </details>
       </main>
       <ActionSheet
-        open={sheet !== null && canRespond}
+        open={sheet !== null && active && (sheet === 'payment' || canRespond)}
         title={sheet ? sheetTitles[sheet] : ''}
         onClose={() => {
           setSheet(null);
         }}
       >
-        {request && canRespond && (
+        {request && active && (
           <div className="recipient-sheet">
             {sheet === 'report' && (
               <>
@@ -339,11 +356,19 @@ function RecipientRequestPage({
               />
             )}
             {sheet === 'payment' && (
-              <div className="recipient-payment-empty">
-                <AppIcon name="qr" size="large" />
-                <h3>Chưa có mã QR</h3>
-                <p>{request.collectorName} chưa thêm tài khoản nhận tiền.</p>
-                <ActionButton onClick={() => openSheet('report')}>Tôi đã chuyển</ActionButton>
+              <div className="recipient-qr-panel">
+                <QrPreview
+                  label={request.paymentQrPayload ? 'Mã QR chuyển khoản' : 'Mã QR mở bill mẫu'}
+                  payload={
+                    request.paymentQrPayload ??
+                    new URL(`/p/${encodeURIComponent(request.id)}`, window.location.origin).href
+                  }
+                  renderer={qrRenderer}
+                />
+                {!request.paymentQrPayload && <p className="recipient-caption">QR bill mẫu</p>}
+                {canRespond && (
+                  <ActionButton onClick={() => openSheet('report')}>Tôi đã chuyển</ActionButton>
+                )}
               </div>
             )}
             {issue && (

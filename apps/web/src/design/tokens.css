@@ -252,6 +252,8 @@
   --recipient-gutter: var(--space-4);
   --recipient-brand-mark-size: 1.5rem;
   --recipient-action-height: 2.75rem;
+  --qr-preview-size: 16rem;
+  --qr-preview-frame-height: 19rem;
   --design-header-height: 4rem;
   --design-hero-gap: 2rem;
   --design-hero-illustration-size: 10rem;

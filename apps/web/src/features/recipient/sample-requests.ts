@@ -43,6 +43,7 @@ export function samplePaymentRequest(id: string, today: string): PaymentRequest 
     principalAmount: lines.reduce((amount, line) => amount + line.personalAmount, 0),
     confirmedAmounts: recipient.confirmed,
     access: recipient.access,
+    paymentQrPayload: null,
     dueDate: recipient.personId === 'dung' ? addDays(today, -2) : today,
     billTotal: lines.reduce((amount, line) => amount + line.totalAmount, 0),
     lines,

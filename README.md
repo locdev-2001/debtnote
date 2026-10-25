@@ -93,4 +93,4 @@ Bộ thiết kế gồm Manrope, Reicon, mascot hoạt hình, token và componen
 
 Prototype [S01 — Trang chủ](docs/screens/S01-HOME.md) và [S02–S05 — Chia tiền](docs/screens/S02-S05-SPLIT.md) đã có tại http://localhost:5173/. Chọn Thêm khoản → Thử bill mẫu để xem bill trắng đen, bỏ người theo khoản và chốt vào sổ mẫu. Bản nháp giữ sau khi tải lại.
 
-Màn [S08 — Người nhận](docs/screens/S08-RECIPIENT.md): mở http://localhost:5173/p/mau-binh để xem phần tiền, báo đã chuyển, hẹn trả và báo sai. Mã QR hiện trạng thái chưa thiết lập; phản hồi chỉ lưu trên thiết bị, chưa gửi tới người tạo hoặc đồng bộ với sổ mẫu Trang chủ.
+Màn [S08 — Người nhận](docs/screens/S08-RECIPIENT.md): mở http://localhost:5173/p/mau-binh để xem phần tiền, báo đã chuyển, hẹn trả và báo sai. Mã QR dùng cây 3D để mở bill mẫu, chưa cấu hình nhận tiền; phản hồi chỉ lưu trên thiết bị, chưa gửi tới người tạo hoặc đồng bộ với sổ mẫu Trang chủ.

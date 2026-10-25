@@ -44,7 +44,7 @@ Chưa có bảng nghiệp vụ, đăng nhập, lưu bill thật, OCR, QR thanh t
 - [ ] P1.1 Chốt cấu trúc điều hướng, hành động tạo mới và cách quay lại mà không mất bản nháp.
 - [x] P1.2 Dựng prototype Trang chủ: cần thu, cần trả, đến hạn/quá hạn, danh sách cần xử lý và nút tạo khoản tiền. Bản đầu để duyệt, xem [S01](screens/S01-HOME.md).
 - [x] P1.3 Prototype tạo/chia khoản thủ công và bill mẫu: chọn người; chia đều/tùy chỉnh; xem lại và chốt vào sổ mẫu. Ảnh bill hiện chỉ xem trước, chưa nối OCR. Xem [S02–S05](screens/S02-S05-SPLIT.md).
-- [x] P1.4 Prototype người nhận S08: bill riêng, báo đã chuyển/một phần, hẹn trả, báo sai theo dòng, đã trả đủ và link hết hạn. QR hiện trạng thái chưa thiết lập; chưa có link/backend thật. Xem [S08](screens/S08-RECIPIENT.md).
+- [x] P1.4 Prototype người nhận S08: bill riêng, báo đã chuyển/một phần, hẹn trả, báo sai theo dòng, đã trả đủ và link hết hạn. QR dùng cây 3D, fixture mở bill mẫu; chưa có cấu hình nhận tiền/link/backend thật. Xem [S08](screens/S08-RECIPIENT.md).
 - [ ] P1.5 Thiết kế chi tiết người/khoản tiền, nhận một phần, nhận đủ và xử lý nhận thừa.
 - [ ] P1.6 Thiết kế theo dõi, báo cáo và thiết lập nhận tiền/nhắc hạn.
 - [ ] P1.7 Duyệt prototype trên điện thoại: ghi số lần chạm, số lần gõ và thời gian cho từng nhiệm vụ.

@@ -9,6 +9,7 @@ export interface PaymentRequest {
   confirmedAmounts: readonly number[];
   dueDate: string | null;
   access: 'active' | 'expired';
+  paymentQrPayload: string | null;
   billTotal: number;
   lines: readonly {
     id: string;
