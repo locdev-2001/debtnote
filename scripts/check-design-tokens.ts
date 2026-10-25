@@ -51,6 +51,7 @@ const contrastPairs = [
   ['--settlement-confirmation-text', '--settlement-confirmation-surface', 4.5],
   ['--settlement-paid-text', '--settlement-paid-surface', 4.5],
   ['--deadline-attention-text', '--deadline-attention-surface', 4.5],
+  ['--deadline-today-text', '--deadline-today-surface', 4.5],
   ['--dispute-text', '--dispute-surface', 4.5],
   ['--feedback-error-text', '--feedback-error-surface', 4.5],
   ['--input-text', '--input-surface', 4.5],

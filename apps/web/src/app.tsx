@@ -1,42 +1,28 @@
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { ActionButton } from './components/actions/action-button';
-import { rpc } from './lib/rpc';
+import { browserPrototypeStorage, createHomePrototypeStore } from './features/home/demo-store';
+import { HomePage } from './features/home/home-page';
+import { getTodayKey } from './features/home/ledger';
 
 export function App() {
-  const connection = useQuery(rpc.system.status.queryOptions());
+  const [store] = useState(() => createHomePrototypeStore(browserPrototypeStorage(), getTodayKey));
   const {
     needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW();
 
   return (
-    <main className="foundation-page">
-      <section className="foundation-panel" aria-labelledby="app-title">
-        <img src="/favicon.svg" alt="" width="56" height="56" className="foundation-logo" />
-        <p className="foundation-brand">Debtnote</p>
-        <h1 id="app-title">Khung ứng dụng đã sẵn sàng.</h1>
-        <p className="foundation-description">
-          Mình sẽ cùng thiết kế từng màn hình và thao tác ở bước tiếp theo.
-        </p>
-        <div role="status" className="connection-status" data-connected={connection.isSuccess}>
-          <span aria-hidden="true" className="connection-dot" />
-          {connection.isPending && 'Đang kết nối…'}
-          {connection.isSuccess && 'Đã kết nối.'}
-          {connection.isError && 'Chưa thể kết nối. Vui lòng thử lại.'}
-        </div>
-        {connection.isError && (
-          <ActionButton onClick={() => void connection.refetch()}>Thử lại</ActionButton>
-        )}
-        {needRefresh && (
-          <aside className="foundation-update">
-            <p>Có phiên bản mới.</p>
-            <ActionButton emphasis="secondary" onClick={() => void updateServiceWorker(true)}>
-              Cập nhật
-            </ActionButton>
-          </aside>
-        )}
-      </section>
-    </main>
+    <>
+      <HomePage store={store} />
+      {needRefresh && (
+        <aside className="home-app-update" aria-label="Phiên bản mới">
+          <p>Có phiên bản mới. Cập nhật khi bạn đã xong thao tác.</p>
+          <ActionButton emphasis="secondary" onClick={() => void updateServiceWorker(true)}>
+            Cập nhật
+          </ActionButton>
+        </aside>
+      )}
+    </>
   );
 }

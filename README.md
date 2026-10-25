@@ -2,7 +2,7 @@
 
 Ứng dụng chia tiền và theo dõi các khoản cần thu, cần trả. Bản đầu là PWA: dùng ngay bằng link, có thể thêm vào màn hình chính. Người nhận yêu cầu thanh toán không phải cài ứng dụng.
 
-Hiện tại repo chỉ có khung kỹ thuật và màn hình khởi động. Thiết kế màn hình, xác thực, lưu bill, thanh toán, OCR, nhắc hạn và tích hợp storage sẽ triển khai sau. Chưa có bảng nghiệp vụ hoặc API ghi dữ liệu người dùng.
+Repo đã có khung kỹ thuật, bộ thiết kế và prototype S01 — Trang chủ. Các thao tác ở trang chủ chỉ cập nhật dữ liệu mẫu trên thiết bị. Chưa có tài khoản, bảng nghiệp vụ, API ghi tiền thật, OCR hoặc kết nối thanh toán/nhắc tiền.
 
 ## Stack
 
@@ -91,4 +91,4 @@ Theo dõi [roadmap đầy đủ](docs/ROADMAP.md) để xem mốc bàn giao, th�
 
 Bộ thiết kế gồm Manrope, Reicon, mascot hoạt hình, token và component nghiệp vụ được mô tả tại [hướng hình ảnh](docs/DESIGN.md). Khi chạy local, mở http://localhost:5173/design/ để thử 3 template solid, borderless và các trạng thái tương tác.
 
-Việc tiếp theo là thiết kế trang chủ và hành động tạo khoản tiền bằng prototype. Sau đó triển khai từng luồng cùng schema, quyền truy cập và adapter liên quan.
+Prototype [S01 — Trang chủ](docs/screens/S01-HOME.md) đã sẵn sàng để duyệt tại http://localhost:5173/. Sau khi chốt S01 sẽ thiết kế tiếp luồng S02–S05: tạo khoản, chọn người, chia tiền và chốt.

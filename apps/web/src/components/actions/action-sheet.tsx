@@ -10,18 +10,26 @@ interface ActionSheetProps {
 
 export function ActionSheet({ open, title, children, onClose }: ActionSheetProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const dialog = dialogRef.current;
     if (open && !dialog?.open) dialog?.showModal();
     if (!open && dialog?.open) dialog.close();
-  }, [open]);
+    if (open && title) closeButtonRef.current?.focus();
+  }, [open, title]);
 
   return (
     <dialog className="money-action-sheet" ref={dialogRef} onClose={onClose} aria-label={title}>
       <div className="money-sheet-header">
         <h2>{title}</h2>
-        <button type="button" className="icon-action" aria-label="Đóng" onClick={onClose}>
+        <button
+          ref={closeButtonRef}
+          type="button"
+          className="icon-action"
+          aria-label="Đóng"
+          onClick={onClose}
+        >
           <AppIcon name="close" />
         </button>
       </div>

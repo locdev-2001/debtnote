@@ -17,4 +17,4 @@ export const settlementStates = {
 
 export type MoneyDirection = keyof typeof moneyDirections;
 export type SettlementState = keyof typeof settlementStates;
-export type DeadlineKind = 'upcoming' | 'promised' | 'overdue';
+export type DeadlineKind = 'upcoming' | 'today' | 'promised' | 'overdue';

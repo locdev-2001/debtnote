@@ -74,6 +74,11 @@
   --settlement-paid-surface: #356f52;
   --deadline-attention-text: #fff9eb;
   --deadline-attention-surface: #946322;
+  --deadline-today-text: #f6fbff;
+  --deadline-today-surface: #416d92;
+  --size-illustration-inline: 5rem;
+  --size-home-sidebar: 20rem;
+  --size-home-bottom-action: 3.5rem;
   --dispute-text: #fff9f4;
   --dispute-surface: #9e4e48;
   --feedback-error-text: #913e35;

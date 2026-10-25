@@ -168,6 +168,10 @@
   color: var(--deadline-attention-text);
   background: var(--deadline-attention-surface);
 }
+.deadline-badge[data-deadline="today"] {
+  color: var(--deadline-today-text);
+  background: var(--deadline-today-surface);
+}
 .dispute-badge {
   color: var(--dispute-text);
   background: var(--dispute-surface);

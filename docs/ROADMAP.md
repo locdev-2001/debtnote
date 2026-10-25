@@ -36,13 +36,13 @@ Không ấn định ngày giao trong tài liệu này. Ước lượng lịch sa
 - [x] Môi trường local, Docker Compose, build production và hướng dẫn chạy.
 - [x] CI: lint, typecheck, 18 kiểm thử, build, migration và kiểm tra API/worker thực tế.
 
-Chưa có bảng nghiệp vụ, đăng nhập, lưu bill, OCR, QR thanh toán hoặc gửi nhắc. Màn hình khởi động không phải trang chủ sản phẩm.
+Chưa có bảng nghiệp vụ, đăng nhập, lưu bill thật, OCR, QR thanh toán hoặc gửi nhắc. Trang chủ hiện là prototype S01 dùng dữ liệu mẫu trên thiết bị.
 
 ## 1. Thiết kế screen và prototype — bước làm ngay
 
 - [x] P1.0 Có nền tảng thiết kế bản đầu: Manrope, 3 template solid, borderless, token nghiệp vụ, component dùng chung, Reicon, 8 ảnh mascot và trang xem thử riêng.
 - [ ] P1.1 Chốt cấu trúc điều hướng, hành động tạo mới và cách quay lại mà không mất bản nháp.
-- [ ] P1.2 Thiết kế trang chủ: cần thu, cần trả, đến hạn/quá hạn, danh sách cần xử lý và nút tạo khoản tiền.
+- [x] P1.2 Dựng prototype Trang chủ: cần thu, cần trả, đến hạn/quá hạn, danh sách cần xử lý và nút tạo khoản tiền. Bản đầu để duyệt, xem [S01](screens/S01-HOME.md).
 - [ ] P1.3 Thiết kế flow tạo khoản: chụp/chọn ảnh bill hoặc khoản trực tiếp; chọn người; chia đều/tùy chỉnh; xem lại và chốt.
 - [ ] P1.4 Thiết kế flow người nhận: mở link, xem phép chia, QR, báo đã chuyển, hẹn trả và báo sai.
 - [ ] P1.5 Thiết kế chi tiết người/khoản tiền, nhận một phần, nhận đủ và xử lý nhận thừa.
@@ -190,4 +190,4 @@ Các con số hiệu năng và quy mô dùng thử là mục tiêu nghiệm thu,
 
 ## Việc thực hiện tiếp theo
 
-Bắt đầu P1.1–P1.2 / S01: thiết kế trang chủ và hành động tạo khoản tiền bằng prototype. Dùng bộ số mẫu 940.000đ cần thu để thử cách người dùng tìm đúng người/khoản và hành động cần làm. Chưa nối dữ liệu giả vào báo cáo thật hoặc tạo thêm các màn hình nghiệp vụ ngoài phần đang duyệt.
+Duyệt prototype S01 tại trang chủ: dữ liệu mẫu ban đầu cần thu 940.000đ, cần trả 200.000đ, 1 khoản đến hạn hôm nay và 1 khoản quá hạn. Sau khi chốt bố cục và thao tác sẽ chuyển sang S02–S05. Nút ghi nhanh hiện chỉ thử trên sổ mẫu, chưa đánh dấu toàn bộ luồng tạo bill/chia tiền đã hoàn thành.
