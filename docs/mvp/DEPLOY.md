@@ -56,7 +56,7 @@ Redis không đặt mật khẩu: `REDIS_URL=redis://127.0.0.1:6379/0`. Nếu m�
 ## 3. Deploy
 
 ```bash
-bash scripts/production-deploy.sh
+bash deploy.sh
 ```
 
 Script kiểm tra cấu hình/công cụ, cài dependencies, build web/API/worker, backup DB đã có, migrate, khởi động hoặc restart đúng hai app PM2, kiểm tra `/readyz`, gửi tác vụ probe thật qua worker và `pm2 save`.
@@ -124,7 +124,7 @@ Hai launcher tự đọc `.env.production`; không cần chép secret vào cấu
 ```bash
 cd /www/wwwroot/debtnote.robertnguyen.io.vn
 git pull --ff-only origin main
-bash scripts/production-deploy.sh
+bash deploy.sh
 pm2 logs debtnote-api --lines 100
 pm2 logs debtnote-worker --lines 100
 ```

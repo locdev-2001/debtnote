@@ -56,6 +56,11 @@ Chạy ba lệnh ở terminal riêng để xem bản build tại http://localhos
 
 ## Production và tiến độ
 
+Sau khi pull source, chạy `bash deploy.sh` tại thư mục dự án. Script cài dependencies,
+build, backup dữ liệu đã có, migrate và restart API/worker bằng PM2, rồi kiểm tra
+readiness và worker. Lần đầu cần cài dịch vụ trong aaPanel và điền `.env.production`
+theo hướng dẫn bên dưới.
+
 - [Triển khai aaPanel/PM2 và backup](docs/mvp/DEPLOY.md).
 - [Tiến độ MVP và bằng chứng](docs/mvp/PROGRESS.md).
 - [Roadmap toàn sản phẩm](docs/ROADMAP.md).
