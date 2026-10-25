@@ -576,7 +576,6 @@ function OwnerWorkspace({
         hidden
         ref={photoInput}
         accept="image/*"
-        capture="environment"
         onChange={async (event) => {
           const file = event.target.files?.[0];
           event.target.value = '';

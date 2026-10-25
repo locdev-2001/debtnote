@@ -491,7 +491,6 @@ export function HomePage({
         tabIndex={-1}
         type="file"
         accept="image/*"
-        capture="environment"
         aria-label="Chọn ảnh hóa đơn"
         onChange={choosePhoto}
       />
