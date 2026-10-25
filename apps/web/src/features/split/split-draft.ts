@@ -37,12 +37,14 @@ export interface SplitPreview {
 }
 export const currentPerson: SplitPerson = { id: 'self', name: 'Bạn' };
 
-export function createSplitDraft(): SplitDraft {
+export function createSplitDraft(people: readonly SplitPerson[] = []): SplitDraft {
   return {
     id: crypto.randomUUID(),
     step: 0,
     mode: 'equal',
-    participants: [currentPerson],
+    participants: [
+      ...new Map([currentPerson, ...people].map(({ id, name }) => [id, { id, name }])).values(),
+    ],
     payerId: currentPerson.id,
     items: [{ id: crypto.randomUUID(), title: 'Khoản chung', amount: '', excludedIds: [] }],
   };

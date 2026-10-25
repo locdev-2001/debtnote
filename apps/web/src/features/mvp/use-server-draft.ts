@@ -2,9 +2,18 @@ import type { Draft } from '@debtnote/contracts';
 import { useRef, useState } from 'react';
 import { apiClient } from '../../lib/rpc';
 import { isSplitDraft } from '../split/draft-store';
-import { createSplitDraft, type SplitDraft, type SplitPreview } from '../split/split-draft';
+import {
+  createSplitDraft,
+  type SplitDraft,
+  type SplitPerson,
+  type SplitPreview,
+} from '../split/split-draft';
 
-export function useServerDraft(ownerId: string, serverDrafts: readonly Draft[]) {
+export function useServerDraft(
+  ownerId: string,
+  serverDrafts: readonly Draft[],
+  people: readonly SplitPerson[],
+) {
   const storageKey = `debtnote:draft:${ownerId}`;
   const [draft, setDraft] = useState<SplitDraft | null>(() => {
     try {
@@ -67,7 +76,7 @@ export function useServerDraft(ownerId: string, serverDrafts: readonly Draft[]) 
     start: (prepared?: SplitDraft) => {
       setCompleted(null);
       if (prepared) update(prepared);
-      else if (!draft) update(createSplitDraft());
+      else if (!draft) update(createSplitDraft(people));
       else persist(draft);
       setOpen(true);
     },

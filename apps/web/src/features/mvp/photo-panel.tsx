@@ -2,15 +2,17 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ActionButton } from '../../components/actions/action-button';
 import { apiClient } from '../../lib/rpc';
-import { createSplitDraft, type SplitDraft } from '../split/split-draft';
+import { createSplitDraft, type SplitDraft, type SplitPerson } from '../split/split-draft';
 
 export function PhotoPanel({
   id,
   ownerId,
+  people,
   onContinue,
 }: {
   id: string;
   ownerId: string;
+  people: readonly SplitPerson[];
   onContinue: (draft: SplitDraft) => void;
 }) {
   const queryClient = useQueryClient();
@@ -67,7 +69,7 @@ export function PhotoPanel({
       ))}
       <ActionButton
         onClick={() => {
-          const draft = createSplitDraft();
+          const draft = createSplitDraft(people);
           draft.attachmentId = id;
           if (photo.ocrResult?.items.length)
             draft.items = photo.ocrResult.items.map((item) => ({

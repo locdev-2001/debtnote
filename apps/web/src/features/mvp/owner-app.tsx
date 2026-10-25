@@ -135,7 +135,7 @@ function OwnerWorkspace({
   controller: ReturnType<typeof useLedger>;
 }) {
   const { perform, pending, issue, notice } = controller;
-  const split = useServerDraft(user.id, snapshot.drafts);
+  const split = useServerDraft(user.id, snapshot.drafts, snapshot.people);
   const [tab, setTab] = useState<Tab>('home');
   const [direction, setDirection] = useState<Direction>('receivable');
   const [filter, setFilter] = useState<Filter>('all');
@@ -661,7 +661,12 @@ function OwnerWorkspace({
           />
         )}
         {sheet?.type === 'photo' && (
-          <PhotoPanel id={sheet.id} ownerId={user.id} onContinue={(draft) => startSplit(draft)} />
+          <PhotoPanel
+            id={sheet.id}
+            ownerId={user.id}
+            people={snapshot.people}
+            onContinue={(draft) => startSplit(draft)}
+          />
         )}
         {(sheet?.type === 'new-person' || sheet?.type === 'edit-person') && (
           <PersonEditor
