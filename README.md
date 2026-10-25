@@ -87,4 +87,6 @@ Service worker chỉ cache tài nguyên giao diện, không cache response API h
 
 ## Bước tiếp theo
 
-Thiết kế và duyệt từng màn hình, bắt đầu từ trang chủ và luồng tạo bill. Sau đó mới triển khai schema nghiệp vụ theo ERD đã thống nhất, quyền truy cập, adapter OCR/storage và các luồng thanh toán, nhắc hạn.
+Theo dõi [roadmap đầy đủ](docs/ROADMAP.md) để xem mốc bàn giao, thứ tự screen, công việc và tiêu chí nghiệm thu từng giai đoạn.
+
+Việc tiếp theo là thiết kế trang chủ và hành động tạo khoản tiền bằng prototype. Sau đó triển khai từng luồng cùng schema, quyền truy cập và adapter liên quan.
