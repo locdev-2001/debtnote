@@ -1,4 +1,5 @@
 import { addDays } from '../../lib/calendar';
+import { DatePickerField } from './date-picker-field';
 
 export function PromiseDateField({
   value,
@@ -11,16 +12,7 @@ export function PromiseDateField({
 }) {
   return (
     <>
-      <label className="money-form-field">
-        Ngày hẹn
-        <input
-          type="date"
-          required
-          min={today}
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-        />
-      </label>
+      <DatePickerField label="Ngày hẹn" value={value} minDate={today} onChange={onChange} />
       <div className="money-presets">
         {[
           { days: 1, label: 'Ngày mai' },

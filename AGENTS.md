@@ -10,3 +10,5 @@
 - Riêng hóa đơn và luồng chia tiền dùng giấy trắng/mực đen như bill quán ăn, không hoa văn. Mascot trạng thái có thể làm hình chìm giữ nguyên màu, rõ vừa đủ, nằm dưới nội dung bill; không lặp lại ảnh trên thanh trạng thái. Input/select/textarea trên mobile tối thiểu 16 px qua token chung; không khóa zoom bằng viewport meta.
 - Ưu tiên ít chữ: màn chính chỉ giữ tên, số tiền, trạng thái cần biết và hành động. Ghi chú/giải thích để trong chi tiết; không thêm đoạn hướng dẫn hoặc khẩu hiệu lặp lại.
 - Khi người dùng yêu cầu bỏ test cho lượt chỉnh UI, không chạy test/build/CI thay cho review ảnh; ghi đúng những kiểm tra thực sự đã làm.
+
+- Ngày hẹn dùng `DatePickerField`/`PromiseDateField` chung, tiếng Việt và `dd/MM/yyyy`; không dùng input date mặc định của trình duyệt. Dữ liệu ngày vẫn giữ dạng `YYYY-MM-DD`.

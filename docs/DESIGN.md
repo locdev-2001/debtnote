@@ -102,3 +102,7 @@ Mascot trạng thái của người nhận được đặt làm hình chìm ở 
 QR chỉ dùng giao diện cây 3D theo lựa chọn đã chốt. `QrPreview` nhận renderer qua contract trung tính; adapter WebGL giữ tham số nhúng. Chữ trong sheet rút gọn, payload chuyển khoản và hình thức hiển thị là hai lớp riêng.
 
 `ActionSheet` đóng khi bấm vùng tối bên ngoài. Bấm trong popup, padding hoặc kéo từ trong ra ngoài giữ popup mở. Nút đóng và Escape vẫn hoạt động; quy tắc này nằm ở component dùng chung.
+
+Ngày hẹn dùng `DatePickerField` + React DayPicker 10.0.2 (`@daypicker/react`), nạp lịch khi mở. Lịch nằm trong luồng của sheet, dùng tiếng Việt/T2–CN, icon Reicon, không bật popup ngày của hệ điều hành. Các size dùng token component và `calendar-*`; hiển thị `dd/MM/yyyy`, dữ liệu vẫn là `YYYY-MM-DD`, không chuyển qua UTC khi chọn ngày.
+
+`PromiseDateField` ghép lịch dùng chung với các nút chọn nhanh. Ngày quá khứ bị vô hiệu; chọn ngày tự thu lịch và trả focus về nút; Escape thu lịch trước khi đóng sheet. Đã rà chọn khác tháng, chọn nhanh khi lịch đang mở, overlay và giao diện Trang chủ/người nhận ở 390 px cùng desktop; không chạy test/build/CI trong lượt UI này.

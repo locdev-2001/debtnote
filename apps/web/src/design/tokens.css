@@ -254,6 +254,15 @@
   --recipient-action-height: 2.75rem;
   --qr-preview-size: 16rem;
   --qr-preview-frame-height: 19rem;
+  --calendar-padding: var(--space-3);
+  --calendar-day-size: 2.25rem;
+  --calendar-day-font-size: var(--font-size-body);
+  --calendar-nav-size: 2rem;
+  --calendar-caption-size: var(--font-size-body);
+  --calendar-weekday-size: var(--font-size-caption);
+  --calendar-weekday-height: 1.5rem;
+  --calendar-cell-gap: 0.125rem;
+  --calendar-disabled-opacity: 0.45;
   --design-header-height: 4rem;
   --design-hero-gap: 2rem;
   --design-hero-illustration-size: 10rem;
@@ -320,6 +329,7 @@
 @media (pointer: coarse) {
   :root,
   [data-design-theme] {
+    --calendar-day-size: 2.5rem;
     --button-height-regular: 2.5rem;
     --input-height-regular: 2.5rem;
     --input-font-small: var(--mobile-input-font-size);

@@ -9,6 +9,7 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@daypicker/react": "catalog:",
     "@fontsource-variable/manrope": "catalog:",
     "@debtnote/money-core": "workspace:*",
     "@tanstack/react-query": "catalog:",
