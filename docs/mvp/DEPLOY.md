@@ -51,6 +51,8 @@ UPLOAD_DIR=.local/uploads
 LOG_LEVEL=info
 ```
 
+Đọc bill bằng AI (không bắt buộc): thêm `RECEIPT_AI_API_KEY=<key OpenRouter>` vào `.env.production`. Worker gửi ảnh bill tới các model khai báo trong `apps/worker/src/receipt-ai-config.ts` (model free có nhận ảnh, thử lần lượt; model free có thể bị giới hạn tần suất hoặc gỡ bỏ, khi đó sửa danh sách trong file này). Nếu AI lỗi hoặc quá 90 giây, worker tự đọc lại bằng tesseract trên server. Để trống key thì chỉ dùng tesseract, ảnh không rời server. Đổi cấu hình xong chạy lại `bash deploy.sh` để restart worker.
+
 Redis không đặt mật khẩu: `REDIS_URL=redis://127.0.0.1:6379/0`. Nếu mật khẩu chứa ký tự đặc biệt như `@`, `#`, `/`, dùng dạng URL-encoded trong URL kết nối. Không thay `APP_DATA_KEY` đã sinh; khóa này cần để đọc QR nhận tiền đã lưu. Nếu trước đó có file cấu hình Docker, bổ sung DATABASE_URL/REDIS_URL trỏ server thật và giữ khóa cũ.
 
 ## 3. Deploy

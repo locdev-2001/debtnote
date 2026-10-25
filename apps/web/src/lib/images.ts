@@ -11,6 +11,34 @@ async function readImage(file: File) {
     throw new Error('Chưa đọc được ảnh. Chọn JPG, PNG hoặc WebP.');
   }
 }
+function stretchGrayscaleContrast(pixels: Uint8ClampedArray) {
+  const pixelCount = pixels.length / 4;
+  const luminances = new Uint8Array(pixelCount);
+  const histogram = new Uint32Array(256);
+  for (let index = 0; index < pixelCount; index++) {
+    const luminance = Math.round(
+      0.299 * (pixels[index * 4] ?? 0) +
+        0.587 * (pixels[index * 4 + 1] ?? 0) +
+        0.114 * (pixels[index * 4 + 2] ?? 0),
+    );
+    luminances[index] = luminance;
+    histogram[luminance] = (histogram[luminance] ?? 0) + 1;
+  }
+  const percentile = (share: number) => {
+    let seen = 0;
+    for (let level = 0; level < 256; level++) {
+      seen += histogram[level] ?? 0;
+      if (seen >= pixelCount * share) return level;
+    }
+    return 255;
+  };
+  const darkest = percentile(0.02);
+  const range = Math.max(1, percentile(0.99) - darkest);
+  for (let index = 0; index < pixelCount; index++) {
+    const stretched = (((luminances[index] ?? 0) - darkest) * 255) / range;
+    pixels[index * 4] = pixels[index * 4 + 1] = pixels[index * 4 + 2] = stretched;
+  }
+}
 export async function prepareReceiptImage(file: File) {
   const { image, close } = await readImage(file);
   try {
@@ -23,6 +51,9 @@ export async function prepareReceiptImage(file: File) {
     context.fillStyle = '#ffffff';
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    const frame = context.getImageData(0, 0, canvas.width, canvas.height);
+    stretchGrayscaleContrast(frame.data);
+    context.putImageData(frame, 0, 0);
     return {
       name: file.name,
       mime: 'image/jpeg' as const,

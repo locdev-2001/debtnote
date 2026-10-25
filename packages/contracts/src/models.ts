@@ -240,7 +240,7 @@ export function emptyLedgerState(): LedgerState {
 
 export interface ReceiptOcrResult {
   text: string;
-  confidence: number;
+  confidence: number | null;
   items: { id: string; title: string; amount: number }[];
   detectedTotal: number | null;
   issues: string[];

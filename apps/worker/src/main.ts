@@ -13,6 +13,11 @@ import {
 } from '@debtnote/jobs';
 import { readWorkerEnvironment, registerShutdown, systemClock, systemIds } from '@debtnote/runtime';
 import { Worker } from 'bullmq';
+import { receiptAiConfig } from './receipt-ai-config';
+import { createFallbackReceiptReader } from './receipt-readers/fallback-receipt-reader';
+import type { ReceiptReader } from './receipt-readers/receipt-reader';
+import { createTesseractReceiptReader } from './receipt-readers/tesseract-receipt-reader';
+import { createVisionModelReceiptReader } from './receipt-readers/vision-model-receipt-reader';
 import { startReceiptWorker } from './receipt-worker';
 
 const environment = readWorkerEnvironment();
@@ -34,7 +39,16 @@ const probe = new Worker(
 );
 probe.on('failed', (job) => console.error(`Tác vụ kiểm tra ${job?.id} thất bại.`));
 probe.on('error', () => console.error('Worker gặp lỗi.'));
-const ocr = startReceiptWorker(connection, database.pool, cachePath);
+const receiptReaders: ReceiptReader[] = [createTesseractReceiptReader(cachePath)];
+if (environment.RECEIPT_AI_API_KEY)
+  receiptReaders.unshift(
+    createVisionModelReceiptReader({ ...receiptAiConfig, apiKey: environment.RECEIPT_AI_API_KEY }),
+  );
+const ocr = startReceiptWorker(
+  connection,
+  database.pool,
+  createFallbackReceiptReader(receiptReaders),
+);
 const ocrQueue = createReceiptOcrQueue(connection);
 let reminding = false;
 async function processReminders() {

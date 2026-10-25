@@ -27,6 +27,14 @@ const apiEnvironmentSchema = processEnvironmentSchema.extend({
     .refine((value) => ['postgres:', 'postgresql:'].includes(new URL(value).protocol)),
 });
 
+const workerEnvironmentSchema = apiEnvironmentSchema.extend({
+  RECEIPT_AI_API_KEY: z
+    .string()
+    .trim()
+    .optional()
+    .transform((value) => value || undefined),
+});
+
 function parseEnvironment<EnvironmentSchema extends z.ZodType>(schema: EnvironmentSchema) {
   const parsedEnvironment = schema.safeParse(process.env);
 
@@ -45,7 +53,7 @@ export function readApiEnvironment() {
 }
 
 export function readWorkerEnvironment() {
-  return parseEnvironment(apiEnvironmentSchema);
+  return parseEnvironment(workerEnvironmentSchema);
 }
 
 export function registerShutdown(closeResources: () => Promise<void>): void {

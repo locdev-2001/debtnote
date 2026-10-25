@@ -17,7 +17,8 @@
     "tesseract.js": "catalog:",
     "@debtnote/jobs": "workspace:*",
     "@debtnote/runtime": "workspace:*",
-    "bullmq": "catalog:"
+    "bullmq": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/pg": "catalog:",

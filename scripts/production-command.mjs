@@ -37,6 +37,7 @@ try {
         'API_TRUST_PROXY_HOPS=1',
         'UPLOAD_DIR=.local/uploads',
         'LOG_LEVEL=info',
+        'RECEIPT_AI_API_KEY=',
         '',
       ].join('\n');
       writeFileSync(environmentPath, content, { flag: 'wx', mode: 0o600 });
