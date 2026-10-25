@@ -42,6 +42,7 @@ catalog:
 allowBuilds:
   esbuild: true
   msgpackr-extract: true
+  tesseract.js: false
   "@tailwindcss/oxide": true
 
 minimumReleaseAgeExclude:
