@@ -13,8 +13,8 @@ Cập nhật 25/10/2026. Bản local dùng PostgreSQL thật. Production chưa �
 - [x] Worker nhắc trong ứng dụng, giờ/tắt nhắc, đổi hẹn, chống trùng trong ngày và dừng khi trả đủ. Chia sẻ do người dùng bấm; không ghi mở chia sẻ thành đã gửi/đọc.
 - [x] Logo mascot mới, wordmark component chung, favicon và icon PWA.
 - [x] Kiểm thử tiền/quyền/đồng thời, browser thật và reload trên máy phát triển; build đầy đủ.
-- [x] Gói Docker/Compose, cấu hình proxy domain, deploy/migration, backup, restore thử và rollback app đã chuẩn bị; shell/YAML đã kiểm tra.
-- [ ] Chạy image/Compose trên server và xác nhận HTTPS/API/browser production. Máy phát triển không có Docker; người quản trị tự pull/chạy ở `/www/wwwroot/debtnote.robertnguyen.io.vn`.
+- [x] Deploy native aaPanel: Node.js/PM2, Nginx phục vụ web tĩnh, PostgreSQL/Redis trên server; script init/deploy/backup/restore và hai launcher API/worker đã chuẩn bị. Đã bỏ cấu hình Docker production.
+- [ ] Chạy deploy aaPanel trên server và xác nhận HTTPS/API/browser production; người quản trị tự pull/chạy ở `/www/wwwroot/debtnote.robertnguyen.io.vn`.
 - [ ] Nghiệm thu Android/iPhone vật lý và dùng thử nhóm. Các kích thước mobile/desktop bên dưới là kiểm tra viewport trên browser, không thay thế thiết bị thật.
 
 CI tự động đã tắt theo yêu cầu; chỉ giữ workflow chạy tay khi cần. Kết quả nghiệm thu dưới đây là kiểm tra local.
@@ -29,6 +29,8 @@ CI tự động đã tắt theo yêu cầu; chỉ giữ workflow chạy tay khi 
 - Bản build API/worker: chạy riêng trên cổng 3002 và Redis DB 1; HTTP đăng nhập/snapshot, tác vụ probe và khôi phục ảnh queued sau startup đều qua. 80 request snapshot tuần tự trên máy local đạt p50 5,82 ms/p95 9,34 ms; phép chia 50 người/100 dòng, 100 lượt đạt p95 1,29 ms. Đây là số đo local với sổ nhỏ, không phải cam kết production hay mạng di động.
 - Backup native PostgreSQL: `pg_dump -Fc` → `pg_restore` vào DB tạm; số khoản, thanh toán và ảnh khớp, DB tạm đã đóng/xóa. File ảnh được kiểm tra riêng qua HTTP có session và không session.
 - Ảnh QA nằm tại `.local/mvp-*.png`, `.local/auth-*.png`; đã tự xem ảnh. `.local` bị loại khỏi Git. Ghi nhận riêng local, push/CI và production; không suy từ build sang đã deploy.
+
+Kiểm tra triển khai aaPanel/native: hai tiến trình PM2 dùng launcher production đã chạy trên cổng kiểm tra riêng; readiness API, tác vụ worker qua Redis, backup và restore vào DB tạm đều qua. Không thay đổi server production trong lượt này.
 
 ## Giới hạn của bản này
 

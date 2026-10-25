@@ -1,64 +1,145 @@
-# Đưa MVP lên debtnote.robertnguyen.io.vn
+# Chạy Debtnote trên aaPanel
 
-Thư mục server: `/www/wwwroot/debtnote.robertnguyen.io.vn`, IP `103.166.182.185`. Người quản trị tự Git pull. Cấu hình này dùng Docker Engine và Docker Compose v2; Nginx/SSL hiện có của aaPanel vẫn nhận domain bên ngoài.
+Domain: https://debtnote.robertnguyen.io.vn/ — server `103.166.182.185` — source `/www/wwwroot/debtnote.robertnguyen.io.vn`.
 
-## Lần đầu
+Nginx phục vụ `apps/web/dist`; API và worker chạy trực tiếp bằng Node.js/PM2. PostgreSQL và Redis được cài trên server. Các script production không dùng Docker. CI tự động đã tắt theo yêu cầu.
+
+## 1. Cài phần mềm trong aaPanel
+
+- App Store: Nginx, Node.js Version Manager, PostgreSQL Manager và Redis.
+- Node.js Version Manager: cài Node.js 22 từ 22.18 trở lên, chọn làm **Command line ver**. Repo dùng Node 22.23.4. Terminal và tiến trình PM2 phải dùng cùng bản Node.
+- PostgreSQL Manager: cài PostgreSQL hiện hành tương thích, tạo database `debtnote`, user `debtnote`, mật khẩu riêng. Repo đã kiểm tra với PostgreSQL 18; schema dùng các tính năng tiêu chuẩn PostgreSQL.
+- Redis: bật dịch vụ trên `127.0.0.1:6379`, cấu hình mật khẩu nếu dùng và bật persistence. Giữ `maxmemory-policy noeviction` cho hàng đợi BullMQ.
+
+aaPanel có thể hiển thị plugin ở nhóm Deployment hoặc Plug-ins tùy bản. Tài liệu chính thức: [Node.js](https://www.aapanel.com/docs/Function/Node.html), [PostgreSQL Manager](https://www.aapanel.com/docs/Function/Plug-ins.html), [Redis](https://www.aapanel.com/docs/Function/Redis.html).
+
+Mở Terminal aaPanel, kiểm tra và cài công cụ:
+
+```bash
+node -v
+npm install -g pnpm@11.8.0 pm2@6
+pnpm -v
+pm2 -v
+psql --version
+pg_dump --version
+```
+
+Nếu `psql`/`pg_dump` chưa nằm trong PATH, thêm thư mục `bin` của PostgreSQL đã cài trong panel vào PATH. Dùng pg_dump cùng major với PostgreSQL server hoặc mới hơn.
+
+Chạy các lệnh deploy và PM2 bằng cùng một tài khoản hệ thống. Tài khoản đó cần đọc source/`.env.production`, ghi `.local` và kết nối PostgreSQL/Redis. Không đổi user PM2 giữa các lần cập nhật.
+
+## 2. Pull và điền kết nối
 
 ```bash
 cd /www/wwwroot/debtnote.robertnguyen.io.vn
 git pull --ff-only origin main
 bash scripts/production-init.sh
+```
+
+Script tạo `.env.production` quyền 600 và sinh `APP_DATA_KEY`. Mở file bằng trình sửa file của aaPanel, sửa:
+
+```dotenv
+NODE_ENV=production
+APP_ORIGIN=https://debtnote.robertnguyen.io.vn
+APP_DATA_KEY=GIU_NGUYEN_KHOA_SCRIPT_DA_SINH
+DATABASE_URL=postgresql://debtnote:MAT_KHAU_DB@127.0.0.1:5432/debtnote
+REDIS_URL=redis://:MAT_KHAU_REDIS@127.0.0.1:6379/0
+API_HOST=127.0.0.1
+API_PORT=3001
+API_TRUST_PROXY_HOPS=1
+UPLOAD_DIR=.local/uploads
+LOG_LEVEL=info
+```
+
+Redis không đặt mật khẩu: `REDIS_URL=redis://127.0.0.1:6379/0`. Nếu mật khẩu chứa ký tự đặc biệt như `@`, `#`, `/`, dùng dạng URL-encoded trong URL kết nối. Không thay `APP_DATA_KEY` đã sinh; khóa này cần để đọc QR nhận tiền đã lưu. Nếu trước đó có file cấu hình Docker, bổ sung DATABASE_URL/REDIS_URL trỏ server thật và giữ khóa cũ.
+
+## 3. Deploy
+
+```bash
 bash scripts/production-deploy.sh
 ```
 
-`production-init` sinh mật khẩu DB và khóa mã hóa riêng vào `.env.production` quyền 600. Chạy lại không đổi khóa. Không commit file này. DB, Redis và ảnh nằm trong volume; chỉ web được bind tại `127.0.0.1:18080`. Không dùng credential local ở production.
+Script kiểm tra cấu hình/công cụ, cài dependencies, build web/API/worker, backup DB đã có, migrate, khởi động hoặc restart đúng hai app PM2, kiểm tra `/readyz`, gửi tác vụ probe thật qua worker và `pm2 save`.
 
-Trong vhost HTTPS của domain, thay `location /` cũ bằng nội dung [nginx-domain.conf](../../deploy/nginx-domain.conf). Giữ SSL hiện có và redirect HTTP sang HTTPS. Tắt các location regex phục vụ tài nguyên tĩnh cũ để `/assets/` cũng đi qua proxy. Không phục vụ thẳng source hoặc `.env`; tất cả request đi qua proxy. Đổi log format ở vhost ngoài để chỉ chứa IP, method, status và thời gian, không chứa `$request`, `$request_uri` hoặc query: link `/p/` là quyền xem riêng. Proxy trong container đã dùng log không chứa URL.
+Tên tiến trình: `debtnote-api`, `debtnote-worker`. Log tại `.local/logs`. Ảnh và model OCR tại `.local/uploads`. Script không tự cài/thay đổi PostgreSQL, Redis hoặc Nginx của panel.
 
-Sau khi kiểm tra cấu hình Nginx bằng chức năng của panel, reload Nginx. Kiểm tra:
+```bash
+pm2 status
+curl --fail http://127.0.0.1:3001/readyz
+```
+
+Kết quả readiness phải có database/redis đều `ok`. Lần OCR đầu tải model Việt/Anh; các lần sau dùng cache.
+
+## 4. Website và Nginx trong aaPanel
+
+Dùng website hiện có của domain, giữ SSL/HTTPS. Đặt **Document Root** thành:
+
+```text
+/www/wwwroot/debtnote.robertnguyen.io.vn/apps/web/dist
+```
+
+Trong cấu hình Nginx của website, áp dụng các location từ [nginx-domain.conf](../../deploy/nginx-domain.conf). Thay `root`/`index`/`location /` cũ; không dán thêm directive trùng. Giữ các directive SSL/listen/certificate của panel. Cấu hình này phục vụ SPA và proxy `/trpc`, `/files`, `/readyz`, `/healthz` đến API port 3001. Nếu đổi API_PORT thì sửa cả proxy.
+
+Tắt các location static cũ có thể chặn proxy `/files`; block API phải được ưu tiên trước regex tài nguyên tĩnh. Dùng log format không chứa URI/query ở vhost ngoài vì link `/p/` là quyền xem riêng. Kiểm tra cấu hình rồi reload Nginx trong aaPanel.
 
 ```bash
 curl --fail https://debtnote.robertnguyen.io.vn/readyz
 curl --fail https://debtnote.robertnguyen.io.vn/trpc/system.status
 ```
 
-Mở app trên hai trình duyệt: SĐT → PIN, ghi khoản, tải lại, tạo link; khách báo đã chuyển; chủ sổ xác nhận rồi đối chiếu số còn nợ. SĐT mới tự mở sổ với PIN lần đầu. SĐT là định danh tự khai, chưa được xác minh bằng OTP. Không tự liên kết người trong sổ với tài khoản theo SĐT.
+Mở domain: SĐT → PIN, ghi khoản, reload, tạo link, khách báo chuyển, chủ sổ xác nhận và đối chiếu số dư.
 
-## Cập nhật
+## 5. Tự chạy sau reboot
+
+Cùng tài khoản đã deploy:
+
+```bash
+pm2 startup
+```
+
+Chạy đúng lệnh mà PM2 in ra để đăng ký startup với hệ điều hành, sau đó:
+
+```bash
+pm2 save
+```
+
+PostgreSQL/Redis/Nginx cần bật khởi động cùng server trong aaPanel. Sau khi nâng bản Node, cập nhật lại startup PM2 theo hướng dẫn PM2 vì đường dẫn Node có thể thay đổi.
+
+## Quản lý trực tiếp bằng Node.js Project của aaPanel
+
+Script deploy ở trên đã quản lý hai tiến trình qua PM2. Nếu muốn tự tạo project trong giao diện panel thay cho bước PM2 của script, dùng các file khởi động sau:
+
+| Thuộc tính | API | Worker |
+| --- | --- | --- |
+| Startup File | `deploy/api.mjs` | `deploy/worker.mjs` |
+| Run Directory | thư mục source | thư mục source |
+| Node Version | 22.18+ | 22.18+ |
+| Instances | 1 | 1 |
+| Port | 3001 | Không bind cổng HTTP |
+
+Hai launcher tự đọc `.env.production`; không cần chép secret vào cấu hình panel. Chọn cùng user có quyền đọc file/ghi `.local`. Không tạo thêm bản tiến trình trùng với hai app đã chạy bằng script. Domain phục vụ web tĩnh bằng Nginx, chỉ các đường API/ảnh được proxy.
+
+## Cập nhật và log
 
 ```bash
 cd /www/wwwroot/debtnote.robertnguyen.io.vn
 git pull --ff-only origin main
 bash scripts/production-deploy.sh
+pm2 logs debtnote-api --lines 100
+pm2 logs debtnote-worker --lines 100
 ```
 
-Script build image gắn Git revision, giữ DB/Redis, backup trước migration nếu đã có bảng, migrate rồi thay API/worker/web. Bản app mới được đề nghị cập nhật qua PWA; không tự tải lại form đang thao tác. Trình quản lý container tự khởi động lại dịch vụ sau reboot nếu Docker được bật cùng hệ thống.
+Deploy native có restart tiến trình; không cam kết zero downtime. Không tự reload toàn bộ app PM2 khác trên server. Giữ `.env.production` và `.local` khi pull/cập nhật.
 
-## Backup và khôi phục thử
+## Backup và khôi phục
 
 ```bash
 bash scripts/production-backup.sh
 bash scripts/production-verify-restore.sh /duong/dan/backup
 ```
 
-Backup gồm PostgreSQL dạng custom, ảnh, Git revision, `.env.production` và checksum. Chuyển bản backup sang nơi lưu riêng có giới hạn quyền; bản trên cùng server không chống mất server. Khóa `APP_DATA_KEY` cần được giữ cùng backup để đọc QR nhận tiền đã mã hóa.
+Backup gồm PostgreSQL custom dump, ảnh/model OCR, env, Git revision và checksum; quyền chỉ tài khoản triển khai đọc được. Giữ một bản ở nơi lưu riêng và giữ đúng khóa mã hóa.
 
-Lệnh kiểm tra restore tạo DB tạm riêng, khôi phục vào đó, đếm bản ghi rồi xóa DB tạm; không sửa DB đang dùng. Kiểm tra kho ảnh bằng `tar`. Khi cần phục hồi thực sự, dừng API/worker, phục hồi DB và kho ảnh cùng một bộ backup, giữ đúng khóa mã hóa rồi khởi động lại. Chỉ thực hiện việc ghi đè DB sau khi đã xác định đúng bộ backup và có bản sao hiện trạng.
+Restore thử cần role PostgreSQL có quyền CREATEDB: script tạo database tên ngẫu nhiên riêng, restore/đếm bản ghi rồi xóa DB tạm, không ghi vào DB đang chạy. Nếu role app không có quyền này, nhờ quản trị PostgreSQL thực hiện kiểm tra restore.
 
-## Rollback app
-
-Giữ image bản trước. Sau một lần cập nhật thành công, revision trước nằm tại `.local/previous-release`.
-
-```bash
-RELEASE_TAG="$(cat .local/previous-release)" docker compose --env-file .env.production -f compose.production.yaml up -d --no-build api worker web
-```
-
-Rollback này đổi ứng dụng; không tự đảo migration. Kiểm tra tương thích schema trước khi rollback. Bản MVP đầu chỉ tạo bảng và thêm constraint; các migration sau cần được đánh giá riêng. Không chạy `docker compose down -v` khi cập nhật vì `-v` xóa volume dữ liệu.
-
-## Vận hành và giới hạn MVP
-
-- `/healthz`: tiến trình API. `/readyz`: PostgreSQL và Redis. `docker compose ... logs --tail=100 api worker` để xem lỗi; không log PIN, session, QR hoặc nguyên link khách.
-- Worker OCR dùng Tesseract tiếng Việt/Anh, concurrency 1; tải model ở lần đọc đầu và cache trong volume ảnh. Có giới hạn ảnh, timeout và retry. OCR là gợi ý cần người dùng kiểm tra, chưa được đánh giá trên bộ bill thực tế đa dạng.
-- Worker nhắc trong ứng dụng mỗi ngày vào giờ đã cấu hình, không tự gửi SMS/Zalo/email. Nút chia sẻ mở chức năng của thiết bị; app không ghi nhận là đã gửi/đọc.
-- QR dạng cây dùng mã gốc đã nhập. Mã app chưa nhận diện được giữ nguyên. Adapter hỗ trợ NAPAS mới điền số tiền/nội dung và CRC; không coi quét QR hay báo chuyển là tiền đã về.
-- Đã kiểm tra local và cấu hình shell; máy phát triển hiện không có Docker nên chưa chạy image/Compose. Production chỉ được coi là đã triển khai sau khi lệnh trên được chạy ở server và đối chiếu HTTPS cùng luồng browser thực tế.
+Khi cần phục hồi thật, dừng đúng API/worker, phục hồi DB và ảnh của cùng bộ backup, giữ khóa mã hóa rồi khởi động lại. Rollback source cần chọn Git revision tương thích schema và build/deploy lại; script không tự đảo migration.

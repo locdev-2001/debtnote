@@ -56,7 +56,7 @@ Chạy ba lệnh ở terminal riêng để xem bản build tại http://localhos
 
 ## Production và tiến độ
 
-- [Triển khai domain, backup và rollback](docs/mvp/DEPLOY.md).
+- [Triển khai aaPanel/PM2 và backup](docs/mvp/DEPLOY.md).
 - [Tiến độ MVP và bằng chứng](docs/mvp/PROGRESS.md).
 - [Roadmap toàn sản phẩm](docs/ROADMAP.md).
 - [Design system](docs/DESIGN.md).
