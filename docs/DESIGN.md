@@ -100,3 +100,5 @@ Lượt chỉnh này chỉ format source và review ảnh; không chạy test/bu
 Mascot trạng thái của người nhận được đặt làm hình chìm ở giữa bill qua prop `watermark` của `ExpenseReceipt`. Ảnh giữ nguyên màu, độ hiện 24%, nằm dưới chữ, không nhận thao tác và không được đọc như nội dung. Kích thước/độ mờ nằm trong token `receipt-watermark-*`; không lặp ảnh trên thanh trạng thái.
 
 QR chỉ dùng giao diện cây 3D theo lựa chọn đã chốt. `QrPreview` nhận renderer qua contract trung tính; adapter WebGL giữ tham số nhúng. Chữ trong sheet rút gọn, payload chuyển khoản và hình thức hiển thị là hai lớp riêng.
+
+`ActionSheet` đóng khi bấm vùng tối bên ngoài. Bấm trong popup, padding hoặc kéo từ trong ra ngoài giữ popup mở. Nút đóng và Escape vẫn hoạt động; quy tắc này nằm ở component dùng chung.
