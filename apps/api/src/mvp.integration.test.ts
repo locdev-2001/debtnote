@@ -2,13 +2,16 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import { mkdtemp, readdir, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { readApiEnvironment } from '@debtnote/runtime';
+import { readApiEnvironment, systemClock } from '@debtnote/runtime';
 import { Pool } from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createServer } from './app';
 import { createServices } from './services/create-services';
 
 const enabled = process.env.DEBTNOTE_INTEGRATION === '1';
+const tomorrow = new Date(`${systemClock.today()}T12:00:00Z`);
+tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+const futureDate = tomorrow.toISOString().slice(0, 10);
 describe.skipIf(!enabled)('MVP qua HTTP và PostgreSQL thật', () => {
   const schemaName = `mvp_test_${randomUUID().replaceAll('-', '')}`;
   let admin: Pool;
@@ -118,7 +121,7 @@ describe.skipIf(!enabled)('MVP qua HTTP và PostgreSQL thật', () => {
       personName: 'Bình',
       direction: 'receivable',
       amount: 360_000,
-      dueDate: '2026-10-26',
+      dueDate: futureDate,
     };
     const created = await post('ledger.createDebt', command, owner.cookie);
     expect(created.statusCode, created.body).toBe(200);
@@ -133,7 +136,7 @@ describe.skipIf(!enabled)('MVP qua HTTP và PostgreSQL thật', () => {
       (
         await post(
           'ledger.promise',
-          { commandId: randomUUID(), debtId: debt.id, date: '2026-10-26' },
+          { commandId: randomUUID(), debtId: debt.id, date: futureDate },
           outsider.cookie,
         )
       ).statusCode,
@@ -151,7 +154,7 @@ describe.skipIf(!enabled)('MVP qua HTTP và PostgreSQL thật', () => {
         await post('guest.promise', {
           key,
           commandId: randomUUID(),
-          date: '2026-10-26',
+          date: futureDate,
           amount: 100_000,
         })
       ).statusCode,
